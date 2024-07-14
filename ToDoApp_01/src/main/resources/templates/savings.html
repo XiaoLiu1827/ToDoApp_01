@@ -9,9 +9,11 @@
 </head>
 
 <body>
+
 	<div class="container">
 		<h1>Your Savings</h1>
-		<form th:action="@{/api/savings}" th:object="${newSavings}" method="post" class="form-inline">
+		<form th:action="@{/api/savings}" th:object="${savingsFormWithValidation}" method="post" class="form-inline">
+			<div th:errors="*{amount}" class="invalid-feedback d-block"></div>
 			<div class="form-group mb-2">
 				<label for="name" class="sr-only">Name</label>
 				<input type="text" id="name" th:field="*{name}" placeholder="Name" class="form-control">
@@ -55,7 +57,7 @@
 		</div>
 
 		<div class="table-container">
-			 <div class="title">Intended Purchases</div>
+			<div class="title">Intended Purchases</div>
 			<table class="table table-striped">
 				<thead>
 					<tr>

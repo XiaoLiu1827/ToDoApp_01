@@ -13,7 +13,8 @@ public class Savings {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private Double amount;
+   
+    private Double amount;
 	
 	public Savings() {}
 	
