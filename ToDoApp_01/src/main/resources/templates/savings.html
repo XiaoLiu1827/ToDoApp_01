@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Savings</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Your Savings</h1>
+		<form th:action="@{/api/savings}" th:object="${newSavings}" method="post" class="form-inline">
+			<div class="form-group mb-2">
+				<label for="name" class="sr-only">Name</label>
+				<input type="text" id="name" th:field="*{name}" placeholder="Name" class="form-control">
+			</div>
+			<div class="form-group mx-sm-3 mb-2">
+				<label for="amount" class="sr-only">Amount</label>
+				<input type="text" id="amount" th:field="*{amount}" placeholder="Amount" class="form-control">
+			</div>
+
+			<div class="form-group mx-sm-3 mb-2">
+				<label for="purpose" class="sr-only"></label>
+				<select id="purpose" name="purpose" class="form-control">
+					<option th:each="purpose :${purposeList}" th:value="${purpose.id}" th:text="${purpose.name}">
+					</option>
+				</select>
+			</div>
+			<button type="submit" class="btn btn-primary mb-2">Add Savings</button>
+		</form>
+		<div class="table-container">
+			<div class="title">Unpurchased tracks</div>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Amount</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="savings : ${savingsList}">
+						<td th:text="${savings.id}"></td>
+						<td th:text="${savings.name}"></td>
+						<td th:text="${savings.amount}"></td>
+						<td>
+							<a th:href="@{/api/savings/delete/{id}(id=${savings.id})}" class="btn btn-danger">Delete</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="table-container">
+			 <div class="title">Intended Purchases</div>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>current</th>
+						<th>Needed</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="purpose :${purposeList}">
+						<td th:text="${purpose.id}"></td>
+						<td th:text="${purpose.name}"></td>
+						<td th:text="${purpose.currentAmount}"></td>
+						<td th:text="${purpose.neededAmount}"></td>
+						<td>
+							<a th:href="@{/api/savings/delete/{id}(id=${purpose.id})}" class="btn btn-danger">Delete</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</body>
+
+</html>
+S
