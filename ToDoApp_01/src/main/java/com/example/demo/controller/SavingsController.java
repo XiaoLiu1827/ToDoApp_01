@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.model.SavingPurpose;
 import com.example.demo.model.Savings;
 import com.example.demo.model.SavingsFormWithValidation;
+import com.example.demo.model.UserAccount;
 import com.example.demo.service.SavingPuroposeService;
 import com.example.demo.service.SavingsService;
 
@@ -64,7 +65,7 @@ public class SavingsController {
 			return "savings";
 		}
 
-		Savings savings = new Savings(savingsFormWithValidation.getName(), savingsFormWithValidation.getAmount());
+		Savings savings = new Savings(savingsFormWithValidation.getName(), savingsFormWithValidation.getAmount(), new UserAccount());
 		savingsService.saveSavings(savings);
 
 		SavingPurpose purpose = purposeService.getSavingPurposeById(purposeId);

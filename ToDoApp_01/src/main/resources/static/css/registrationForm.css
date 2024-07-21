@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.title {
+    background-color: #ffc600;
+    border-radius: 0.8vw;
+    padding-left: 5.8vw;
+    padding-right: 5.8vw;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.table-container {
+    margin-bottom: 30px;
+}
