@@ -23,8 +23,8 @@ import com.example.demo.service.SavingPuroposeService;
 import com.example.demo.service.SavingsService;
 
 @Controller
-@RequestMapping("/api/savings")
-public class SavingsController {
+@RequestMapping("/api/savings/user")
+public class UserSavingsController {
 	@Autowired
 	private SavingsService savingsService;
 	@Autowired
