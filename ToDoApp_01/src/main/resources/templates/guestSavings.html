@@ -11,8 +11,8 @@
 <body>
 	<div class="container">
 		<div class="d-flex justify-content-end">
-			<a th:href="@{/api/savings/register}" class="btn btn-outline-primary mr-2">Register</a>
-			<a th:href="@{/api/savings/login}" class="btn btn-outline-secondary">Login</a>
+			<a th:href="@{/savings/register}" class="btn btn-outline-primary mr-2">Register</a>
+			<a th:href="@{/savings/login}" class="btn btn-outline-secondary">Login</a>
 		</div>
 		<h1>Your Savings</h1>
 		<form th:action="@{/api/savings}" th:object="${guestSavings}" method="post" class="form-inline">

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Login</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/loginForm.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Login</h1>
+		<form th:action="@{/savings/login}" th:object="${userAccountForm}" method="post">
+			<div th:if="${UserNotFound}" class="alert alert-danger">
+                <p th:text="${UserNotFound}"></p>
+            </div>
+			<div class="form-group">
+				<label for="username">Username</label>
+				<input type="text" id="username" th:field="*{username}" class="form-control" placeholder="Username"
+					required>
+				<div th:errors="*{username}" class="invalid-feedback d-block"></div>
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input type="password" id="password" th:field="*{password}" class="form-control" placeholder="Password"
+					required>
+				<div th:errors="*{password}" class="invalid-feedback d-block"></div>
+			</div>
+			<button type="submit" class="btn btn-primary">Login</button>
+		</form>
+	</div>
+</body>
+
+</html>
