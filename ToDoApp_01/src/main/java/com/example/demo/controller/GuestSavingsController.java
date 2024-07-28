@@ -25,7 +25,8 @@ public class GuestSavingsController {
 
 	@GetMapping
 	public String getAllSavings(HttpSession session, Model model, @ModelAttribute GuestSavings guestSavings) {
-		List<GuestSavingsPurpose> purposeList =(List<GuestSavingsPurpose>) session.getAttribute("purposeList");
+		List<GuestSavingsPurpose> purposeList =Optional.ofNullable((List<GuestSavingsPurpose>) session.getAttribute("purposeList"))
+				.orElseGet(ArrayList::new);;
 		if (purposeList== null || purposeList.isEmpty()) {
 			purposeList = new ArrayList<>();
 			purposeList.add(new GuestSavingsPurpose("rich dinner", 0.0, 5000.0));

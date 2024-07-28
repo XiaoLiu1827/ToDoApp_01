@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SavingPurpose;
 import com.example.demo.repository.SavingPurposeRepository;
 
@@ -22,6 +23,12 @@ public class SavingPuroposeService {
 		return repository.findById(purposeId).orElse(null);
 	}
 
+	public SavingPurpose updateCurrentAmount(Long purposeId, Double addedAmount) {
+		SavingPurpose purpose = repository.findById(purposeId)
+				.orElseThrow(() -> new ResourceNotFoundException("SavingPurpose not found with ID: " + purposeId, purposeId));
+		purpose.updateCurrentAmount(addedAmount);
+		return repository.save(purpose);
+	}
 	public SavingPurpose saveSavingPurpose(SavingPurpose savingPurpose) {
 		return repository.save(savingPurpose);
 	}

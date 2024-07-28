@@ -16,6 +16,8 @@ import com.example.demo.model.UserAccount;
 import com.example.demo.model.UserAccountForm;
 import com.example.demo.service.UserAccountService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/savings")
 public class UserManagementController {
@@ -44,7 +46,7 @@ public class UserManagementController {
 
 	@PostMapping("/login")
 	public String loginUser(@Validated @ModelAttribute UserAccountForm userAccountForm, BindingResult bindingResult,
-			Model model) {
+			Model model, HttpSession session) {
 		if (bindingResult.hasErrors()) {
 			return "login";
 		}
@@ -56,6 +58,7 @@ public class UserManagementController {
 			model.addAttribute("UserNotFound", UserNotFount);
 			return "login";
 		}else {
+			session.setAttribute("userId", opt.get().getId());
 			return "redirect:/savings/user";
 		}
 	}

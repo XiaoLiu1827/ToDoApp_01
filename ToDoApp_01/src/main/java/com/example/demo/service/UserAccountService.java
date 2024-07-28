@@ -16,4 +16,7 @@ public class UserAccountService {
     public Optional<UserAccount> findByUsernameAndPassword(String username, String password){
     	return repository.findByUsernameAndPassword(username, password);
     };
+    public Optional<UserAccount> findById(Long id){
+    	return repository.findById(id);
+    }
 }

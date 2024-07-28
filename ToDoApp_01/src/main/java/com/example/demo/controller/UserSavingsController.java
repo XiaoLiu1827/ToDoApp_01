@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +16,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SavingPurpose;
 import com.example.demo.model.Savings;
 import com.example.demo.model.SavingsFormWithValidation;
 import com.example.demo.model.UserAccount;
 import com.example.demo.service.SavingPuroposeService;
 import com.example.demo.service.SavingsService;
+import com.example.demo.service.UserAccountService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/savings/user")
@@ -29,17 +34,13 @@ public class UserSavingsController {
 	private SavingsService savingsService;
 	@Autowired
 	private SavingPuroposeService purposeService;
+	@Autowired
+	private UserAccountService userService;
 
 	@GetMapping
 	public String getAllSavings(Model model, @ModelAttribute SavingsFormWithValidation savingsFormWithValidation) {
-		List<Savings> savingList = savingsService.getAllSavings();
-		model.addAttribute("savingsList", savingList);
-
-		List<SavingPurpose> purposeList = purposeService.getAllSavingPurposes();
-		model.addAttribute("purposeList", purposeList);
-		System.out.println(purposeList);
-
-	//	model.addAttribute("savingsFormWithValidation", savingsFormWithValidation);
+		model.addAttribute("savingsList", savingsService.getAllSavings());
+		model.addAttribute("purposeList", purposeService.getAllSavingPurposes());
 
 		return "savings";
 	}
@@ -47,31 +48,33 @@ public class UserSavingsController {
 	@PostMapping
 	public String createSavings(@RequestParam("purpose") Long purposeId,
 			@Validated @ModelAttribute SavingsFormWithValidation savingsFormWithValidation,
-			BindingResult bindingResult, Model model) {
+			BindingResult bindingResult, Model model, HttpSession session) {
 		if (bindingResult.hasErrors()) {
 			List<String> errorList = new ArrayList<>();
+			//<テスト用>入力チェックエラー項目確認
 			bindingResult.getAllErrors().forEach(error -> {
 				errorList.add(error.toString());
 			});
 			
-			List<Savings> savingList = savingsService.getAllSavings();
-			model.addAttribute("savingsList", savingList);
-
-			List<SavingPurpose> purposeList = purposeService.getAllSavingPurposes();
-			model.addAttribute("purposeList", purposeList);
-			
-			//model.addAttribute("savingsFormWithValidation", savingsFormWithValidation);
+			model.addAttribute("savingsList", savingsService.getAllSavings());
+			model.addAttribute("purposeList", purposeService.getAllSavingPurposes());
 
 			return "savings";
 		}
-
-		Savings savings = new Savings(savingsFormWithValidation.getName(), savingsFormWithValidation.getAmount(), new UserAccount());
+		long userId = Optional.ofNullable((long)session.getAttribute("userId"))
+				.orElseThrow(() -> new ResourceNotFoundException("loginUser not found"));
+		Optional<UserAccount> opt = userService.findById(Long.valueOf(userId));
+		//ユーザが見つからない場合未ログイン状態に設定
+		if(opt.isEmpty()) {
+            session.invalidate();
+			return "redirect:/api/savings";
+		}
+		Savings savings = new Savings(savingsFormWithValidation.getName(), savingsFormWithValidation.getAmount(),
+				opt.get());
 		savingsService.saveSavings(savings);
 
-		SavingPurpose purpose = purposeService.getSavingPurposeById(purposeId);
-		purpose.updateCurrentAmount(savings.getAmount());
-
-		purposeService.saveSavingPurpose(purpose);
+		//SavingPurpose.amountの更新
+		SavingPurpose purpose = purposeService.updateCurrentAmount(purposeId, savingsFormWithValidation.getAmount());
 
 		return "redirect:/api/savings";
 	}

@@ -16,7 +16,7 @@
 			<a th:href="@{/api/savings/login}" class="btn btn-outline-secondary">Login</a>
 		</div>
 		<h1>Your Savings</h1>
-		<form th:action="@{/api/savings}" th:object="${savingsFormWithValidation}" method="post" class="form-inline">
+		<form th:action="@{/savings/user}" th:object="${savingsFormWithValidation}" method="post" class="form-inline">
 			<div th:errors="*{amount}" class="invalid-feedback d-block"></div>
 			<div class="form-group mb-2">
 				<label for="name" class="sr-only">Name</label>
