@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import java.util.Optional;
+import javax.security.sasl.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,18 +11,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.example.demo.model.UserAccount;
 import com.example.demo.model.UserAccountForm;
+import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.UserAccountService;
+import com.example.demo.util.MessageUtils;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/savings")
+@SessionAttributes("userId")
 public class UserManagementController {
 	@Autowired
 	private UserAccountService userAccountService;
+	@Autowired
+	private AuthenticationService authenticationService;
+	@Autowired
+	private MessageUtils messageUtils;
 
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model, @ModelAttribute UserAccountForm userAccountForm) {
@@ -50,16 +57,13 @@ public class UserManagementController {
 		if (bindingResult.hasErrors()) {
 			return "login";
 		}
-
-		Optional<UserAccount> opt = userAccountService.findByUsernameAndPassword(userAccountForm.getUsername(),
-				userAccountForm.getPassword());
-		if (opt.isEmpty()) {
-			final String  UserNotFount = "User not found.";
-			model.addAttribute("UserNotFound", UserNotFount);
-			return "login";
-		}else {
-			session.setAttribute("userId", opt.get().getId());
+		try {
+			Long userId = authenticationService.authenticateUser(userAccountForm);
+			model.addAttribute("userId", userId);
 			return "redirect:/savings/user";
+		}catch(AuthenticationException e) {
+			model.addAttribute("UserNotFound",messageUtils.get("user.not.found"));
+			return "login";
 		}
 	}
 }

@@ -22,12 +22,22 @@ public class UserAccount {
 	private String password;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Savings> savings = new ArrayList<>();
+    private List<SavingPurpose> purposeList = new ArrayList<>();
 	
 	public UserAccount() {}
 
 	public UserAccount(String username, String password) {
 		this.username = username;
 		this.password = password;
+	}
+	
+	public void addPurpose(SavingPurpose purpose) {
+		purposeList.add(purpose);
+		purpose.setUser(this);
+	}
+	
+	public void removePurpose(SavingPurpose purpose) {
+		purposeList.remove(purpose);
+		purpose.setUser(null);
 	}
 }

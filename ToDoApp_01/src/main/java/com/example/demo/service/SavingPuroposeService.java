@@ -22,6 +22,10 @@ public class SavingPuroposeService {
 	public SavingPurpose getSavingPurposeById(Long purposeId) {
 		return repository.findById(purposeId).orElse(null);
 	}
+	
+	public List<SavingPurpose>getSavingPurposeByUserId(Long userId) {
+		return repository.findByUserId(userId);
+	}
 
 	public SavingPurpose updateCurrentAmount(Long purposeId, Double addedAmount) {
 		SavingPurpose purpose = repository.findById(purposeId)

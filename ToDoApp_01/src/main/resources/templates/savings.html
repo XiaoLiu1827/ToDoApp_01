@@ -12,8 +12,7 @@
 	<script src="/js/index.js"></script>
 	<div class="container">
 		<div class="d-flex justify-content-end">
-			<a th:href="@{/api/savings/register}" class="btn btn-outline-primary mr-2">Register</a>
-			<a th:href="@{/api/savings/login}" class="btn btn-outline-secondary">Login</a>
+			<a th:href="@{/api/savings/logout}" class="btn btn-outline-secondary">Logout</a>
 		</div>
 		<h1>Your Savings</h1>
 		<form th:action="@{/savings/user}" th:object="${savingsFormWithValidation}" method="post" class="form-inline">

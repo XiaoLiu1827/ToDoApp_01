@@ -11,17 +11,21 @@ import com.example.demo.repository.SavingsRepository;
 @Service
 public class SavingsService {
 	@Autowired
-    private SavingsRepository savingsRepository;
+    private SavingsRepository repository;
 	
 	public List<Savings> getAllSavings(){
-		return savingsRepository.findAll();
+		return repository.findAll();
+	}
+	
+	public List<Savings> getSavingsByUserId(Long userId) {
+		return repository.findByUserId(userId);
 	}
 	
 	public Savings saveSavings(Savings savings) {
-		return savingsRepository.save(savings);
+		return repository.save(savings);
 	}
 	
 	public void deleteSavings(Long id) {
-		savingsRepository.deleteById(id);
+		repository.deleteById(id);
 	}
 }
