@@ -25,11 +25,10 @@ public class SavingPurpose {
 	
 	public SavingPurpose() {}
 	
-	public SavingPurpose(String name, Double currentAmount, Double neededAmount,UserAccount user) {
+	public SavingPurpose(String name, Double currentAmount, Double neededAmount) {
 		this.name = name;
-		this.neededAmount = neededAmount;
 		this.currentAmount = currentAmount;
-		this.user = user;
+		this.neededAmount = neededAmount;
 	}
 	
 	public void updateCurrentAmount(Double addedAmount) {

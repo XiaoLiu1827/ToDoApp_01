@@ -57,6 +57,7 @@ public class UserManagementController {
 		if (bindingResult.hasErrors()) {
 			return "login";
 		}
+		
 		try {
 			Long userId = authenticationService.authenticateUser(userAccountForm);
 			model.addAttribute("userId", userId);

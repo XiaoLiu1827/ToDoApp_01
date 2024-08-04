@@ -68,7 +68,6 @@ public class UserSavingsController {
 
 			return "savings";
 		}
-		
 		Savings savings = new Savings(savingsFormWithValidation.getName(), savingsFormWithValidation.getAmount(),userId);
 		savingsService.saveSavings(savings);
 

@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<title>Savings</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="/css/userIndex.css">
 </head>
 
 <body>
@@ -52,7 +52,7 @@
 						<td th:text="${savings.name}"></td>
 						<td th:text="${savings.amount}"></td>
 						<td>
-							<a th:href="@{/api/savings/delete/{id}(id=${savings.id})}" class="btn btn-danger">Delete</a>
+							<a th:href="@{/savings/delete/{id}(id=${savings.id})}" class="btn btn-danger">Delete</a>
 						</td>
 					</tr>
 				</tbody>
@@ -60,7 +60,10 @@
 		</div>
 
 		<div class="table-container">
-			<div class="title">Intended Purchases</div>
+			<div class="header">
+				<div class="title">Use your savings for what truly matters!</div>
+				<a th:href="@{/savings/user/addPurpose}" class="btn-primary add-button onclick">Add</a>
+			</div>
 			<table class="table table-striped">
 				<thead>
 					<tr>
