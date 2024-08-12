@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.example.demo.model.MySavingRule;
 import com.example.demo.model.SavingPurpose;
 import com.example.demo.model.Savings;
 import com.example.demo.model.SavingsFormWithValidation;
+import com.example.demo.service.MySavingRuleService;
 import com.example.demo.service.SavingPuroposeService;
 import com.example.demo.service.SavingsService;
 import com.example.demo.service.UserAccountService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/savings/user")
@@ -34,6 +34,8 @@ public class UserSavingsController {
 	private SavingsService savingsService;
 	@Autowired
 	private SavingPuroposeService purposeService;
+	@Autowired
+	private MySavingRuleService mySavingRuleService;
 	@Autowired
 	private UserAccountService userService;
 	
@@ -48,14 +50,16 @@ public class UserSavingsController {
 	public String getAllSavings(Model model, @ModelAttribute SavingsFormWithValidation savingsFormWithValidation) {
 		model.addAttribute("savingsList", savingsService.getSavingsByUserId(userId));
 		model.addAttribute("purposeList", purposeService.getSavingPurposeByUserId(userId));
+		model.addAttribute("myRuleList", mySavingRuleService.getMySavingRuleByUserId(userId));
 
 		return "savings";
 	}
 
 	@PostMapping
 	public String createSavings(@RequestParam("purpose") Long purposeId,
+			@RequestParam(name = "myRule", required = false) Long myRuleId,
 			@Validated @ModelAttribute SavingsFormWithValidation savingsFormWithValidation,
-			BindingResult bindingResult, Model model, HttpSession session) {
+			BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			List<String> errorList = new ArrayList<>();
 			//<テスト用>入力チェックエラー項目確認
@@ -68,7 +72,10 @@ public class UserSavingsController {
 
 			return "savings";
 		}
-		Savings savings = new Savings(savingsFormWithValidation.getName(), savingsFormWithValidation.getAmount(),userId);
+		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
+		
+		Savings savings = new Savings(savingsFormWithValidation.getAmount(),
+				myRule,userId);
 		savingsService.saveSavings(savings);
 
 		//SavingPurpose.amountの更新

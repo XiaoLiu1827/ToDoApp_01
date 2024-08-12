@@ -13,13 +13,18 @@
 	<div class="container">
 		<div class="d-flex justify-content-end">
 			<a th:href="@{/api/savings/logout}" class="btn btn-outline-secondary">Logout</a>
+			<a th:href="@{/savings/createMyRule}">Create My Saving Rule</a>
 		</div>
 		<h1>Your Savings</h1>
 		<form th:action="@{/savings/user}" th:object="${savingsFormWithValidation}" method="post" class="form-inline">
 			<div th:errors="*{amount}" class="invalid-feedback d-block"></div>
-			<div class="form-group mb-2">
-				<label for="name" class="sr-only">Name</label>
-				<input type="text" id="name" th:field="*{name}" placeholder="Name" class="form-control">
+			<div class="form-group mx-sm-3 mb-2">
+				<label for="myRule" class="sr-only"></label>
+				<select id="myRule" name="myRule" class="form-control">
+					<option th:if="${#lists.isEmpty(myRuleList)}"value="">-- Select a rule --</option>
+					<option th:each="myRule :${myRuleList}" th:value="${myRule.id}" th:text="${myRule.name}">
+					</option>
+				</select>
 			</div>
 			<div class="form-group mx-sm-3 mb-2">
 				<label for="amount" class="sr-only">Amount</label>
@@ -41,7 +46,6 @@
 				<thead>
 					<tr>
 						<th>ID</th>
-						<th>Name</th>
 						<th>Amount</th>
 						<th>Actions</th>
 					</tr>
@@ -49,7 +53,6 @@
 				<tbody>
 					<tr th:each="savings : ${savingsList}">
 						<td th:text="${savings.id}"></td>
-						<td th:text="${savings.name}"></td>
 						<td th:text="${savings.amount}"></td>
 						<td>
 							<a th:href="@{/savings/delete/{id}(id=${savings.id})}" class="btn btn-danger">Delete</a>
@@ -67,7 +70,7 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th>ID</th>
+						<th>No</th>
 						<th>Name</th>
 						<th>current</th>
 						<th>Needed</th>
@@ -75,8 +78,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="purpose :${purposeList}">
-						<td th:text="${purpose.id}"></td>
+					<tr th:each="purpose,st :${purposeList}">
+						<td th:text="${st.count}"></td>
 						<td th:text="${purpose.name}"></td>
 						<td th:text="${purpose.currentAmount}"></td>
 						<td th:text="${purpose.neededAmount}"></td>
