@@ -26,6 +26,8 @@ public class MySavingRule {
 	private String Description;
 	
 	private Long userId;
+	
+	private Double defaultSavingsAmount;
    
 	@OneToMany(mappedBy = "mySavingRule")
 	private List<Savings> savings = new ArrayList<>();

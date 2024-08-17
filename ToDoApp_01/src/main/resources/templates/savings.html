@@ -13,7 +13,7 @@
 	<div class="container">
 		<div class="d-flex justify-content-end">
 			<a th:href="@{/api/savings/logout}" class="btn btn-outline-secondary">Logout</a>
-			<a th:href="@{/savings/createMyRule}">Create My Saving Rule</a>
+			<a th:href="@{/savings/mySavingRule}">My Saving Rule</a>
 		</div>
 		<h1>Your Savings</h1>
 		<form th:action="@{/savings/user}" th:object="${savingsFormWithValidation}" method="post" class="form-inline">

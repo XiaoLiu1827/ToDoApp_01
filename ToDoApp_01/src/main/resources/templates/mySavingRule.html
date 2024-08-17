@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>My Saving Rules</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="container mt-4">
+		<h2>Create a New Saving Rule</h2>
+		<form th:action="@{/savings/MySavingRule}" th:object="${mySavingRuleForm}" method="post" class="mb-4">
+			<div class="form-group"><label for="name">Rule Name</label><input type="text" id="name" th:field="*{name}"
+					class="form-control" placeholder="Enter rule name" required></div>
+			<div class="form-group"><label for="description">Description</label><textarea id="description"
+					th:field="*{description}" class="form-control" placeholder="コンビニでスイーツを買うのを我慢したら300円貯金！"></textarea>
+			</div>
+			<div class="form-group"><label for="defaultSavingsAmount">Default Amount</label><input type="number"
+					id="defaultSavingsAmount" th:field="*{defaultSavingsAmount}" class="form-control"
+					placeholder="このルールを選んだ時のデフォルト貯金額を設定しましょう" step="0.01"></div>
+			<button type="submit" class="btn btn-primary">Save</button>
+		</form>
+		<h2>Current My Saving Rules</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Rule Name</th>
+					<th>Description</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rule,st : ${myRuleList}">
+					<td th:text="${st.count}">1</td>
+					<td th:text="${rule.name}">Sample Rule</td>
+					<td th:text="${rule.description}">Sample Description</td>
+					<td><a th:href="@{/savingRules/edit/{id}(id=${rule.id})}" class="btn btn-warning btn-sm">Edit</a><a
+							th:href="@{/savingRules/delete/{id}(id=${rule.id})}" class="btn btn-danger btn-sm"
+							onclick="return confirm('Are you sure you want to delete this rule?');">Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>
