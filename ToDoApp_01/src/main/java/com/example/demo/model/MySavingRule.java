@@ -22,8 +22,8 @@ public class MySavingRule {
 	private Long id;
 	
 	private String name;
-	
-	private String Description;
+
+	private String description;
 	
 	private Long userId;
 	
@@ -32,5 +32,12 @@ public class MySavingRule {
 	@OneToMany(mappedBy = "mySavingRule")
 	private List<Savings> savings = new ArrayList<>();
 	
+	public MySavingRule(String name, String description, Long userId, Double defaultSavingsAmount) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.userId = userId;
+		this.defaultSavingsAmount = defaultSavingsAmount;
+	}
 	
 }

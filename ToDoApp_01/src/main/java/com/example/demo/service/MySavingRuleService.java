@@ -20,4 +20,7 @@ public class MySavingRuleService {
 	public MySavingRule getMySavingRuleById(Long id) {
 		return repository.findById(id).orElse(null);
 	}
+	public MySavingRule saveMySavingRule(MySavingRule myRule) {
+		return repository.save(myRule);
+	}
 }

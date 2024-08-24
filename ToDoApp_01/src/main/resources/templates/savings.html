@@ -9,7 +9,6 @@
 </head>
 
 <body>
-	<script src="/js/index.js"></script>
 	<div class="container">
 		<div class="d-flex justify-content-end">
 			<a th:href="@{/api/savings/logout}" class="btn btn-outline-secondary">Logout</a>
@@ -21,8 +20,9 @@
 			<div class="form-group mx-sm-3 mb-2">
 				<label for="myRule" class="sr-only"></label>
 				<select id="myRule" name="myRule" class="form-control">
-					<option th:if="${#lists.isEmpty(myRuleList)}"value="">-- Select a rule --</option>
-					<option th:each="myRule :${myRuleList}" th:value="${myRule.id}" th:text="${myRule.name}">
+					<option value="">-- Select a rule --</option>
+					<option th:each="myRule :${myRuleList}" th:value="${myRule.id}" th:text="${myRule.name}"
+					th:attr="data-default-savings-amount=${myRule.defaultSavingsAmount}">>
 					</option>
 				</select>
 			</div>
@@ -90,8 +90,9 @@
 				</tbody>
 			</table>
 		</div>
-
 	</div>
+		<script src="/js/index.js"></script>
+
 </body>
 
 </html>

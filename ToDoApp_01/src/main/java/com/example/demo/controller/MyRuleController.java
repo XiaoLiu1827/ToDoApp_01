@@ -5,10 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.example.demo.model.MySavingRule;
 import com.example.demo.model.MySavingRuleForm;
 import com.example.demo.service.MySavingRuleService;
 
@@ -31,4 +33,11 @@ public class MyRuleController {
 		return "mySavingRule";
 	}
 
+	@PostMapping
+	public String saveMySavingRules(Model model, MySavingRuleForm mySavingRuleForm) {		
+		MySavingRule myRule = new MySavingRule(mySavingRuleForm.getName(),mySavingRuleForm.getDescription(),
+				userId,mySavingRuleForm.getDefaultSavingsAmount());
+		mySavingRuleService.saveMySavingRule(myRule);
+		return "redirect:/savings/user";
+	}
 }
