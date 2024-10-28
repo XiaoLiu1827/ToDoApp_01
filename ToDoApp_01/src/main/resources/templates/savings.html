@@ -40,28 +40,22 @@
 			</div>
 			<button type="submit" class="btn btn-primary mb-2">Add Savings</button>
 		</form>
-		<div class="table-container">
-			<div class="title">Savings tracks</div>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Amount</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="savings : ${savingsList}">
-						<td th:text="${savings.id}"></td>
-						<td th:text="${savings.amount}"></td>
-						<td>
-							<a th:href="@{/savings/delete/{id}(id=${savings.id})}" class="btn btn-danger">Delete</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		
+		<h2>マイ貯金ルール</h2>
+		<div class="my-saving-rules">
+			<div th:each="myRule : ${myRuleList}" class="card mb-3">
+				<div class="card-body">
+					<h5 class="card-title" th:text="${myRule.name}"></h5>
+					<p class="card-text" th:text="${myRule.defaultSavingsAmount} + '円 (' + myRule.frequency + ')'"></p>
+					<div>
+						<button class="btn btn-primary mr-2">達成</button>
+						<button class="btn btn-secondary">未達成</button>
+					</div>
+				</div>
+			</div>
 		</div>
 
+		
 		<div class="table-container">
 			<div class="header">
 				<div class="title">Use your savings for what truly matters!</div>
@@ -90,6 +84,25 @@
 				</tbody>
 			</table>
 		</div>
+		
+		<h2>欲しいもののリスト</h2>
+		<div class="wanted-list">
+			<div th:each="purpose : ${purposeList}" class="card mb-3">
+				<div class="card-body">
+					<h5 class="card-title" th:text="${purpose.name}"></h5>
+					<p class="card-text">
+						<span th:text="${purpose.currentAmount}"></span>円 / 
+						<span th:text="${purpose.neededAmount}"></span>円
+					</p>
+					<div class="progress">
+						<div class="progress-bar" role="progressbar"
+							th:style="'width:' + (${purpose.currentAmount} / ${purpose.neededAmount}) * 100 + '%;'"
+							aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 	</div>
 		<script src="/js/index.js"></script>
 
