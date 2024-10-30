@@ -28,9 +28,8 @@ public class Savings {
 	private Long userId;
 
     	
-	public Savings(Double amount, MySavingRule mySavingRule, Long userId) {
+	public Savings(Double amount,Long userId) {
 		this.amount = amount;
-		this.mySavingRule = mySavingRule;
 		this.userId = userId;
 	}
 }

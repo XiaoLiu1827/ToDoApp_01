@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Savings</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/userIndex.css">
+</head>
+
+<body>
+	<div class="container">
+		<div class="d-flex justify-content-end">
+			<a th:href="@{/api/savings/logout}" class="btn btn-outline-secondary">Logout</a>
+			<a th:href="@{/savings/mySavingRule}">My Saving Rule</a>
+		</div>
+		<h2>マイ貯金ルール</h2>
+		<div class="my-saving-rules">
+			<form th:action="@{/savings/user}" method="post" class="form-inline">
+				<!-- 隠しフィールド -->
+				<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId">
+				<div class="form-group mx-sm-3 mb-2">
+					<label for="wishItem" class="sr-only"></label>
+					<select id="wishItem" name="wishItemId" title="wishItem" class="form-control">
+						<option th:each="wishItem :${wishList}" th:value="${wishItem.id}" th:text="${wishItem.name}">
+						</option>
+					</select>
+				</div>
+				<div th:each="myRule : ${myRuleList}" class="card mb-3">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${myRule.title}"></h5>
+						<p class="card-text" th:text="${myRule.amount} + '円'">
+						</p>
+						<div>
+							<button type="button" class="btn btn-primary mr-2"
+								th:attr="data-id=${myRule.id}"
+								onclick="setMyRuleData(this)">達成</button>
+<!--							<button class="btn btn-secondary">未達成</button>-->
+						</div>
+					</div>
+				</div>
+			</form>
+
+
+			<h2>欲しいものリスト</h2>
+			<div class="wanted-list">
+				<div th:each="wishItem : ${wishList}" class="card mb-3">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${wishItem.name}"></h5>
+						<p class="card-text">
+							<span th:text="${wishItem.currentAmount}"></span>円 /
+							<span th:text="${wishItem.neededAmount}"></span>円
+						</p>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar"
+								th:style="'width:' + (${wishItem.currentAmount} / ${wishItem.neededAmount}) * 100 + '%;'"
+								aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<script src="/js/index.js"></script>
+
+</body>
+
+</html>

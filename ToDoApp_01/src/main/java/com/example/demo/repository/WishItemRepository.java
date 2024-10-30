@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.model.SavingPurpose;
+import com.example.demo.model.WishItem;
 
 @Repository
-public interface SavingPurposeRepository extends JpaRepository<SavingPurpose, Long>{
-	List<SavingPurpose> findByUserId(Long userId);
+public interface WishItemRepository extends JpaRepository<WishItem, Long>{
+	List<WishItem> findByUserId(Long userId);
 }

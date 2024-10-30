@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.SessionExpiredException;
-import com.example.demo.model.SavingPurpose;
+import com.example.demo.model.WishItem;
 import com.example.demo.model.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.util.MessageUtils;
@@ -25,7 +25,7 @@ public class UserAccountService {
     public void addSavingPurpose(Long userId,String name, Double neededAmount) {
     	UserAccount user = findById(userId);
     	
-    	SavingPurpose purpose = new SavingPurpose(name,0.0,neededAmount);
+    	WishItem purpose = new WishItem(name,0.0,neededAmount);
 		user.addPurpose(purpose);
 		
 		repository.save(user);

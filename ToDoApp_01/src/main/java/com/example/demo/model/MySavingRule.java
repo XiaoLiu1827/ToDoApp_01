@@ -21,23 +21,23 @@ public class MySavingRule {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String name;
+	private String title;
 
 	private String description;
 	
 	private Long userId;
 	
-	private Double defaultSavingsAmount;
+	private Double amount;
    
 	@OneToMany(mappedBy = "mySavingRule")
 	private List<Savings> savings = new ArrayList<>();
 	
-	public MySavingRule(String name, String description, Long userId, Double defaultSavingsAmount) {
+	public MySavingRule(String title, String description, Long userId, Double amount) {
 		super();
-		this.name = name;
+		this.title = title;
 		this.description = description;
 		this.userId = userId;
-		this.defaultSavingsAmount = defaultSavingsAmount;
+		this.amount = amount;
 	}
 	
 }

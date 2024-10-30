@@ -6,13 +6,13 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.demo.repository.SavingPurposeRepository;
+import com.example.demo.repository.WishItemRepository;
 
 @SpringBootApplication
 public class ToDoApp01Application implements ApplicationRunner{
 	
 	@Autowired
-	SavingPurposeRepository repository;
+	WishItemRepository repository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ToDoApp01Application.class, args);

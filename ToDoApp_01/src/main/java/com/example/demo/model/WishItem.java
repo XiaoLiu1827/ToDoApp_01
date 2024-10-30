@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class SavingPurpose {
+public class WishItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -23,9 +23,9 @@ public class SavingPurpose {
 	@JoinColumn(name = "userAccount_id", referencedColumnName = "id")
 	private UserAccount user;
 	
-	public SavingPurpose() {}
+	public WishItem() {}
 	
-	public SavingPurpose(String name, Double currentAmount, Double neededAmount) {
+	public WishItem(String name, Double currentAmount, Double neededAmount) {
 		this.name = name;
 		this.currentAmount = currentAmount;
 		this.neededAmount = neededAmount;
