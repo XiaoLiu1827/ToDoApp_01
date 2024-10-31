@@ -9,6 +9,7 @@ selectElement.addEventListener(`change`, function() {
 	inputAmount.value = defaultSavingsAmount;
 });
 
+//プルダウンに設定したマイ貯金ルールをサーバ送信用に格納する
 function setMyRuleData(button) {
 	const myRuleId = button.getAttribute("data-id");
 
@@ -17,4 +18,38 @@ function setMyRuleData(button) {
 
 	// フォームを送信
 	button.closest("form").submit();
+}
+
+//目標額到達時にサーバに通知する
+document.addEventListener("DOMContentLoaded", function() {
+	checkProgress();
+});
+
+function checkProgress() {
+	const wishItems = document.querySelectorAll(".wanted-list .card");
+
+	wishItems.forEach((item) => {
+		const currentAmount = parseInt(item.querySelector(".card-text span").textContent);
+		const neededAmount = parseInt(item.querySelector(".card-text span:nth-of-type(2)").textContent);
+
+		if (currentAmount >= neededAmount) {
+			// 目標到達時にサーバーへ通知
+			notifyGoalAchieved(item.getAttribute("data-id"));
+		}
+	});
+}
+
+function notifyGoalAchieved(wishItemId) {
+	fetch(`/savings/goalAchieved`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ id: wishItemId }),
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			console.log("目標到達の通知が送信されました", data);
+		})
+		.catch((error) => console.error("通知エラー:", error));
 }

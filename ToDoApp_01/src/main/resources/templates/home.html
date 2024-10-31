@@ -32,10 +32,9 @@
 						<p class="card-text" th:text="${myRule.amount} + '円'">
 						</p>
 						<div>
-							<button type="button" class="btn btn-primary mr-2"
-								th:attr="data-id=${myRule.id}"
+							<button type="button" class="btn btn-primary mr-2" th:attr="data-id=${myRule.id}"
 								onclick="setMyRuleData(this)">達成</button>
-<!--							<button class="btn btn-secondary">未達成</button>-->
+							<!--							<button class="btn btn-secondary">未達成</button>-->
 						</div>
 					</div>
 				</div>
@@ -45,7 +44,7 @@
 			<h2>欲しいものリスト</h2>
 			<div class="wanted-list">
 				<div th:each="wishItem : ${wishList}" class="card mb-3">
-					<div class="card-body">
+					<div class="card-body" data-id="${wishItem.id}">
 						<h5 class="card-title" th:text="${wishItem.name}"></h5>
 						<p class="card-text">
 							<span th:text="${wishItem.currentAmount}"></span>円 /
