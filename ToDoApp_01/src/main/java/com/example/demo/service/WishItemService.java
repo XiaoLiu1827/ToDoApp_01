@@ -38,7 +38,7 @@ public class WishItemService {
 		return repository.save(savingWishItem);
 	}
 
-	public void deleteSavings(Long id) {
+	public void deleteWishItem(Long id) {
 		repository.deleteById(id);
 	}
 

@@ -1,13 +1,13 @@
-const selectElement = document.getElementById(`myRule`);
-selectElement.addEventListener(`change`, function() {
-	let selectedOption = selectElement.options[selectElement.selectedIndex];
-	let defaultSavingsAmount = selectedOption.getAttribute(`data-default-savings-amount`);
-	console.log('Selected Rule ID:', selectElement.value);
-	console.log('Default Savings Amount:', defaultSavingsAmount);
-
-	const inputAmount = document.getElementById(`amount`);
-	inputAmount.value = defaultSavingsAmount;
-});
+//const selectElement = document.getElementById(`myRule`);
+//selectElement.addEventListener(`change`, function() {
+//	let selectedOption = selectElement.options[selectElement.selectedIndex];
+//	let defaultSavingsAmount = selectedOption.getAttribute(`data-default-savings-amount`);
+//	console.log('Selected Rule ID:', selectElement.value);
+//	console.log('Default Savings Amount:', defaultSavingsAmount);
+//
+//	const inputAmount = document.getElementById(`amount`);
+//	inputAmount.value = defaultSavingsAmount;
+//});
 
 //プルダウンに設定したマイ貯金ルールをサーバ送信用に格納する
 function setMyRuleData(button) {
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function checkProgress() {
-	const wishItems = document.querySelectorAll(".wanted-list .card");
+	const wishItems = document.querySelectorAll(".wanted-list .card-body");
 
 	wishItems.forEach((item) => {
 		const currentAmount = parseInt(item.querySelector(".card-text span").textContent);
@@ -34,22 +34,15 @@ function checkProgress() {
 
 		if (currentAmount >= neededAmount) {
 			// 目標到達時にサーバーへ通知
+			console.log(item.getAttribute("data-id"));
 			notifyGoalAchieved(item.getAttribute("data-id"));
 		}
 	});
 }
 
 function notifyGoalAchieved(wishItemId) {
-	fetch(`/savings/goalAchieved`, {
+	fetch(`/savings/user/goalAchieved?wishItemId=${wishItemId}`, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ id: wishItemId }),
 	})
-		.then((response) => response.json())
-		.then((data) => {
-			console.log("目標到達の通知が送信されました", data);
-		})
 		.catch((error) => console.error("通知エラー:", error));
 }

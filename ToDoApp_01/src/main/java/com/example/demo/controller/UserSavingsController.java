@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,7 +62,16 @@ public class UserSavingsController {
 
 		return "redirect:/savings/user";
 	}
-
+	//目標額到達時
+	@CrossOrigin(origins = "*") // 全てのオリジンを許可
+	@PostMapping("/goalAchieved")
+	public String goalAchieved(@RequestParam("wishItemId") Long wishItemId) {
+		wishItemService.deleteWishItem(wishItemId);
+		
+		return "redirect:/savings/user";
+	}
+	
+	//削除
 	@GetMapping("/delete/{id}")
 	public String deleteSavings(@PathVariable Long id) {
 		savingsService.deleteSavings(id);
