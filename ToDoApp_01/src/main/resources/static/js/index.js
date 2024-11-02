@@ -21,28 +21,44 @@ function setMyRuleData(button) {
 }
 
 //目標額到達時にサーバに通知する
-document.addEventListener("DOMContentLoaded", function() {
-	checkProgress();
-});
-
-function checkProgress() {
-	const wishItems = document.querySelectorAll(".wanted-list .card-body");
-
-	wishItems.forEach((item) => {
-		const currentAmount = parseInt(item.querySelector(".card-text span").textContent);
-		const neededAmount = parseInt(item.querySelector(".card-text span:nth-of-type(2)").textContent);
-
-		if (currentAmount >= neededAmount) {
-			// 目標到達時にサーバーへ通知
-			console.log(item.getAttribute("data-id"));
-			notifyGoalAchieved(item.getAttribute("data-id"));
-		}
-	});
-}
-
-function notifyGoalAchieved(wishItemId) {
-	fetch(`/savings/user/goalAchieved?wishItemId=${wishItemId}`, {
-		method: "POST",
-	})
-		.catch((error) => console.error("通知エラー:", error));
-}
+//document.addEventListener("DOMContentLoaded", function() {
+//	checkProgress();
+//});
+//
+//function checkProgress() {
+//	const wishItems = document.querySelectorAll(".wanted-list .card-body");
+//
+//	wishItems.forEach((item) => {
+//		const currentAmount = parseInt(item.querySelector(".card-text span").textContent);
+//		const neededAmount = parseInt(item.querySelector(".card-text span:nth-of-type(2)").textContent);
+//
+//		if (currentAmount >= neededAmount) {
+//			// 目標到達時にサーバーへ通知
+//			const itemId = item.getAttribute("data-id");
+//			console.log(itemId);
+//
+//			//削除するアイテムをプルダウンから無効化
+//			const option = document.querySelector(`#wishItem option[value="${itemId}"]`);
+//			console.log(option);
+//			const option2 = document.querySelector('#wishItem option[value="1"]');
+//			console.log(option2);
+//			if (option) {
+//				// 無効化または非表示にする
+//				option.disabled = true; // 選択不可にする
+//				option.style.display = 'none'; // 非表示にする場合
+//			}
+//			notifyGoalAchieved(itemId);
+//
+//		}
+//	});
+//}
+//
+//function notifyGoalAchieved(wishItemId) {
+//	console.log("delet!!!!")
+//	fetch(`/savings/user/goalAchieved?wishItemId=${wishItemId}`, {
+//		method: "POST",
+//	})
+//		.catch((error) => console.error("通知エラー:", error));
+//}
+//
+//

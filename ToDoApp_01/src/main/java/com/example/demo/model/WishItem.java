@@ -34,4 +34,8 @@ public class WishItem {
 	public void updateCurrentAmount(Double addedAmount) {
 		this.currentAmount += addedAmount;
 	}
+	
+	public boolean checkProgress(){
+		return this.currentAmount >= this.neededAmount;
+	}
 }

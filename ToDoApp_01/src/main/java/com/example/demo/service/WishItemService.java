@@ -28,10 +28,10 @@ public class WishItemService {
 	}
 
 	public WishItem updateCurrentAmount(Long wishItemId, Double addedAmount) {
-		WishItem purpose = repository.findById(wishItemId)
+		WishItem wishItem = repository.findById(wishItemId)
 				.orElseThrow(() -> new ResourceNotFoundException("SavingPurpose not found with ID: " + wishItemId));
-		purpose.updateCurrentAmount(addedAmount);
-		return repository.save(purpose);
+		wishItem.updateCurrentAmount(addedAmount);
+		return repository.save(wishItem);
 	}
 
 	public WishItem saveSavingPurpose(WishItem savingWishItem) {

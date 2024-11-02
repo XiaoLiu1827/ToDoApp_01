@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,13 +32,13 @@ public class UserSavingsController {
 	private MySavingRuleService mySavingRuleService;
 	@Autowired
 	private UserAccountService userService;
-	
+
 	private Long userId;
 
-    @ModelAttribute
-    public void setUserId(@SessionAttribute("userId") Long userId) {
-        this.userId = userId;
-    }
+	@ModelAttribute
+	public void setUserId(@SessionAttribute("userId") Long userId) {
+		this.userId = userId;
+	}
 
 	@GetMapping
 	public String getAllSavings(Model model, @ModelAttribute SavingsFormWithValidation savingsFormWithValidation) {
@@ -51,26 +50,30 @@ public class UserSavingsController {
 	}
 
 	@PostMapping
-	public String createSavings(@RequestParam("wishItemId") Long wishItemid,
+	public String createSavings(@RequestParam("wishItemId") Long wishItemId,
 			@RequestParam(name = "myRuleId", required = true) Long myRuleId,
 			Model model) {
-		
-		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
-		
-		//SavingPurpose.amountの更新
-		WishItem purpose = wishItemService.updateCurrentAmount(wishItemid, myRule.getAmount());
 
+		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
+
+		//WishItem.CurrentAmountの更新
+		WishItem wishItem = wishItemService.updateCurrentAmount(wishItemId, myRule.getAmount());
+
+		//目標額到達可否のチェック
+		if (wishItem.checkProgress()) {
+			wishItemService.deleteWishItem(wishItemId);
+		}
 		return "redirect:/savings/user";
 	}
+
 	//目標額到達時
-	@CrossOrigin(origins = "*") // 全てのオリジンを許可
 	@PostMapping("/goalAchieved")
 	public String goalAchieved(@RequestParam("wishItemId") Long wishItemId) {
 		wishItemService.deleteWishItem(wishItemId);
-		
+
 		return "redirect:/savings/user";
 	}
-	
+
 	//削除
 	@GetMapping("/delete/{id}")
 	public String deleteSavings(@PathVariable Long id) {
