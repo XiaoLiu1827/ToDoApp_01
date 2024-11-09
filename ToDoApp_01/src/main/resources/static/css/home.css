@@ -1,0 +1,177 @@
+@charset "UTF-8";
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f0f8ff;
+	color: #333;
+	margin: 0;
+	padding: 20px;
+}
+
+.container {
+	max-width: 1000px;
+	margin: 0 auto;
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+header {
+	background-color: #4a90e2;
+	color: white;
+	padding: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+h1 {
+	margin: 0;
+	font-size: 32px;
+}
+
+h2 {
+	margin: 0;
+	font-size: 24px;
+}
+
+.button.outline {
+	background-color: white;
+	color: #4a90e2;
+	border: 1px solid #4a90e2;
+}
+
+.content {
+	padding: 20px;
+}
+
+.section {
+	margin-bottom: 20px;
+}
+
+/*一覧表示*/
+.savings-rule,
+.wishlist-item {
+	background-color: #f9f9f9;
+	border: 1px solid #e0e0e0;
+	border-radius: 5px;
+	padding: 15px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.wishlist-select {
+	width: 100%;
+	/* Full-width dropdown */
+	padding: 8px;
+	border: 1px solid #e0e0e0;
+	border-radius: 5px;
+}
+
+.wrap-list {
+	display: flex;
+	flex-direction: column;
+	/* Stacks items vertically */
+	gap: 10px;
+	/* Adds space between items */
+	margin-top: 10px;
+	/* Adds space between dropdown and list */
+}
+
+.title {
+	background-color: #ffc600;
+	border-radius: 0.8vw;
+	padding-left: 5.8vw;
+	padding-right: 5.8vw;
+	margin-bottom: 10px;
+	text-align: center;
+	font-size: 1.5em;
+	font-weight: bold;
+	text-align: center;
+	flex: 1;
+	/* タイトルが中央に配置されるようにする */
+}
+
+.button {
+	background-color: #4a90e2;
+	color: white;
+	border: none;
+	padding: 8px 15px;
+	border-radius: 5px;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+}
+
+.button.outline {
+	background-color: white;
+	color: #4a90e2;
+	border: 1px solid #4a90e2;
+}
+
+.button.small {
+	padding: 8px 15px;
+	/* Updated padding and font size */
+	font-size: 14px;
+	/* Updated padding and font size */
+}
+
+.progress-bar {
+	background-color: #e0e0e0;
+	height: 10px;
+	border-radius: 5px;
+	margin-top: 10px;
+	flex-grow: 1;
+	margin-right: 10px;
+}
+
+.progress {
+	background-color: #4a90e2;
+	height: 100%;
+	border-radius: 5px;
+	width: 0;
+}
+
+.item-content {
+	flex-grow: 1;
+}
+
+.item-actions {
+	display: flex;
+	align-items: center;
+	/* Added align-items */
+}
+
+.edit-icon {
+	cursor: pointer;
+	color: #4a90e2;
+	margin-left: 10px;
+	text-decoration: none;
+	/* Removes underline */
+}
+
+.section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+	flex-wrap: wrap;
+}
+
+.form-vertical {
+	display: flex;
+	flex-direction: column;
+	/* Aligns form elements vertically */
+	gap: 10px;
+	/* Adds spacing between dropdown and list */
+}
+
+.form-group {
+	width: 100%;
+	/* Ensures dropdown spans full width if needed */
+	margin-top: 10px;
+}

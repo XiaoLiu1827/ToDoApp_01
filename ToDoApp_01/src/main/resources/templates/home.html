@@ -5,63 +5,78 @@
 	<meta charset="UTF-8">
 	<title>Savings</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/userIndex.css">
+	<link rel="stylesheet" href="/css/home.css">
 </head>
 
 <body>
 	<div class="container">
-		<div class="d-flex justify-content-end">
-			<a th:href="@{/api/savings/logout}" class="btn btn-outline-secondary">Logout</a>
-			<a th:href="@{/savings/mySavingRule}">My Saving Rule</a>
-		</div>
-		<h2>マイ貯金ルール</h2>
-		<div class="my-saving-rules">
-			<form th:action="@{/savings/user}" method="post" class="form-inline">
-				<!-- 隠しフィールド -->
-				<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId">
-				<div class="form-group mx-sm-3 mb-2">
-					<label for="wishItem" class="sr-only"></label>
-					<select id="wishItem" name="wishItemId" title="wishItem" class="form-control">
-						<option th:each="wishItem :${wishList}" th:value="${wishItem.id}" th:text="${wishItem.name}">
-						</option>
-					</select>
-				</div>
-				<div th:each="myRule : ${myRuleList}" class="card mb-3">
-					<div class="card-body">
-						<h5 class="card-title" th:text="${myRule.title}"></h5>
-						<p class="card-text" th:text="${myRule.amount} + '円'">
-						</p>
-						<div>
-							<button type="button" class="btn btn-primary mr-2" th:attr="data-id=${myRule.id}"
-								onclick="setMyRuleData(this)">達成</button>
-							<!--							<button class="btn btn-secondary">未達成</button>-->
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-
-			<h2>欲しいものリスト</h2>
-			<div class="wanted-list">
-				<div th:each="wishItem : ${wishList}" class="card mb-3">
-					<div class="card-body" th:attr="data-id=${wishItem.id}">
-						<h5 class="card-title" th:text="${wishItem.name}"></h5>
-						<p class="card-text">
-							<span th:text="${wishItem.currentAmount}"></span>円 /
-							<span th:text="${wishItem.neededAmount}"></span>円
-						</p>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar"
-								th:style="'width:' + (${wishItem.currentAmount} / ${wishItem.neededAmount}) * 100 + '%;'"
-								aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-						        <span th:text="${wishItem.id}" class="wish-item-id" style="display: none;"></span>
-					</div>
-				</div>
+		<header>
+			<h1>マイ貯金アプリ</h1>
+			<div>
+				<a th:href="@{/api/savings/myPage}" class="button outline" type="button">マイページ</a>
+				<a th:href="@{/api/savings/logout}" class="button outline" type="button">ログアウト</a>
 			</div>
+		</header>
+		<div class="content">
+			<div class="section">
+				<div class="section-header">
+					<h2>マイ貯金ルール</h2>
+					<a href="#" class="button">新規追加</a>
+				</div>
+				<form th:action="@{/savings/user}" method="post" class="form-vertical">
+					<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId">
 
-		</div>
-		<script src="/js/index.js"></script>
+					<div class="form-group">
+						<label for="wishItem" class="sr-only"></label>
+						<select id="wishItem" name="wishItemId" title="wishItem" class="wishlist-select">
+							<option th:each="wishItem :${wishList}" th:value="${wishItem.id}"
+								th:text="${wishItem.name}">
+							</option>
+						</select>
+					</div>
+
+					<div class="wrap-list">
+						<div th:each="myRule : ${myRuleList}" class="savings-rule">
+							<div class="item-content">
+								<h5 class="card-title" th:text="${myRule.title}"></h5>
+								<span class="edit-icon" title="編集">✎</span>
+								<p class="card-text" th:text="${myRule.amount} + '円'">
+								</p>
+							</div>
+							<div class="item-actions">
+								<button type="button" class="button small" th:attr="data-id=${myRule.id}"
+									onclick="setMyRuleData(this)">達成</button>
+								<!--							<button class="btn btn-secondary">未達成</button>-->
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="section">
+				<div class="section-header">
+					<h2>欲しいものリスト</h2>
+					<a href="#" class="button">新規追加</a>
+				</div>
+				<div class="wrap-list">
+					<div th:each="wishItem : ${wishList}" class="wishlist-item">
+						<div class="item-content" th:attr="data-id=${wishItem.id}">
+							<h5 class="card-title" th:text="${wishItem.name}"></h5>
+							<p class="card-text">
+								<span th:text="${wishItem.currentAmount}"></span>円 /
+								<span th:text="${wishItem.neededAmount}"></span>円
+							</p>
+							<div class="progress-bar">
+								<div class="progress" role="progressbar"
+									th:style="'width:' + (${wishItem.currentAmount} / ${wishItem.neededAmount}) * 100 + '%;'"
+									aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+							<span th:text="${wishItem.id}" class="wish-item-id" style="display: none;"></span>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<script src="/js/index.js"></script>
 
 </body>
 

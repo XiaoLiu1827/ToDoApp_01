@@ -18,7 +18,7 @@ import com.example.demo.service.UserAccountService;
 @Controller
 @RequestMapping("/savings/user/addPurpose")
 @SessionAttributes("userId")
-public class UserSavingPurposeController {
+public class WishItemController {
 	@Autowired
 	private UserAccountService userAccountService;
 	
