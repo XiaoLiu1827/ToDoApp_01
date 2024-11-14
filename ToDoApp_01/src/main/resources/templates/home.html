@@ -21,7 +21,7 @@
 			<div class="section">
 				<div class="section-header">
 					<h2>マイ貯金ルール</h2>
-					<a href="#" class="button">新規追加</a>
+					<a th:href="@{/savings/mySavingRule}" class="button">新規追加</a>
 				</div>
 				<form th:action="@{/savings/user}" method="post" class="form-vertical">
 					<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId">

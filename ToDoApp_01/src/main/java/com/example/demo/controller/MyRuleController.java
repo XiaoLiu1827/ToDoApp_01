@@ -30,13 +30,13 @@ public class MyRuleController {
 	@GetMapping
 	public String showMySavingRules(Model model, MySavingRuleForm mySavingRuleForm) {
 		model.addAttribute("myRuleList", mySavingRuleService.getMySavingRuleByUserId(userId));
-		return "mySavingRule";
+		return "addSavingsRule";
 	}
 
 	@PostMapping
 	public String saveMySavingRules(Model model, MySavingRuleForm mySavingRuleForm) {		
-		MySavingRule myRule = new MySavingRule(mySavingRuleForm.getName(),mySavingRuleForm.getDescription(),
-				userId,mySavingRuleForm.getDefaultSavingsAmount());
+		MySavingRule myRule = new MySavingRule(mySavingRuleForm.getTitle(),mySavingRuleForm.getDescription(),
+				userId,mySavingRuleForm.getAmount());
 		mySavingRuleService.saveMySavingRule(myRule);
 		return "redirect:/savings/user";
 	}
