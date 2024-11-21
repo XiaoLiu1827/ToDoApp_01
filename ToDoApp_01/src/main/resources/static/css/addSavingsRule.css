@@ -66,3 +66,36 @@ body {
             color: #4a90e2;
             border: 1px solid #4a90e2;
         }
+         .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .checkbox-button {
+            display: inline-block;
+            position: relative;
+        }
+        .checkbox-button input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkbox-button label {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .checkbox-button input[type="checkbox"]:checked + label {
+            background-color: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+        .checkbox-button input[type="checkbox"]:focus + label {
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5);
+        }

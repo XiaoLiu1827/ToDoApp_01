@@ -35,8 +35,13 @@ public class MyRuleController {
 
 	@PostMapping
 	public String saveMySavingRules(Model model, MySavingRuleForm mySavingRuleForm) {		
-		MySavingRule myRule = new MySavingRule(mySavingRuleForm.getTitle(),mySavingRuleForm.getDescription(),
-				userId,mySavingRuleForm.getAmount());
+		MySavingRule myRule = MySavingRule.builder()
+		        .title(mySavingRuleForm.getTitle())
+		        .description(mySavingRuleForm.getDescription())
+		        .userId(userId)
+		        .amount(mySavingRuleForm.getAmount())
+		        .frequency(mySavingRuleForm.getFrequency())
+		        .build();
 		mySavingRuleService.saveMySavingRule(myRule);
 		return "redirect:/savings/user";
 	}
