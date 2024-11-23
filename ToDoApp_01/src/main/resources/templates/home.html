@@ -37,11 +37,25 @@
 
 					<div class="wrap-list">
 						<div th:each="myRule : ${myRuleList}" class="savings-rule">
-							<div class="item-content">
+
+							<div class="item-content" onclick="showEditRuleForm()">
 								<h5 class="card-title" th:text="${myRule.title}"></h5>
 								<span class="edit-icon" title="編集">✎</span>
 								<p class="card-text" th:text="${myRule.amount} + '円'">
 								</p>
+							</div>
+							<div id="form-container" style="display: none;">
+								<form>
+									<label for="title">タイトル:</label>
+									<input type="text" id="title" name="title" th:value="${myRule.title}"><br>
+
+									<label for="amount">説明:</label>
+									<input type="text" id="description" name="description" th:value="${myRule.description}"><br>
+									<label for="amount">貯金額:</label>
+									<input type="text" id="amount" name="amount" th:value="${myRule.amount}"><br>
+
+									<button type="submit" id="submit-myRule-button">保存</button>
+								</form>
 							</div>
 							<div class="item-actions">
 								<button type="button" class="button small" th:attr="data-id=${myRule.id}"

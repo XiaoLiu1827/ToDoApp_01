@@ -7,8 +7,8 @@ import javax.security.sasl.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.form.UserAccountForm;
 import com.example.demo.model.UserAccount;
-import com.example.demo.model.UserAccountForm;
 
 @Service
 public class AuthenticationService {

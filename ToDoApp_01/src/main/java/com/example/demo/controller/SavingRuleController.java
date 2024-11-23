@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.example.demo.form.MySavingRuleForm;
 import com.example.demo.model.MySavingRule;
-import com.example.demo.model.MySavingRuleForm;
 import com.example.demo.service.MySavingRuleService;
 
 @Controller
 @RequestMapping("/savings/mySavingRule")
 @SessionAttributes("userId")
-public class MyRuleController {
+public class SavingRuleController {
 	@Autowired
 	private MySavingRuleService mySavingRuleService;
 	
@@ -43,6 +43,11 @@ public class MyRuleController {
 		        .frequency(mySavingRuleForm.getFrequency())
 		        .build();
 		mySavingRuleService.saveMySavingRule(myRule);
+		return "redirect:/savings/user";
+	}
+	
+	@PostMapping("/update")
+	public String updatetMySavingRule() {
 		return "redirect:/savings/user";
 	}
 }

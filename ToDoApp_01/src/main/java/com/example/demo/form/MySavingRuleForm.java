@@ -1,6 +1,8 @@
-package com.example.demo.model;
+package com.example.demo.form;
 
 import java.util.Set;
+
+import com.example.demo.model.DayOfWeek;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;

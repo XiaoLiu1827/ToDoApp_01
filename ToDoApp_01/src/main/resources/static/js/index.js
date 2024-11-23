@@ -19,6 +19,33 @@ function setMyRuleData(button) {
 	// フォームを送信
 	button.closest("form").submit();
 }
+/*
+マイ貯金ルール編集
+ */
+//編集ボタン押下時、入力フォームを表示
+function showEditRuleForm() {
+	const formContainer = document.getElementById(`form-container`);
+	if (formContainer.style.display === `none`) {
+		formContainer.style.display = `block`
+	} else {
+		formContainer.style.display = `none`;
+	}
+}
+
+//編集内容を保存
+document.getElementById(`submit-myRule-button`).addEventListener(`click`, async function() {
+	const title = document.getElementById(`title`).value;
+	const description = document.getElementById(`description`).value;
+	const amount = document.getElementById(`amount`).value;
+	//null以外の項目をセットする　null項目は更新しない 
+	const myRule = JSON.stringify({
+		"title": title,
+		"description": description,
+		"amount": amount
+	});
+	
+});
+
 
 //目標額到達時にサーバに通知する
 //document.addEventListener("DOMContentLoaded", function() {

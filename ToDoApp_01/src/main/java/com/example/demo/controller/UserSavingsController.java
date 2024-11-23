@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.example.demo.form.SavingsFormWithValidation;
 import com.example.demo.model.MySavingRule;
-import com.example.demo.model.SavingsFormWithValidation;
 import com.example.demo.model.WishItem;
 import com.example.demo.service.MySavingRuleService;
 import com.example.demo.service.SavingsService;

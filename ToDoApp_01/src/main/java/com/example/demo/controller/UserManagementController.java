@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.example.demo.model.UserAccountForm;
+import com.example.demo.form.UserAccountForm;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.UserAccountService;
 import com.example.demo.util.MessageUtils;
