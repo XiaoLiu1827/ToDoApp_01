@@ -53,7 +53,7 @@ public class UserSavingsController {
 	public String createSavings(@RequestParam("wishItemId") Long wishItemId,
 			@RequestParam(name = "myRuleId", required = true) Long myRuleId,
 			Model model) {
-
+		
 		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
 
 		//WishItem.CurrentAmountの更新

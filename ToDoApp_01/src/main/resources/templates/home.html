@@ -23,9 +23,7 @@
 					<h2>マイ貯金ルール</h2>
 					<a th:href="@{/savings/mySavingRule}" class="button">新規追加</a>
 				</div>
-				<form th:action="@{/savings/user}" method="post" class="form-vertical">
-					<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId">
-
+				<form th:action="@{/savings/user}" method="post" id="savings" class="form-vertical">
 					<div class="form-group">
 						<label for="wishItem" class="sr-only"></label>
 						<select id="wishItem" name="wishItemId" title="wishItem" class="wishlist-select">
@@ -37,7 +35,7 @@
 
 					<div class="wrap-list">
 						<div th:each="myRule : ${myRuleList}" class="savings-rule">
-
+							<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId" th:value="${myRule.id}">
 							<div class="item-content" onclick="showEditRuleForm()">
 								<h5 class="card-title" th:text="${myRule.title}"></h5>
 								<span class="edit-icon" title="編集">✎</span>
@@ -45,21 +43,20 @@
 								</p>
 							</div>
 							<div id="form-container" style="display: none;">
-								<form>
-									<label for="title">タイトル:</label>
-									<input type="text" id="title" name="title" th:value="${myRule.title}"><br>
+								<label for="title">タイトル:</label>
+								<input type="text" id="title" name="title" th:value="${myRule.title}"><br>
 
-									<label for="amount">説明:</label>
-									<input type="text" id="description" name="description" th:value="${myRule.description}"><br>
-									<label for="amount">貯金額:</label>
-									<input type="text" id="amount" name="amount" th:value="${myRule.amount}"><br>
-
-									<button type="submit" id="submit-myRule-button">保存</button>
-								</form>
+								<label for="amount">説明:</label>
+								<input type="text" id="description" name="description"
+									th:value="${myRule.description}"><br>
+								<label for="amount">貯金額:</label>
+								<input type="text" id="amount" name="amount" th:value="${myRule.amount}"><br>
+								<input type="hidden" id="id" value="${myRule.id}">
+								<button type="submit" id="submit-myRule-button"
+									th:attr="data-id=${myRule.id}">保存</button>
 							</div>
 							<div class="item-actions">
-								<button type="button" class="button small" th:attr="data-id=${myRule.id}"
-									onclick="setMyRuleData(this)">達成</button>
+								<button type="submit" class="report-savings">達成</button>
 								<!--							<button class="btn btn-secondary">未達成</button>-->
 							</div>
 						</div>

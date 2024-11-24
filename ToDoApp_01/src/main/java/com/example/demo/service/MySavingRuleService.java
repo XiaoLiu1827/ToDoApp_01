@@ -23,4 +23,13 @@ public class MySavingRuleService {
 	public MySavingRule saveMySavingRule(MySavingRule myRule) {
 		return repository.save(myRule);
 	}
+	
+	public MySavingRule updateMySavingRule(Long id, MySavingRule updatedRule) {
+		return repository.findById(id).map(existingRule -> {
+			existingRule.setTitle(updatedRule.getTitle());
+			existingRule.setDescription(updatedRule.getDescription());
+            existingRule.setAmount(updatedRule.getAmount());
+            return repository.save(existingRule);      
+		}).orElseThrow(() -> new RuntimeException("not found with id" + id));
+	}
 }

@@ -9,42 +9,71 @@
 //	inputAmount.value = defaultSavingsAmount;
 //});
 
-//プルダウンに設定したマイ貯金ルールをサーバ送信用に格納する
-function setMyRuleData(button) {
-	const myRuleId = button.getAttribute("data-id");
+////プルダウンに設定したマイ貯金ルールをサーバ送信用に格納する
+//function setMyRuleData(button) {
+//	const myRuleId = button.getAttribute("data-id");
+//
+//	// 隠しフィールドに設定
+//	document.getElementById("myRuleId").value = myRuleId;
+//
+//	// フォームを送信
+//	button.closest("form").submit();
+//}
 
-	// 隠しフィールドに設定
-	document.getElementById("myRuleId").value = myRuleId;
-
-	// フォームを送信
-	button.closest("form").submit();
-}
 /*
-マイ貯金ルール編集
+フォーム送信処理
  */
-//編集ボタン押下時、入力フォームを表示
-function showEditRuleForm() {
-	const formContainer = document.getElementById(`form-container`);
-	if (formContainer.style.display === `none`) {
-		formContainer.style.display = `block`
-	} else {
-		formContainer.style.display = `none`;
-	}
-}
-
-//編集内容を保存
-document.getElementById(`submit-myRule-button`).addEventListener(`click`, async function() {
-	const title = document.getElementById(`title`).value;
-	const description = document.getElementById(`description`).value;
-	const amount = document.getElementById(`amount`).value;
-	//null以外の項目をセットする　null項目は更新しない 
-	const myRule = JSON.stringify({
-		"title": title,
-		"description": description,
-		"amount": amount
+//貯金報告
+document.addEventListener("DOMContentLoaded", () => {
+	// メインフォーム送信時の処理
+	document.getElementById("submit-savings").addEventListener("click", function(event) {
+		// デフォルト送信を有効にする
+		document.getElementById("savings").submit();
 	});
-	
-});
+
+	/*
+	マイ貯金ルール編集
+	 */
+	//編集ボタン押下時、入力フォームを表示
+	function showEditRuleForm() {
+		const formContainer = document.getElementById(`form-container`);
+		if (formContainer.style.display === `none`) {
+			formContainer.style.display = `block`
+		} else {
+			formContainer.style.display = `none`;
+		}
+	}
+
+	//編集内容を保存
+	document.getElementById(`submit-myRule-button`).addEventListener(`click`, async function() {
+		const id = this.dataset.id;
+		const title = document.getElementById(`title`).value;
+		const description = document.getElementById(`description`).value;
+		const amount = document.getElementById(`amount`).value;
+		//null以外の項目をセットする　null項目は更新しない 
+		const myRule = JSON.stringify({
+			"title": title,
+			"description": description,
+			"amount": amount
+		}, function(prop, value) {
+			if (value === null || value === "") {
+				alert(`${prop} is required!`)
+				return;
+			}
+			return value;
+		});
+		try {
+			await fetch(`/savings/mySavingRule/update/${id}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json' // JSON形式で送信
+				},
+				body: myRule // オブジェクトをJSON形式に変換して送信
+			});
+		} catch (error) {
+
+		}
+	});
 
 
 //目標額到達時にサーバに通知する
