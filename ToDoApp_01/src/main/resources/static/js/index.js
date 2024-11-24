@@ -20,16 +20,7 @@
 //	button.closest("form").submit();
 //}
 
-/*
-フォーム送信処理
- */
-//貯金報告
-document.addEventListener("DOMContentLoaded", () => {
-	// メインフォーム送信時の処理
-	document.getElementById("submit-savings").addEventListener("click", function(event) {
-		// デフォルト送信を有効にする
-		document.getElementById("savings").submit();
-	});
+
 
 	/*
 	マイ貯金ルール編集
@@ -75,7 +66,15 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 
+//フォーム送信処理
 
+////貯金報告
+//document.addEventListener("DOMContentLoaded", () => {
+//	// メインフォーム送信時の処理
+//	document.getElementById("submit-savings").addEventListener("click", function(event) {
+//		// デフォルト送信を有効にする
+//		document.getElementById("savings").submit();
+//	});
 //目標額到達時にサーバに通知する
 //document.addEventListener("DOMContentLoaded", function() {
 //	checkProgress();
