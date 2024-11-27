@@ -22,49 +22,51 @@
 
 
 
-	/*
-	マイ貯金ルール編集
-	 */
-	//編集ボタン押下時、入力フォームを表示
-	function showEditRuleForm() {
-		const formContainer = document.getElementById(`form-container`);
-		if (formContainer.style.display === `none`) {
-			formContainer.style.display = `block`
-		} else {
-			formContainer.style.display = `none`;
-		}
+/*
+マイ貯金ルール編集
+ */
+//編集ボタン押下時、入力フォームを表示
+function showEditRuleForm() {
+	const formContainer = document.getElementById(`form-container`);
+	if (formContainer.style.display === `none`) {
+		formContainer.style.display = `block`
+	} else {
+		formContainer.style.display = `none`;
 	}
+}
 
-	//編集内容を保存
-	document.getElementById(`submit-myRule-button`).addEventListener(`click`, async function() {
-		const id = this.dataset.id;
-		const title = document.getElementById(`title`).value;
-		const description = document.getElementById(`description`).value;
-		const amount = document.getElementById(`amount`).value;
-		//null以外の項目をセットする　null項目は更新しない 
-		const myRule = JSON.stringify({
-			"title": title,
-			"description": description,
-			"amount": amount
-		}, function(prop, value) {
-			if (value === null || value === "") {
-				alert(`${prop} is required!`)
-				return;
-			}
-			return value;
-		});
-		try {
-			await fetch(`/savings/mySavingRule/update/${id}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json' // JSON形式で送信
-				},
-				body: myRule // オブジェクトをJSON形式に変換して送信
-			});
-		} catch (error) {
-
+//編集内容を保存
+document.getElementById(`submit-myRule-button`).addEventListener(`click`, async function() {
+	console.log('Button clicked!');
+	const id = this.dataset.id;
+	const title = document.getElementById(`title`).value;
+	const description = document.getElementById(`description`).value;
+	const amount = document.getElementById(`amount`).value;
+	//null以外の項目をセットする　null項目は更新しない 
+	const myRule = JSON.stringify({
+		"title": title,
+		"description": description,
+		"amount": amount
+	}, function(prop, value) {
+		if (value === null || value === "") {
+			alert(`${prop} is required!`)
+			return;
 		}
+		return value;
 	});
+	try {
+		console.log('Sending fetch request...');
+		await fetch(`/savings/mySavingRule/update/${id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json' // JSON形式で送信
+			},
+			body: myRule // オブジェクトをJSON形式に変換して送信
+		});
+	} catch (error) {
+
+	}
+});
 
 //フォーム送信処理
 
