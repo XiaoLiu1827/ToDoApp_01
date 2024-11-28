@@ -5,9 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -48,10 +46,10 @@ public class SavingRuleController {
 		return "redirect:/savings/user";
 	}
 	
-	@PostMapping("/update/{id}")
-	public String updatetMySavingRule(@PathVariable Long id, @RequestBody MySavingRule updatedRule) {
-		MySavingRule result = mySavingRuleService.updateMySavingRule(id, updatedRule);
-		
-		return "redirect:/savings/user";
-	}
+//	@PostMapping("/update/{id}")
+//	public String updatetMySavingRule(@PathVariable Long id, @RequestBody MySavingRule updatedRule) {
+//		MySavingRule result = mySavingRuleService.updateMySavingRule(id, updatedRule);
+//		
+//		return "redirect:/savings/user";
+//	}
 }

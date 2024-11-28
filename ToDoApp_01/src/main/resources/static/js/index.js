@@ -56,15 +56,24 @@ document.getElementById(`submit-myRule-button`).addEventListener(`click`, async 
 	});
 	try {
 		console.log('Sending fetch request...');
-		await fetch(`/savings/mySavingRule/update/${id}`, {
+		const response = await fetch(`/savings/api/mySavingRule/update/${id}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json' // JSON形式で送信
 			},
 			body: myRule // オブジェクトをJSON形式に変換して送信
 		});
+		if(response.ok){
+			const updatedRule = await response.json();
+			const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
+			ruleElement.querySelector('.card-title').textContent = updatedRule.title;
+            ruleElement.querySelector('.card-text').textContent = `${updatedRule.amount}円`;
+			alert(`更新が完了しました。`);
+		}else{
+			alert(`更新に失敗しました。`);
+		}
 	} catch (error) {
-
+	console.erro(`error:`,error);
 	}
 });
 

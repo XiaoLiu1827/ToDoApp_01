@@ -34,7 +34,7 @@
 					</div>
 
 					<div class="wrap-list">
-						<div th:each="myRule : ${myRuleList}" class="savings-rule">
+						<div th:each="myRule : ${myRuleList}" class="savings-rule" th:attr="data-id=${myRule.id}">
 							<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId" th:value="${myRule.id}">
 							<div class="item-content" onclick="showEditRuleForm()">
 								<h5 class="card-title" th:text="${myRule.title}"></h5>
