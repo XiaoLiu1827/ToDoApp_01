@@ -26,8 +26,9 @@
 マイ貯金ルール編集
  */
 //編集ボタン押下時、入力フォームを表示
-function showEditRuleForm() {
-	const formContainer = document.getElementById(`form-container`);
+function showEditRuleForm(element) {
+	const ruleId = element.dataset.id;
+	const formContainer = document.getElementById(`form-container-${ruleId}`);
 	if (formContainer.style.display === `none`) {
 		formContainer.style.display = `block`
 	} else {
@@ -36,46 +37,57 @@ function showEditRuleForm() {
 }
 
 //編集内容を保存
-document.getElementById(`submit-myRule-button`).addEventListener(`click`, async function() {
-	console.log('Button clicked!');
-	const id = this.dataset.id;
-	const title = document.getElementById(`title`).value;
-	const description = document.getElementById(`description`).value;
-	const amount = document.getElementById(`amount`).value;
-	//null以外の項目をセットする　null項目は更新しない 
-	const myRule = JSON.stringify({
-		"title": title,
-		"description": description,
-		"amount": amount
-	}, function(prop, value) {
-		if (value === null || value === "") {
-			alert(`${prop} is required!`)
-			return;
+document.querySelectorAll('#submit-myRule-button').forEach(button => {
+	button.addEventListener(`click`, async function() {
+		console.log('Button clicked!');
+		const id = this.dataset.id;
+		const formContainer = document.querySelector(`#form-container-${id}`);
+		const title = formContainer.querySelector(`#title`).value;
+		const description = formContainer.querySelector(`#description`).value;
+		const amount = formContainer.querySelector(`#amount`).value;
+
+	    //入力チェック
+		const amountPattern = /^[0-9]+$/;  
+
+		if (!amountPattern.test(amount)) {
+			alert('貯金額は半角数字で入力してください。');
 		}
-		return value;
-	});
-	try {
-		console.log('Sending fetch request...');
-		const response = await fetch(`/savings/api/mySavingRule/update/${id}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json' // JSON形式で送信
-			},
-			body: myRule // オブジェクトをJSON形式に変換して送信
+
+		//null以外の項目をセットする　null項目は更新しない 
+		const myRule = JSON.stringify({
+			"title": title,
+			"description": description,
+			"amount": amount
+		}, function(prop, value) {
+			if (value === null || value === "") {
+				return;
+			}
+			return value;
 		});
-		if(response.ok){
-			const updatedRule = await response.json();
-			const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
-			ruleElement.querySelector('.card-title').textContent = updatedRule.title;
-            ruleElement.querySelector('.card-text').textContent = `${updatedRule.amount}円`;
-			alert(`更新が完了しました。`);
-		}else{
-			alert(`更新に失敗しました。`);
+		try {
+			console.log('Sending fetch request...');
+			const response = await fetch(`/savings/api/mySavingRule/update/${id}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json' // JSON形式で送信
+				},
+				body: myRule // オブジェクトをJSON形式に変換して送信
+			});
+			if (response.ok) {
+				const updatedRule = await response.json();
+				const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
+				ruleElement.querySelector('.card-title').textContent = updatedRule.title;
+				ruleElement.querySelector('.card-text').textContent = `${updatedRule.amount}円`;
+				alert(`更新が完了しました。`);
+			} else {
+				alert(`更新に失敗しました。`);
+			}
+		} catch (error) {
+			console.error(`error:`, error);
 		}
-	} catch (error) {
-	console.erro(`error:`,error);
-	}
+	});
 });
+
 
 //フォーム送信処理
 
