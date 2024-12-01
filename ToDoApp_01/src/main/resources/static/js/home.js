@@ -28,64 +28,70 @@
 //編集ボタン押下時、入力フォームを表示
 function showEditRuleForm(element) {
 	const ruleId = element.dataset.id;
-	const formContainer = document.getElementById(`form-container-${ruleId}`);
-	if (formContainer.style.display === `none`) {
-		formContainer.style.display = `block`
-	} else {
-		formContainer.style.display = `none`;
-	}
+	const ruleElement = document.querySelector(`.savings-rule[data-id="${ruleId}"]`);
+
+	// モーダルの値をセット
+	document.getElementById("modal-id").value = ruleId;
+	document.getElementById("modal-title").value = ruleElement.querySelector(".card-title").textContent.trim();
+	document.getElementById("modal-description").value = ruleElement.querySelector("#description")?.value || "";
+	document.getElementById("modal-amount").value = ruleElement.querySelector(".card-text").textContent.trim().replace("円", "");
+
+	// モーダルを表示
+	document.getElementById("edit-modal").style.display = "block";
 }
 
+// モーダルを閉じる
+document.getElementById("close-modal").addEventListener("click", function() {
+	document.getElementById("edit-modal").style.display = "none";
+});
+
 //編集内容を保存
-document.querySelectorAll('#submit-myRule-button').forEach(button => {
-	button.addEventListener(`click`, async function() {
-		console.log('Button clicked!');
-		const id = this.dataset.id;
-		const formContainer = document.querySelector(`#form-container-${id}`);
-		const title = formContainer.querySelector(`#title`).value;
-		const description = formContainer.querySelector(`#description`).value;
-		const amount = formContainer.querySelector(`#amount`).value;
+document.getElementById('save-modal-button').addEventListener(`click`, async function() {
+	console.log('Button clicked!');
+	const id = document.getElementById("modal-id").value;
+	const title = document.getElementById("modal-title").value;
+	const description = document.getElementById("modal-description").value;
+	const amount = document.getElementById("modal-amount").value;
 
-	    //入力チェック
-		const amountPattern = /^[0-9]+$/;  
+	//入力チェック
+	const amountPattern = /^[0-9]+$/;
 
-		if (!amountPattern.test(amount)) {
-			alert('貯金額は半角数字で入力してください。');
+	if (!amountPattern.test(amount)) {
+		alert('貯金額は半角数字で入力してください。');
+	}
+
+	//null以外の項目をセットする　null項目は更新しない 
+	const myRule = JSON.stringify({
+		"title": title,
+		"description": description,
+		"amount": amount
+	}, function(prop, value) {
+		if (value === null || value === "") {
+			return;
 		}
-
-		//null以外の項目をセットする　null項目は更新しない 
-		const myRule = JSON.stringify({
-			"title": title,
-			"description": description,
-			"amount": amount
-		}, function(prop, value) {
-			if (value === null || value === "") {
-				return;
-			}
-			return value;
-		});
-		try {
-			console.log('Sending fetch request...');
-			const response = await fetch(`/savings/api/mySavingRule/update/${id}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json' // JSON形式で送信
-				},
-				body: myRule // オブジェクトをJSON形式に変換して送信
-			});
-			if (response.ok) {
-				const updatedRule = await response.json();
-				const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
-				ruleElement.querySelector('.card-title').textContent = updatedRule.title;
-				ruleElement.querySelector('.card-text').textContent = `${updatedRule.amount}円`;
-				alert(`更新が完了しました。`);
-			} else {
-				alert(`更新に失敗しました。`);
-			}
-		} catch (error) {
-			console.error(`error:`, error);
-		}
+		return value;
 	});
+	try {
+		console.log('Sending fetch request...');
+		const response = await fetch(`/savings/api/mySavingRule/update/${id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json' // JSON形式で送信
+			},
+			body: myRule // オブジェクトをJSON形式に変換して送信
+		});
+		if (response.ok) {
+			const updatedRule = await response.json();
+			const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
+			ruleElement.querySelector('.card-title').textContent = updatedRule.title;
+			ruleElement.querySelector('.card-text').textContent = `${updatedRule.amount}円`;
+			alert(`更新が完了しました。`);
+		} else {
+			alert(`更新に失敗しました。`);
+		}
+	} catch (error) {
+		console.error(`error:`, error);
+	}
 });
 
 

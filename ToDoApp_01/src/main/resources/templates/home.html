@@ -24,33 +24,30 @@
 					<a th:href="@{/savings/mySavingRule}" class="button">新規追加</a>
 				</div>
 				<form th:action="@{/savings/user}" method="post" id="savings" class="form-vertical">
-					<div class="form-group">
-						<label for="wishItem" class="sr-only"></label>
-						<select id="wishItem" name="wishItemId" title="wishItem" class="wishlist-select">
-							<option th:each="wishItem :${wishList}" th:value="${wishItem.id}"
-								th:text="${wishItem.name}">
-							</option>
-						</select>
-					</div>
-
 					<div class="wrap-list">
 						<div th:each="myRule : ${myRuleList}" class="savings-rule" th:attr="data-id=${myRule.id}">
 							<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId" th:value="${myRule.id}">
-							<div class="item-content" th:attr="data-id=${myRule.id}" onclick="showEditRuleForm(this)">
+							<div th:id="'item-content-'+ ${myRule.id}" class="item-content" style="display: block">
 								<h5 class="card-title" th:text="${myRule.title}"></h5>
-								<span class="edit-icon" title="編集">✎</span>
+								<span class="edit-icon" title="編集" th:attr="data-id=${myRule.id}"
+									onclick="showEditRuleForm(this)">✎</span>
 								<p class="card-text" th:text="${myRule.amount} + '円'">
 								</p>
 							</div>
 							<div th:id="'form-container-'+ ${myRule.id}" style="display: none;">
-								<label for="title">タイトル:</label>
-								<input type="text" id="title" name="title" th:value="${myRule.title}"><br>
-
-								<label for="amount">説明:</label>
-								<input type="text" id="description" name="description"
-									th:value="${myRule.description}"><br>
-								<label for="amount">貯金額:</label>
-								<input type="text" id="amount" name="amount" th:value="${myRule.amount}"><br>
+								<div class="form-group">
+									<label for="title">タイトル:</label>
+									<input type="text" id="title" name="title" th:value="${myRule.title}"><br>
+								</div>
+								<div class="form-group">
+									<label for="amount">説明:</label>
+									<input type="text" id="description" name="description"
+										th:value="${myRule.description}"><br>
+								</div>
+								<div class="form-group">
+									<label for="amount">貯金額:</label>
+									<input type="text" id="amount" name="amount" th:value="${myRule.amount}"><br>
+								</div>
 								<input type="hidden" id="id" value="${myRule.id}">
 								<button type="button" id="submit-myRule-button"
 									th:attr="data-id=${myRule.id}">保存</button>
@@ -63,6 +60,10 @@
 					</div>
 				</form>
 			</div>
+
+
+
+
 			<div class="section">
 				<div class="section-header">
 					<h2>欲しいものリスト</h2>
@@ -73,19 +74,35 @@
 						<div class="item-content" th:attr="data-id=${wishItem.id}">
 							<h5 class="card-title" th:text="${wishItem.name}"></h5>
 							<p class="card-text">
-								<span th:text="${wishItem.currentAmount}"></span>円 /
 								<span th:text="${wishItem.neededAmount}"></span>円
 							</p>
-							<div class="progress-bar">
-								<div class="progress" role="progressbar"
-									th:style="'width:' + (${wishItem.currentAmount} / ${wishItem.neededAmount}) * 100 + '%;'"
-									aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-							</div>
 							<span th:text="${wishItem.id}" class="wish-item-id" style="display: none;"></span>
 						</div>
 					</div>
 				</div>
 
+			</div>
+			<!-- 編集用モーダル -->
+			<div id="edit-modal" class="modal" style="display: none;">
+				<div class="modal-content">
+					<span id="close-modal" class="close">&times;</span>
+					<form id="edit-form">
+						<div class="form-group">
+							<label for="modal-title">タイトル:</label>
+							<input type="text" id="modal-title" name="title">
+						</div>
+						<div class="form-group">
+							<label for="modal-description">説明:</label>
+							<input type="text" id="modal-description" name="description">
+						</div>
+						<div class="form-group">
+							<label for="modal-amount">貯金額:</label>
+							<input type="text" id="modal-amount" name="amount">
+						</div>
+						<input type="hidden" id="modal-id" name="id">
+						<button type="button" id="save-modal-button">保存</button>
+					</form>
+				</div>
 			</div>
 			<script src="/js/home.js"></script>
 
