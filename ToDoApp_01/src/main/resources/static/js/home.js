@@ -32,7 +32,6 @@ function showEditRuleForm(element) {
 
 	// モーダルの値をセット
 	document.getElementById("modal-id").value = ruleId;
-	document.getElementById("modal-title").value = ruleElement.querySelector(".card-title").textContent.trim();
 	document.getElementById("modal-description").value = ruleElement.querySelector("#description")?.value || "";
 	document.getElementById("modal-amount").value = ruleElement.querySelector(".card-text").textContent.trim().replace("円", "");
 
@@ -49,12 +48,11 @@ document.getElementById("close-modal").addEventListener("click", function() {
 document.getElementById('save-modal-button').addEventListener(`click`, async function() {
 	console.log('Button clicked!');
 	const id = document.getElementById("modal-id").value;
-	const title = document.getElementById("modal-title").value;
 	const description = document.getElementById("modal-description").value;
 	const amount = document.getElementById("modal-amount").value;
 
 	//入力チェック
-	const amountPattern = /^[0-9]+$/;
+	const amountPattern = /^[0-9]+(\.[0-9]+)?$/;
 
 	if (!amountPattern.test(amount)) {
 		alert('貯金額は半角数字で入力してください。');
@@ -62,7 +60,6 @@ document.getElementById('save-modal-button').addEventListener(`click`, async fun
 
 	//null以外の項目をセットする　null項目は更新しない 
 	const myRule = JSON.stringify({
-		"title": title,
 		"description": description,
 		"amount": amount
 	}, function(prop, value) {
@@ -83,7 +80,7 @@ document.getElementById('save-modal-button').addEventListener(`click`, async fun
 		if (response.ok) {
 			const updatedRule = await response.json();
 			const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
-			ruleElement.querySelector('.card-title').textContent = updatedRule.title;
+			ruleElement.querySelector('.card-title').textContent = updatedRule.description;
 			ruleElement.querySelector('.card-text').textContent = `${updatedRule.amount}円`;
 			alert(`更新が完了しました。`);
 		} else {

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.demo.form.SavingsFormWithValidation;
 import com.example.demo.model.MySavingRule;
-import com.example.demo.model.WishItem;
 import com.example.demo.service.MySavingRuleService;
 import com.example.demo.service.SavingsService;
 import com.example.demo.service.UserAccountService;
@@ -56,13 +55,13 @@ public class UserSavingsController {
 		
 		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
 
-		//WishItem.CurrentAmountの更新
-		WishItem wishItem = wishItemService.updateCurrentAmount(wishItemId, myRule.getAmount());
-
-		//目標額到達可否のチェック
-		if (wishItem.checkProgress()) {
-			wishItemService.deleteWishItem(wishItemId);
-		}
+//		//WishItem.CurrentAmountの更新
+//		WishItem wishItem = wishItemService.updateCurrentAmount(wishItemId, myRule.getAmount());
+//
+//		//目標額到達可否のチェック
+//		if (wishItem.checkProgress()) {
+//			wishItemService.deleteWishItem(wishItemId);
+//		}
 		return "redirect:/savings/user";
 	}
 

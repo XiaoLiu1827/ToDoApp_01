@@ -1,5 +1,6 @@
 package com.example.demo.form;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import com.example.demo.model.DayOfWeek;
@@ -15,7 +16,7 @@ public class MySavingRuleForm {
 
 	private String description;
     @DecimalMin(value = "0.0", inclusive = false, message = "amount must be greater than zero")
-	private Double amount;
+	private BigDecimal amount;
     private Set<DayOfWeek> frequency;
     
     public boolean isActiveOn(DayOfWeek day) {

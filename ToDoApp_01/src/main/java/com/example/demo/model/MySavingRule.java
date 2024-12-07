@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import jakarta.persistence.CollectionTable;
@@ -35,22 +36,23 @@ public class MySavingRule {
 
 	private Long userId;
 
-	private Double amount;
-	
+	private BigDecimal amount;
+
 	@ElementCollection(targetClass = DayOfWeek.class)
-    @CollectionTable(
-        name = "MY_SAVING_RULE_FREQUENCY",
-        joinColumns = @JoinColumn(name = "MY_SAVING_RULE_ID")
-    )
-    @Column(name = "DAY_OF_WEEK")
-    @Enumerated(EnumType.STRING)
+	@CollectionTable(name = "MY_SAVING_RULE_FREQUENCY", joinColumns = @JoinColumn(name = "MY_SAVING_RULE_ID"))
+	@Column(name = "DAY_OF_WEEK")
+	@Enumerated(EnumType.STRING)
 	private Set<DayOfWeek> frequency;
 
 	public boolean isActiveOn(DayOfWeek day) {
 		return frequency != null && frequency.contains(day);
 	}
 
-	public MySavingRule(String title, String description, Long userId, Double amount, Set<DayOfWeek> frequency) {
+	public String getFormattedAmount() {
+		return amount.stripTrailingZeros().toPlainString(); // 整形して返す
+	}
+
+	public MySavingRule(String title, String description, Long userId, BigDecimal amount, Set<DayOfWeek> frequency) {
 		super();
 		this.title = title;
 		this.description = description;
