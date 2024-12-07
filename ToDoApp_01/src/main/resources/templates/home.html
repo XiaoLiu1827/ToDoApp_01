@@ -28,9 +28,14 @@
 						<div th:each="myRule : ${myRuleList}" class="savings-rule" th:attr="data-id=${myRule.id}">
 							<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId" th:value="${myRule.id}">
 							<div th:id="'item-content-'+ ${myRule.id}" class="item-content" style="display: block">
-								<h5 class="card-title" th:text="${myRule.title}"></h5>
-								<span class="edit-icon" title="編集" th:attr="data-id=${myRule.id}"
-									onclick="showEditRuleForm(this)">✎</span>
+								<div class="wrap-rule-title">
+									<h5 class="card-title" th:text="${myRule.title}"></h5>
+									<span class="edit-icon" title="編集" th:attr="data-id=${myRule.id}"
+										onclick="showEditRuleForm(this)">✎</span>
+								</div>
+
+
+
 								<p class="card-text" th:text="${myRule.amount} + '円'">
 								</p>
 							</div>

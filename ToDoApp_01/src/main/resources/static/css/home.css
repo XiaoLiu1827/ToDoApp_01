@@ -52,20 +52,16 @@ h2 {
 
 /*マイ貯金ルール*/
 .savings-rule {
-	width: 150px;
-	height: 150px;
-	background-color: #f0f8ff;
+	background-color: #f9f9f9;
 	border: 1px solid #e0e0e0;
-	border-radius: 10px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	/* 垂直方向に配置 */
-	align-items: center;
-	text-align: center;
-	padding: 20px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	/* 影を追加 */
+	border-radius: 5px;
+	padding: 15px;
+	margin-bottom: 10px;
+}
+
+.wrap-rule-title{
+	 display: flex;
+	 gap: 10px; 
 }
 
 /*欲しいものリスト*/
@@ -88,6 +84,8 @@ h2 {
 	border: 1px solid #e0e0e0;
 	border-radius: 5px;
 }
+
+
 
 
 /*モーダル*/
@@ -144,19 +142,6 @@ h2 {
 	font-size: 24px;
 	font-weight: bold;
 	color: #333;
-}
-
-
-
-.wrap-list {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	/* Stacks items vertically */
-	gap: 20px;
-	/* Adds space between items */
-	margin-top: 10px;
-	/* Adds space between dropdown and list */
 }
 
 .title {
