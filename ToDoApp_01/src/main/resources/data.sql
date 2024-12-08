@@ -1,7 +1,12 @@
+--貯金箱--
+INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT) VALUES (1, 1000.0);
+INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT) VALUES (2, 1000.0);
+INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT) VALUES (3, 1000.0);
+
 -- Inserting test data into the UserAccount table
-INSERT INTO USER_ACCOUNT (id, username, password) VALUES (1, 'john_doe', 'password123');
-INSERT INTO USER_ACCOUNT (id, username, password) VALUES (2, 'jane_smith', 'passw0rd');
-INSERT INTO USER_ACCOUNT (id, username, password) VALUES (3, 'alice_jones', 'alicepass');
+INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (1, 'john_doe', 'password123',1);
+INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (2, 'jane_smith', 'passw0rd', 2);
+INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (3, 'alice_jones', 'alicepass', 3);
 
 -- Assuming UserAccount IDs 1, 2, and 3 already exist in the UserAccount table
 
@@ -11,9 +16,9 @@ INSERT INTO WISH_ITEM (NAME, CURRENT_AMOUNT, NEEDED_AMOUNT, USER_ACCOUNT_ID) VAL
 
 --MySavingRule--
 INSERT INTO MY_SAVING_RULE (AMOUNT, ID, USER_ID, DESCRIPTION, TITLE) VALUES
-(5000, 5, 1, '毎月の貯金', '月次貯金'),
-(3000, 2, 1, '旅行用の貯金', '旅行貯金'),
-(10000, 3, 1, '新しいガジェット購入のための貯金', 'ガジェット貯金');
+(5000, 5, 1, '仕事終わりの余計な買い食いをしない', '月次貯金'),
+(3000, 2, 1, '弁当を作る', '旅行貯金'),
+(10000, 3, 1, '外食をしない', 'ガジェット貯金');
 
 -- 月次貯金: 月曜と金曜に適用
 INSERT INTO MY_SAVING_RULE_FREQUENCY (MY_SAVING_RULE_ID, DAY_OF_WEEK) VALUES
@@ -29,3 +34,5 @@ INSERT INTO MY_SAVING_RULE_FREQUENCY (MY_SAVING_RULE_ID, DAY_OF_WEEK) VALUES
 INSERT INTO MY_SAVING_RULE_FREQUENCY (MY_SAVING_RULE_ID, DAY_OF_WEEK) VALUES
 (3, 'TUESDAY'),
 (3, 'THURSDAY');
+
+

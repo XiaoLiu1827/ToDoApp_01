@@ -59,9 +59,9 @@ h2 {
 	margin-bottom: 10px;
 }
 
-.wrap-rule-title{
-	 display: flex;
-	 gap: 10px; 
+.wrap-rule-title {
+	display: flex;
+	gap: 10px;
 }
 
 /*欲しいものリスト*/
@@ -86,6 +86,34 @@ h2 {
 }
 
 
+/*貯金箱*/
+.piggy-bank {
+	background: linear-gradient(to bottom, #ffd1dc, #ffb6c1);
+	border: 4px solid #ff69b4;
+	border-radius: 20px;
+	padding: 30px;
+	text-align: center;
+	max-width: 300px;
+	margin: 40px auto;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.coin-icon {
+	font-size: 48px;
+	margin-bottom: 20px;
+}
+
+.total-amount {
+	font-size: 28px;
+	font-weight: bold;
+	color: #333;
+	margin: 20px 0;
+}
+
+.button.withdraw {
+	background-color: #ff69b4;
+	font-weight: bold;
+}
 
 
 /*モーダル*/

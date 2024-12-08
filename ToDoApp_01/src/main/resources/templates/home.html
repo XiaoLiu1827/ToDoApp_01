@@ -59,42 +59,53 @@
 				</form>
 			</div>
 			<div class="section">
-				<div class="section-header">
-					<h2>欲しいものリスト</h2>
-					<a href="#" class="button">新規追加</a>
-				</div>
-				<div class="wrap-list">
-					<div th:each="wishItem : ${wishList}" class="wishlist-item">
-						<div class="item-content" th:attr="data-id=${wishItem.id}">
-							<h5 class="card-title" th:text="${wishItem.name}"></h5>
-							<p class="card-text">
-								<span th:text="${wishItem.neededAmount}"></span>円
-							</p>
-							<span th:text="${wishItem.id}" class="wish-item-id" style="display: none;"></span>
+				<section id="savings-box">
+					<div class="piggy-bank">
+						<div class="coin-icon">💰</div>
+						<h2>貯金箱</h2>
+						<div id="total-savings" class="total-amount">0円</div>
+						<button id="withdraw-button" class="button withdraw" disabled>取り崩す</button>
+					</div>
+				</section>
+			</div>
+
+				<div class="section">
+					<div class="section-header">
+						<h2>欲しいものリスト</h2>
+						<a href="#" class="button">新規追加</a>
+					</div>
+					<div class="wrap-list">
+						<div th:each="wishItem : ${wishList}" class="wishlist-item">
+							<div class="item-content" th:attr="data-id=${wishItem.id}">
+								<h5 class="card-title" th:text="${wishItem.name}"></h5>
+								<p class="card-text">
+									<span th:text="${wishItem.neededAmount}"></span>円
+								</p>
+								<span th:text="${wishItem.id}" class="wish-item-id" style="display: none;"></span>
+							</div>
 						</div>
 					</div>
-				</div>
 
-			</div>
-			<!-- 編集用モーダル -->
-			<div id="edit-modal" class="modal" style="display: none;">
-				<div class="modal-content">
-					<span id="close-modal" class="close">&times;</span>
-					<form id="edit-form">
-						<div class="form-group">
-							<label for="modal-description">説明:</label>
-							<input type="text" id="modal-description" name="description">
-						</div>
-						<div class="form-group">
-							<label for="modal-amount">貯金額:</label>
-							<input type="text" id="modal-amount" name="amount">
-						</div>
-						<input type="hidden" id="modal-id" name="id">
-						<button type="button" id="save-modal-button">保存</button>
-					</form>
 				</div>
-			</div>
-			<script src="/js/home.js"></script>
+				<!-- 編集用モーダル -->
+				<div id="edit-modal" class="modal" style="display: none;">
+					<div class="modal-content">
+						<span id="close-modal" class="close">&times;</span>
+						<form id="edit-form">
+							<div class="form-group">
+								<label for="modal-description">説明:</label>
+								<input type="text" id="modal-description" name="description">
+							</div>
+							<div class="form-group">
+								<label for="modal-amount">貯金額:</label>
+								<input type="text" id="modal-amount" name="amount">
+							</div>
+							<input type="hidden" id="modal-id" name="id">
+							<button type="button" id="save-modal-button">保存</button>
+						</form>
+					</div>
+				</div>
+				<script src="/js/home.js"></script>
 
 </body>
 
