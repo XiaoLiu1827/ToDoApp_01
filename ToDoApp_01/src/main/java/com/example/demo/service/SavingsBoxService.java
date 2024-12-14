@@ -14,11 +14,11 @@ public class SavingsBoxService {
 	SavingsBoxRepository repository;
 	
 	public void updateAmount(Long userId, BigDecimal amount) {
-		SavingsBox updatedSavingsBox = getByUserId(userId);
+		SavingsBox updatedSavingsBox = getSavingBoxByUserId(userId);
 		updatedSavingsBox.updateTotalAmount(amount);
 		repository.save(updatedSavingsBox);
 	}
-	public SavingsBox getByUserId(Long userId) {
+	public SavingsBox getSavingBoxByUserId(Long userId) {
 		return repository.findByUserId(userId);
 	}
 	

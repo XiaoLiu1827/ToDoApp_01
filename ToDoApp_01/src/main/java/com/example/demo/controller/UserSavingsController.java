@@ -47,6 +47,7 @@ public class UserSavingsController {
 		model.addAttribute("savingsList", savingsService.getSavingsByUserId(userId));
 		model.addAttribute("wishList", wishItemService.getSavingPurposeByUserId(userId));
 		model.addAttribute("myRuleList", mySavingRuleService.getMySavingRuleByUserId(userId));
+		model.addAttribute("totalSavings", savingsBoxService.getSavingBoxByUserId(userId).getTotalAmount());
 
 		return "home";
 	}
