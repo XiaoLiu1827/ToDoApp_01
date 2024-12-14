@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.example.demo.form.SavingsFormWithValidation;
 import com.example.demo.model.MySavingRule;
 import com.example.demo.service.MySavingRuleService;
+import com.example.demo.service.SavingsBoxService;
 import com.example.demo.service.SavingsService;
 import com.example.demo.service.UserAccountService;
 import com.example.demo.service.WishItemService;
@@ -31,6 +32,8 @@ public class UserSavingsController {
 	private MySavingRuleService mySavingRuleService;
 	@Autowired
 	private UserAccountService userService;
+	@Autowired
+	private SavingsBoxService savingsBoxService;
 
 	private Long userId;
 
@@ -49,19 +52,11 @@ public class UserSavingsController {
 	}
 
 	@PostMapping
-	public String createSavings(@RequestParam("wishItemId") Long wishItemId,
-			@RequestParam(name = "myRuleId", required = true) Long myRuleId,
+	public String createSavings(@RequestParam(name = "myRuleId", required = true) Long myRuleId,
 			Model model) {
-		
-		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
 
-//		//WishItem.CurrentAmountの更新
-//		WishItem wishItem = wishItemService.updateCurrentAmount(wishItemId, myRule.getAmount());
-//
-//		//目標額到達可否のチェック
-//		if (wishItem.checkProgress()) {
-//			wishItemService.deleteWishItem(wishItemId);
-//		}
+		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
+		savingsBoxService.updateAmount(userId, myRule.getAmount());
 		return "redirect:/savings/user";
 	}
 

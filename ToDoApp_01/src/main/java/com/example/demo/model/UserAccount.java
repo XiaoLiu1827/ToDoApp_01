@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PostPersist;
 import lombok.Data;
 
 @Entity
@@ -27,7 +28,7 @@ public class UserAccount {
 	private List<WishItem> purposeList = new ArrayList<>();
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "savings_box_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "savings_box_id", referencedColumnName = "id", nullable = false)
 	private SavingsBox savingsBox;
 
 	public UserAccount() {
@@ -46,5 +47,12 @@ public class UserAccount {
 	public void removePurpose(WishItem purpose) {
 		purposeList.remove(purpose);
 		purpose.setUser(null);
+	}
+
+	@PostPersist
+	public void updateSavingsBoxUserId() {
+		if (this.savingsBox != null) {
+			this.savingsBox.setUserId(this.id);
+		}
 	}
 }
