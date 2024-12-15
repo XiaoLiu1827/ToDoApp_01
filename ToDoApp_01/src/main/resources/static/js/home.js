@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+	const withdrawButton = document.getElementById('withdraw-button');
+	/**取り崩し処理 */
+	//モーダル表示
 
+	withdrawButton.addEventListener('click', () => {
+		alert('click');
+		document.getElementById("withdraw-list-modal").style.display = "block";
+	});
 	/*
 	マイ貯金ルール編集
 	 */
