@@ -11,7 +11,7 @@
 <body>
 	<div class="container">
 		<header>
-			<h1>マイ貯金アプリ</h1>
+			<h1>さんの貯金箱</h1>
 			<div>
 				<a th:href="@{/api/savings/myPage}" class="button outline" type="button">マイページ</a>
 				<a th:href="@{/api/savings/logout}" class="button outline" type="button">ログアウト</a>
@@ -30,8 +30,8 @@
 							<div th:id="'item-content-'+ ${myRule.id}" class="item-content" style="display: block">
 								<div class="wrap-rule-title">
 									<h5 class="card-title" th:text="${myRule.description}"></h5>
-									<span class="edit-icon" title="編集" th:attr="data-id=${myRule.id}"
-										onclick="showEditRuleForm(this)">✎</span>
+									<span class="open-edit-modal edit-icon" title="編集" th:attr="data-id=${myRule.id}"
+										>✎</span>
 								</div>
 								<p class="card-text" th:text="${myRule.getFormattedAmount} + '円'">
 								</p>
