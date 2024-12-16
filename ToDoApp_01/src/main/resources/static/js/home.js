@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	//モーダル表示
 
 	withdrawButton.addEventListener('click', () => {
-		alert('click');
 		document.getElementById("withdraw-list-modal").style.display = "block";
 	});
 	/*

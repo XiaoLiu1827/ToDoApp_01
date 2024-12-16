@@ -76,6 +76,17 @@ h2 {
 	justify-content: space-between;
 	align-items: center;
 }
+.wishlist-item h3{
+	margin:0;
+	color:#333;
+}
+.wishlist-item p{
+	margin:5px 0 0 0;
+	color:rgb(102, 102, 102);
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
 
 .wishlist-select {
 	width: 100%;
@@ -139,6 +150,10 @@ h2 {
 	width: 50%;
 	/* モーダルの幅 */
 	border-radius: 8px;
+}
+
+.modal-content h2{
+	margin:20px 0px;
 }
 
 .close {
