@@ -1,10 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
+	const totalSavingsAmount = parseInt(document.getElementById('total-savings').innerText, 10);
 	const withdrawButton = document.getElementById('withdraw-button');
+	const withdrawItemList = document.querySelectorAll('.withdraw-item');
+
 	/**取り崩し処理 */
 	//モーダル表示
-
 	withdrawButton.addEventListener('click', () => {
 		document.getElementById("withdraw-list-modal").style.display = "block";
+	});
+
+	//選択ボタン活性制御
+	withdrawItemList.forEach((item) => {
+		console.log(item);
+		const neededAmount = parseInt(item.querySelector('.item-content').dataset.amount, 10);
+		const selectButton = item.querySelector('button[type="submit"]');
+		if (neededAmount > totalSavingsAmount) {
+			selectButton.disabled = true; // ボタンを無効化
+		}
 	});
 	/*
 	マイ貯金ルール編集

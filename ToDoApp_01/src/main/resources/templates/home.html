@@ -97,8 +97,9 @@
 				<div class="modal-content">
 					<h2>欲しいものリスト</h2>
 					<form th:action="@{/savings/user/withdraw}">
-						<div th:each="wishItem : ${wishList}" class="wishlist-item">
-							<div class="item-content" th:attr="data-id=${wishItem.id}">
+						<div th:each="wishItem : ${wishList}" class="withdraw-item">
+							<div class="item-content" th:attr="data-id=${wishItem.id},
+							data-amount=${wishItem.neededAmount}">
 								<h3 class="card-title" th:text="${wishItem.name}"></h3>
 								<p class="card-text">
 									<span th:text="${wishItem.neededAmount}"></span>円
