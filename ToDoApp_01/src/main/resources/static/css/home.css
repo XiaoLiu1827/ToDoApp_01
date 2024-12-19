@@ -171,6 +171,12 @@ h2 {
 	cursor: pointer;
 }
 
+button:disabled {
+    background-color: #ccc; /* グレー */
+    color: #666; /* テキストの色 */
+    cursor: not-allowed; /* カーソルを禁止マークに変更 */
+    opacity: 0.7; /* 透明度を少し下げる */
+}
 
 /*部品*/
 .card-title {

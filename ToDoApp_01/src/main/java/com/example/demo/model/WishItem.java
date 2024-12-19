@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,8 +18,8 @@ public class WishItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private Double currentAmount;
-	private Double neededAmount;
+	private BigDecimal currentAmount;
+	private BigDecimal neededAmount;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userAccount_id", referencedColumnName = "id")
@@ -25,17 +27,26 @@ public class WishItem {
 	
 	public WishItem() {}
 	
-	public WishItem(String name, Double currentAmount, Double neededAmount) {
+	public WishItem(String name, BigDecimal currentAmount, BigDecimal neededAmount) {
 		this.name = name;
 		this.currentAmount = currentAmount;
 		this.neededAmount = neededAmount;
 	}
 	
-	public void updateCurrentAmount(Double addedAmount) {
-		this.currentAmount += addedAmount;
+	public void updateCurrentAmount(BigDecimal addedAmount) {
+	    if (addedAmount != null) {
+	        this.currentAmount = this.currentAmount.add(addedAmount);
+	    } else {
+	        throw new IllegalArgumentException("Added amount cannot be null");
+	    }
+	}
+
+	public boolean checkProgress() {
+	    return this.currentAmount.compareTo(this.neededAmount) >= 0;
 	}
 	
-	public boolean checkProgress(){
-		return this.currentAmount >= this.neededAmount;
+	public String getFormattedAmount() {
+		return neededAmount.stripTrailingZeros().toPlainString(); // 整形して返す
 	}
+
 }

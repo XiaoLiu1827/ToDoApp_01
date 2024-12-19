@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class WishItemService {
 		return repository.findByUserId(userId);
 	}
 
-	public WishItem updateCurrentAmount(Long wishItemId, Double addedAmount) {
+	public WishItem updateCurrentAmount(Long wishItemId, BigDecimal addedAmount) {
 		WishItem wishItem = repository.findById(wishItemId)
 				.orElseThrow(() -> new ResourceNotFoundException("SavingPurpose not found with ID: " + wishItemId));
 		wishItem.updateCurrentAmount(addedAmount);

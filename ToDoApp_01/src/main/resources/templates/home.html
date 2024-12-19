@@ -102,7 +102,7 @@
 							data-amount=${wishItem.neededAmount}">
 								<h3 class="card-title" th:text="${wishItem.name}"></h3>
 								<p class="card-text">
-									<span th:text="${wishItem.neededAmount}"></span>円
+									<span th:text="${wishItem.getFormattedAmount}"></span>円
 								</p>
 							</div>
 							<button type="submit" name="wishItemId" th:value="${wishItem.id}"

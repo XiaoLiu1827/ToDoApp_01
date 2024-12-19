@@ -1,13 +1,14 @@
 package com.example.demo.service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.SessionExpiredException;
-import com.example.demo.model.WishItem;
 import com.example.demo.model.UserAccount;
+import com.example.demo.model.WishItem;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.util.MessageUtils;
 
@@ -22,10 +23,10 @@ public class UserAccountService {
     	return repository.findByUsernameAndPassword(username, password);
     };
     
-    public void addSavingPurpose(Long userId,String name, Double neededAmount) {
+    public void addSavingPurpose(Long userId,String name, BigDecimal neededAmount) {
     	UserAccount user = findById(userId);
     	
-    	WishItem purpose = new WishItem(name,0.0,neededAmount);
+    	WishItem purpose = new WishItem(name, BigDecimal.ZERO, neededAmount);
 		user.addPurpose(purpose);
 		
 		repository.save(user);
