@@ -20,7 +20,7 @@ public class WishItemService {
 		return repository.findAll();
 	}
 
-	public WishItem getSavingPurposeById(Long wishItemId) {
+	public WishItem getWishItembyId(Long wishItemId) {
 		return repository.findById(wishItemId).orElse(null);
 	}
 

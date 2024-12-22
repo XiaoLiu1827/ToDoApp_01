@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.demo.form.SavingsFormWithValidation;
 import com.example.demo.model.MySavingRule;
+import com.example.demo.model.WishItem;
 import com.example.demo.service.MySavingRuleService;
 import com.example.demo.service.SavingsBoxService;
 import com.example.demo.service.SavingsService;
@@ -61,6 +64,17 @@ public class UserSavingsController {
 		return "redirect:/savings/user";
 	}
 
+	//
+		@PostMapping("/withdraw")
+		public String withdrawFromSavingsBox(@RequestParam("wishItemId") Long wishItemId) {
+			WishItem selectedItem = wishItemService.getWishItembyId(wishItemId);
+			BigDecimal withdrawalAmount = selectedItem.getNeededAmount();
+			savingsBoxService.withdraw(userId, withdrawalAmount);
+			wishItemService.deleteWishItem(wishItemId);
+
+			return "redirect:/savings/user";
+		}
+		
 	//目標額到達時
 	@PostMapping("/goalAchieved")
 	public String goalAchieved(@RequestParam("wishItemId") Long wishItemId) {

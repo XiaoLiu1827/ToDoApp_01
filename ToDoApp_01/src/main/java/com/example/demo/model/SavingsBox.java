@@ -19,11 +19,15 @@ public class SavingsBox {
 	private Long id;
 
 	private BigDecimal totalAmount;
-	
+
 	@Column(unique = true)
 	private Long userId;
-	
+
 	public void updateTotalAmount(BigDecimal addedAmount) {
 		this.totalAmount = this.totalAmount.add(addedAmount);
+	}
+
+	public void withDraw(BigDecimal withdrawalAmount) {
+		this.totalAmount = this.totalAmount.subtract(withdrawalAmount);
 	}
 }

@@ -97,7 +97,7 @@
 				<div class="modal-content">
 					<span id="close-withdraw-modal" class="close">&times;</span>
 					<h2>欲しいものリスト</h2>
-					<form th:action="@{/savings/user/withdraw}">
+					<form th:action="@{/savings/user/withdraw}" method="post">
 						<div th:each="wishItem : ${wishList}" class="withdraw-item">
 							<div class="item-content" th:attr="data-id=${wishItem.id},
 							data-amount=${wishItem.neededAmount}">

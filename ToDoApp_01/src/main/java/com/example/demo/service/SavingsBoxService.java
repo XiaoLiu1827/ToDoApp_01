@@ -22,4 +22,10 @@ public class SavingsBoxService {
 		return repository.findByUserId(userId);
 	}
 	
+	public void withdraw(Long userId, BigDecimal amount) {
+		SavingsBox updatedSavingsBox = getSavingBoxByUserId(userId);
+		updatedSavingsBox.withDraw(amount);
+		repository.save(updatedSavingsBox);
+	}
+	
 }
