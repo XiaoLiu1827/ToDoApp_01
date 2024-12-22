@@ -15,13 +15,13 @@ public class AuthenticationService {
 	@Autowired
 	private UserAccountService userAccountService;
 	
-	public Long authenticateUser(UserAccountForm form)throws AuthenticationException {
+	public UserAccount authenticateUser(UserAccountForm form)throws AuthenticationException {
 		Optional<UserAccount> opt = userAccountService.findByUsernameAndPassword(form.getUsername(),
 				form.getPassword());
 		if (opt.isEmpty()) {
 			throw new AuthenticationException();
 		}else {
-			return opt.get().getId();
+			return opt.get();
 		}
 	}
 }

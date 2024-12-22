@@ -11,7 +11,7 @@
 <body>
 	<div class="container">
 		<header>
-			<h1>さんの貯金箱</h1>
+			<h1><span th:text="${username}"></span>さんの貯金箱</h1>
 			<div>
 				<a th:href="@{/api/savings/myPage}" class="button outline" type="button">マイページ</a>
 				<a th:href="@{/api/savings/logout}" class="button outline" type="button">ログアウト</a>

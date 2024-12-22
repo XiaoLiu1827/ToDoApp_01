@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.demo.form.SavingsFormWithValidation;
 import com.example.demo.model.MySavingRule;
@@ -25,7 +24,6 @@ import com.example.demo.service.WishItemService;
 
 @Controller
 @RequestMapping("/savings/user")
-@SessionAttributes("userId")
 public class UserSavingsController {
 	@Autowired
 	private SavingsService savingsService;
@@ -39,10 +37,12 @@ public class UserSavingsController {
 	private SavingsBoxService savingsBoxService;
 
 	private Long userId;
+	private String username;
 
 	@ModelAttribute
-	public void setUserId(@SessionAttribute("userId") Long userId) {
+	public void setUser(@SessionAttribute("userId") Long userId, @SessionAttribute("username") String username) {
 		this.userId = userId;
+		this.username = username;
 	}
 
 	@GetMapping
@@ -51,7 +51,7 @@ public class UserSavingsController {
 		model.addAttribute("wishList", wishItemService.getSavingPurposeByUserId(userId));
 		model.addAttribute("myRuleList", mySavingRuleService.getMySavingRuleByUserId(userId));
 		model.addAttribute("totalSavings", savingsBoxService.getSavingBoxByUserId(userId).getTotalAmount());
-
+		model.addAttribute("username", username);
 		return "home";
 	}
 

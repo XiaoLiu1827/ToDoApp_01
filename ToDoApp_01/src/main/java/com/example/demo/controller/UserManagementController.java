@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.demo.form.UserAccountForm;
+import com.example.demo.model.UserAccount;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.UserAccountService;
 import com.example.demo.util.MessageUtils;
@@ -22,7 +23,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/savings")
-@SessionAttributes("userId")
+@SessionAttributes({"userId", "username"})
 public class UserManagementController {
 	@Autowired
 	private UserAccountService userAccountService;
@@ -59,8 +60,10 @@ public class UserManagementController {
 		}
 		
 		try {
-			Long userId = authenticationService.authenticateUser(userAccountForm);
-			model.addAttribute("userId", userId);
+			UserAccount loginUser = authenticationService.authenticateUser(userAccountForm);
+			model.addAttribute("userId", loginUser.getId());
+			model.addAttribute("username", loginUser.getUsername());
+
 			return "redirect:/savings/user";
 		}catch(AuthenticationException e) {
 			model.addAttribute("UserNotFound",messageUtils.get("user.not.found"));
