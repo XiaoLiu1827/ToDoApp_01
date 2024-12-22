@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.example.demo.form.SavingPurposeForm;
+import com.example.demo.form.WishItemForm;
 import com.example.demo.service.UserAccountService;
 
 @Controller
-@RequestMapping("/savings/user/addPurpose")
+@RequestMapping("/savings/wishItem")
 @SessionAttributes("userId")
 public class WishItemController {
 	@Autowired
@@ -30,17 +30,17 @@ public class WishItemController {
     }
     
     @GetMapping
-    public String showAddPurposeForm(Model model, SavingPurposeForm savingPurposeForm) {
-    	return "addSavingPurpose";
+    public String showWishItemForm(Model model, WishItemForm wishItemForm) {
+    	return "wishItemForm";
     }
     
     @PostMapping
-    public String addPurpose(@Validated @ModelAttribute SavingPurposeForm savingPurposeForm, BindingResult bindingResult,
+    public String addPurpose(@Validated @ModelAttribute WishItemForm wishItemForm, BindingResult bindingResult,
 			Model model) {
 		if (bindingResult.hasErrors()) {
-			return "addSavingPurpose";
+			return "wishItemForm";
 		}		
-		userAccountService.addSavingPurpose(userId, savingPurposeForm.getName(), savingPurposeForm.getNeededAmount());
+		userAccountService.addWishItem(userId, wishItemForm.getName(), wishItemForm.getNeededAmount());
 		
 		return "redirect:/savings/user";
     }

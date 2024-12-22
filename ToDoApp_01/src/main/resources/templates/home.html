@@ -59,7 +59,7 @@
 			<div class="section">
 				<div class="section-header">
 					<h2>欲しいものリスト</h2>
-					<a href="#" class="button">新規追加</a>
+					<a th:href="@{/savings/wishItem}" class="button">新規追加</a>
 				</div>
 				<div class="wrap-list">
 					<div th:each="wishItem : ${wishList}" class="wishlist-item">

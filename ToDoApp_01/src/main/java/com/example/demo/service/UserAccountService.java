@@ -23,7 +23,7 @@ public class UserAccountService {
     	return repository.findByUsernameAndPassword(username, password);
     };
     
-    public void addSavingPurpose(Long userId,String name, BigDecimal neededAmount) {
+    public void addWishItem(Long userId,String name, BigDecimal neededAmount) {
     	UserAccount user = findById(userId);
     	
     	WishItem purpose = new WishItem(name, BigDecimal.ZERO, neededAmount);
