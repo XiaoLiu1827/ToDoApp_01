@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import javax.security.sasl.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,33 +11,63 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.example.demo.model.UserAccountForm;
-import com.example.demo.service.SavingPuroposeService;
-import com.example.demo.service.SavingsService;
+import com.example.demo.form.UserAccountForm;
+import com.example.demo.model.UserAccount;
+import com.example.demo.service.AuthenticationService;
+import com.example.demo.service.UserAccountService;
+import com.example.demo.util.MessageUtils;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/api/savings")
+@RequestMapping("/savings")
+@SessionAttributes({"userId", "username"})
 public class UserManagementController {
 	@Autowired
-	private SavingsService savingsService;
+	private UserAccountService userAccountService;
 	@Autowired
-	private SavingPuroposeService purposeService;
-	
-	@GetMapping("/register")
-    public String showRegistrationForm(Model model, @ModelAttribute UserAccountForm userAccountForm) {
-        return "register";
-    }
-	
-	@PostMapping("/register")
-	public String registerUser(@Validated @ModelAttribute UserAccountForm userAccountForm, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "register";
-        }
-        
+	private AuthenticationService authenticationService;
+	@Autowired
+	private MessageUtils messageUtils;
 
-        
-        
-        return "redirect:/api/savings";
-    }
+	@GetMapping("/register")
+	public String showRegistrationForm(Model model, @ModelAttribute UserAccountForm userAccountForm) {
+		return "register";
+	}
+
+	@PostMapping("/register")
+	public String registerUser(@Validated @ModelAttribute UserAccountForm userAccountForm, BindingResult bindingResult,
+			Model model) {
+		if (bindingResult.hasErrors()) {
+			return "register";
+		}
+
+		return "redirect:/savings";
+	}
+
+	@GetMapping("/login")
+	public String showLoginForm(Model model, @ModelAttribute UserAccountForm userAccountForm) {
+		return "login";
+	}
+
+	@PostMapping("/login")
+	public String loginUser(@Validated @ModelAttribute UserAccountForm userAccountForm, BindingResult bindingResult,
+			Model model, HttpSession session) {
+		if (bindingResult.hasErrors()) {
+			return "login";
+		}
+		
+		try {
+			UserAccount loginUser = authenticationService.authenticateUser(userAccountForm);
+			model.addAttribute("userId", loginUser.getId());
+			model.addAttribute("username", loginUser.getUsername());
+
+			return "redirect:/savings/user";
+		}catch(AuthenticationException e) {
+			model.addAttribute("UserNotFound",messageUtils.get("user.not.found"));
+			return "login";
+		}
+	}
 }

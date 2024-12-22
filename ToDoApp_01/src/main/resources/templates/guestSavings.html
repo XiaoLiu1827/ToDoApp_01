@@ -11,85 +11,9 @@
 <body>
 	<div class="container">
 		<div class="d-flex justify-content-end">
-			<a th:href="@{/api/savings/register}" class="btn btn-outline-primary mr-2">Register</a>
-			<a th:href="@{/api/savings/login}" class="btn btn-outline-secondary">Login</a>
+			<a th:href="@{/savings/register}" class="btn btn-outline-primary mr-2">Register</a>
+			<a th:href="@{/savings/login}" class="btn btn-outline-secondary">Login</a>
 		</div>
-		<h1>Your Savings</h1>
-		<form th:action="@{/api/savings}" th:object="${guestSavings}" method="post" class="form-inline">
-			<div class="form-group mb-2">
-				<label for="name" class="sr-only">Name</label>
-				<input type="text" id="name" max="30" th:field="*{name}" placeholder="Name" class="form-control">
-			</div>
-			<div class="form-group mx-sm-3 mb-2">
-				<label for="amount" class="sr-only">Amount</label>
-				<input type="number" id="amount" min="0" step="0.01" required th:field="*{amount}" placeholder="Amount"
-					class="form-control">
-			</div>
-
-			<div class="form-group mx-sm-3 mb-2">
-				<label for="purpose" class="sr-only"></label>
-				<select id="purpose" name="purpose" class="form-control">
-					<option th:each="purpose :${session.purposeList}" th:value="${purpose.id}"
-						th:text="${purpose.name}">
-					</option>
-				</select>
-			</div>
-			<button type="submit" class="btn btn-primary mb-2">Add Savings</button>
-		</form>
-		<div class="table-container">
-			<div class="title">Savings tracks</div>
-			<div th:if="${session.savingsList == null || session.savingsList.empty}">
-				<p class="message">There are no tracks.</p>
-			</div>
-			<table class="table table-striped" th:if="${session.savingsList != null &&
-			!session.savingsList.empty}">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Amount</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="savings, st: ${session.savingsList}">
-						<td th:text="${savings.name}"></td>
-						<td th:text="${savings.amount}"></td>
-						<td>
-							<a th:href="@{/api/savings/delete/{id}(id=${st.index})}" class="btn btn-danger">Delete</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<div class="table-container">
-			<div class="title">Use your savings for what truly matters!</div>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Name</th>
-						<th>current</th>
-						<th>Needed</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="purpose, st:${session.purposeList}">
-						<td th:text="${st.count}"></td>
-						<td th:text="${purpose.name}"></td>
-						<td th:text="${purpose.currentAmount}"></td>
-						<td th:text="${purpose.neededAmount}"></td>
-						<td>
-							<a th:href="@{/api/savings/purpose/delete/{id}(id=${purpose.id})}" class="btn btn-danger">Delete</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-	</div>
-
-</body>
+		<h1>貯金箱</h1>
 
 </html>

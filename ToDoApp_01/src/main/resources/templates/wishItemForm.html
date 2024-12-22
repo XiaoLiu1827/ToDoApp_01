@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>欲しいもの登録</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/addPurposeForm.css">
+</head>
+
+<body>
+	<div class="container mt-5">
+		<h2>欲しいものを登録する</h2>
+		<form th:action="@{/savings/wishItem}" th:object="${wishItemForm}" method="post">
+			<div class="form-group">
+				<label for="name">名前</label>
+				<input type="text" id="name" th:field="*{name}" class="form-control" required>
+			</div>
+			<div class="form-group">
+				<label for="neededAmount">必要額</label>
+				<input type="number" id="neededAmount" th:field="*{neededAmount}" class="form-control" step="0.01"
+					required>
+				<div th:errors="*{neededAmount}" class="invalid-feedback d-block"></div>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+</body>
+
+</html>

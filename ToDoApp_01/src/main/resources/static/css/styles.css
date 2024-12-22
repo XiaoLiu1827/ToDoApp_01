@@ -9,8 +9,14 @@
 	text-align: center;
 	font-size: 1.5em;
 	font-weight: bold;
+
 }
 
 .table-container {
 	margin-bottom: 30px;
+}
+
+.add-button {
+	margin-left: auto;
+	/* Add any additional styling here */
 }

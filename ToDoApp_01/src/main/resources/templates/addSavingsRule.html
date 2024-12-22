@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>My Saving Rules</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/addSavingsRule.css">
+
+</head>
+
+<body>
+	<div class="containe">
+		<header>
+			<h1>マイ貯金ルール追加</h1>
+			<button class="button outline" onckick="history.back()">戻る</button>
+		</header>
+		<div class="content">
+			<form th:action="@{/savings/mySavingRule}" th:object="${mySavingRuleForm}" method="post">
+				<div class="form-group">
+					<label for="title">タイトル</label>
+					<input type="text" id="title" th:field="*{title}" placeholder="" required>
+				</div>
+				<div class="form-group">
+					<label for="description">貯金ルールの説明</label>
+					<textarea id="description" th:field="*{description}" placeholder="コンビニの買い食いをしなかったら300円貯金！"
+						required></textarea>
+				</div>
+				<div class="form-group">
+					<label for="amount">貯金額 (円)</label>
+					<input type="number" id="amount" th:field="*{amount}" min="1" required>
+				</div>
+				<div class="form-group">
+					<label for="frequency">報告頻度</label>
+					<div class="checkbox-group">
+						<div class="checkbox-button">
+							<input type="checkbox" id="monday" name="frequency" value="MONDAY">
+							<label for="monday">月</label>
+						</div>
+						<div class="checkbox-button">
+							<input type="checkbox" id="tuesday" name="frequency" value="TUESDAY">
+							<label for="tuesday">火</label>
+						</div>
+						<div class="checkbox-button">
+							<input type="checkbox" id="wednesday" name="frequency" value="WEDNESDAY">
+							<label for="wednesday">水</label>
+						</div>
+						<div class="checkbox-button">
+							<input type="checkbox" id="thursday" name="frequency" value="THURSDAY">
+							<label for="thursday">木</label>
+						</div>
+						<div class="checkbox-button">
+							<input type="checkbox" id="friday" name="frequency" value="FRIDAY">
+							<label for="friday">金</label>
+						</div>
+						<div class="checkbox-button">
+							<input type="checkbox" id="saturday" name="frequency" value="SATURDAY">
+							<label for="saturday">土</label>
+						</div>
+						<div class="checkbox-button">
+							<input type="checkbox" id="sunday" name="frequency" value="SUNDAY">
+							<label for="sunday">日</label>
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="button">追加</button>
+
+			</form>
+
+		</div>
+
+	</div>
+</body>
+
+</html>

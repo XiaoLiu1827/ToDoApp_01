@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Savings</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/home.css">
+</head>
+
+<body>
+	<div class="container">
+		<header>
+			<h1><span th:text="${username}"></span>さんの貯金箱</h1>
+			<div>
+				<a th:href="@{/api/savings/myPage}" class="button outline" type="button">マイページ</a>
+				<a th:href="@{/api/savings/logout}" class="button outline" type="button">ログアウト</a>
+			</div>
+		</header>
+		<div class="content">
+			<div class="section">
+				<div class="section-header">
+					<h2>マイ貯金ルール</h2>
+					<a th:href="@{/savings/mySavingRule}" class="button">新規追加</a>
+				</div>
+				<form th:action="@{/savings/user}" method="post" id="savings" class="form-vertical">
+					<div class="wrap-list">
+						<div th:each="myRule : ${myRuleList}" class="savings-rule" th:attr="data-id=${myRule.id}">
+							<!--							<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId" th:value="${myRule.id}">-->
+							<div th:id="'item-content-'+ ${myRule.id}" class="item-content" style="display: block">
+								<div class="wrap-rule-title">
+									<h5 class="card-title" th:text="${myRule.description}"></h5>
+									<span class="open-edit-modal edit-icon" title="編集"
+										th:attr="data-id=${myRule.id}">✎</span>
+								</div>
+								<p class="card-text" th:text="${myRule.getFormattedAmount} + '円'">
+								</p>
+							</div>
+							<div class="item-actions">
+								<button type="submit" name="myRuleId" th:value="${myRule.id}"
+									class="button small">達成</button>
+								<!--							<button class="btn btn-secondary">未達成</button>-->
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="section">
+				<section id="savings-box">
+					<div class="piggy-bank">
+						<div class="coin-icon">💰</div>
+						<h2>貯金箱</h2>
+						<div id="total-savings" class="total-amount" th:text="${totalSavings}"></div>
+						<button id="withdraw-button" class="button withdraw">取り崩す</button>
+					</div>
+				</section>
+			</div>
+
+			<div class="section">
+				<div class="section-header">
+					<h2>欲しいものリスト</h2>
+					<a th:href="@{/savings/wishItem}" class="button">新規追加</a>
+				</div>
+				<div class="wrap-list">
+					<div th:each="wishItem : ${wishList}" class="wishlist-item">
+						<div class="item-content" th:attr="data-id=${wishItem.id}">
+							<h5 class="card-title" th:text="${wishItem.name}"></h5>
+							<p class="card-text">
+								<span th:text="${wishItem.neededAmount}"></span>円
+							</p>
+							<span th:text="${wishItem.id}" class="wish-item-id" style="display: none;"></span>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- 編集用モーダル -->
+			<div id="edit-modal" class="modal" style="display: none;">
+				<div class="modal-content">
+					<span id="close-edit-modal" class="close">&times;</span>
+					<form id="edit-form">
+						<div class="form-group">
+							<label for="modal-description">説明:</label>
+							<input type="text" id="modal-description" name="description">
+						</div>
+						<div class="form-group">
+							<label for="modal-amount">貯金額:</label>
+							<input type="text" id="modal-amount" name="amount">
+						</div>
+						<input type="hidden" id="modal-id" name="id">
+						<button type="button" id="save-modal-button">保存</button>
+					</form>
+				</div>
+			</div>
+			<!-- 取り崩し用モーダル-->
+			<div id="withdraw-list-modal" class="modal">
+				<div class="modal-content">
+					<span id="close-withdraw-modal" class="close">&times;</span>
+					<h2>欲しいものリスト</h2>
+					<form th:action="@{/savings/user/withdraw}" method="post">
+						<div th:each="wishItem : ${wishList}" class="withdraw-item">
+							<div class="item-content" th:attr="data-id=${wishItem.id},
+							data-amount=${wishItem.neededAmount}">
+								<h3 class="card-title" th:text="${wishItem.name}"></h3>
+								<p class="card-text">
+									<span th:text="${wishItem.getFormattedAmount}"></span>円
+								</p>
+							</div>
+							<button type="submit" name="wishItemId" th:value="${wishItem.id}"
+								class="button small">選択</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<script src="/js/home.js"></script>
+
+</body>
+
+</html>
