@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const totalSavingsAmount = parseInt(document.getElementById('total-savings').innerText, 10);
 	const withdrawButton = document.getElementById('withdraw-button');
 	const withdrawItemList = document.querySelectorAll('.withdraw-item');
+	const closeEditModal = document.getElementById("close-edit-modal");
+	const closeWithdrawModal = document.getElementById("close-withdraw-modal");
 
 	/**取り崩し処理 */
 	//モーダル表示
@@ -39,8 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 	// モーダルを閉じる
-	document.getElementById("close-modal").addEventListener("click", function() {
+	closeEditModal.addEventListener("click", function() {
 		document.getElementById("edit-modal").style.display = "none";
+	});
+	
+	// モーダルを閉じる
+	closeWithdrawModal.addEventListener("click", function() {
+		document.getElementById("withdraw-list-modal").style.display = "none";
 	});
 
 	//編集内容を保存

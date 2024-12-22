@@ -77,7 +77,7 @@
 			<!-- 編集用モーダル -->
 			<div id="edit-modal" class="modal" style="display: none;">
 				<div class="modal-content">
-					<span id="close-modal" class="close">&times;</span>
+					<span id="close-edit-modal" class="close">&times;</span>
 					<form id="edit-form">
 						<div class="form-group">
 							<label for="modal-description">説明:</label>
@@ -95,6 +95,7 @@
 			<!-- 取り崩し用モーダル-->
 			<div id="withdraw-list-modal" class="modal">
 				<div class="modal-content">
+					<span id="close-withdraw-modal" class="close">&times;</span>
 					<h2>欲しいものリスト</h2>
 					<form th:action="@{/savings/user/withdraw}">
 						<div th:each="wishItem : ${wishList}" class="withdraw-item">
