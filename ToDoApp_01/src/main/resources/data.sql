@@ -1,12 +1,12 @@
 --貯金箱--
-INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT, USER_ID) VALUES (1, 1000.0, 1);
-INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT, USER_ID) VALUES (2, 1000.0, 2);
-INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT, USER_ID) VALUES (3, 1000.0, 3);
+INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT, USER_ID) VALUES (10, 1000.0, 10);
+INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT, USER_ID) VALUES (12, 1000.0, 12);
+INSERT INTO SAVINGS_BOX (ID, TOTAL_AMOUNT, USER_ID) VALUES (13, 1000.0, 13);
 
 -- Inserting test data into the UserAccount table
-INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (1, 'john_doe', 'password123',1);
-INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (2, 'jane_smith', 'passw0rd', 2);
-INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (3, 'alice_jones', 'alicepass', 3);
+INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (10, 'xiaoLiu', 'srsr1027',10);
+INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (12, 'jane_smith', 'passw0rd', 12);
+INSERT INTO USER_ACCOUNT (id, username, password, SAVINGS_BOX_ID) VALUES (13, 'alice_jones', 'alicepass', 13);
 
 -- Assuming UserAccount IDs 1, 2, and 3 already exist in the UserAccount table
 
