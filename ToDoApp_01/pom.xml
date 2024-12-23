@@ -70,10 +70,16 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.h2database</groupId>-->
+<!--			<artifactId>h2</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--		</dependency>-->
+		<!-- PostgreSQL Driver (PostgreSQLデータベース接続用) -->
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.5</version> <!-- 適切なバージョンを選んでください -->
 		</dependency>
 	</dependencies>
 	<build>
