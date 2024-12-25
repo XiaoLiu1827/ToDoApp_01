@@ -4,6 +4,25 @@ document.addEventListener('DOMContentLoaded', () => {
 	const withdrawItemList = document.querySelectorAll('.withdraw-item');
 	const closeEditModal = document.getElementById("close-edit-modal");
 	const closeWithdrawModal = document.getElementById("close-withdraw-modal");
+	const myRuleList = document.querySelectorAll('.savings-rule');
+
+	/**貯金ルール活性制御 */
+	myRuleList.forEach((rule) => {
+		const selectButton = rule.querySelector('button[type="submit"]');
+		const dayIndex = new Date().getDay();
+		const dayNames = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+		const dayName = dayNames[dayIndex];
+		const frequency = rule.dataset.frequency;
+		console.log(frequency);
+		
+		if(frequency.includes(dayName)){
+			selectButton.disabled = false;
+		}else{
+			selectButton.disabled = true;
+		}
+	});
+
+
 
 	/**取り崩し処理 */
 	//モーダル表示
@@ -13,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//選択ボタン活性制御
 	withdrawItemList.forEach((item) => {
-		console.log(item);
 		const neededAmount = parseInt(item.querySelector('.item-content').dataset.amount, 10);
 		const selectButton = item.querySelector('button[type="submit"]');
 		if (neededAmount > totalSavingsAmount) {
@@ -44,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	closeEditModal.addEventListener("click", function() {
 		document.getElementById("edit-modal").style.display = "none";
 	});
-	
+
 	// モーダルを閉じる
 	closeWithdrawModal.addEventListener("click", function() {
 		document.getElementById("withdraw-list-modal").style.display = "none";

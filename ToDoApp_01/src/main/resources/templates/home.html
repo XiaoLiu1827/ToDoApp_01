@@ -25,8 +25,9 @@
 				</div>
 				<form th:action="@{/savings/user}" method="post" id="savings" class="form-vertical">
 					<div class="wrap-list">
-						<div th:each="myRule : ${myRuleList}" class="savings-rule" th:attr="data-id=${myRule.id}">
-							<!--							<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId" th:value="${myRule.id}">-->
+						<div th:each="myRule : ${myRuleList}" class="savings-rule" th:attr="data-id=${myRule.id}"
+						th:data-frequency="${myRule.frequency}">								
+														<input type="hidden" title="myRuleId" name="myRuleId" id="myRuleId" th:value="${myRule.id}">
 							<div th:id="'item-content-'+ ${myRule.id}" class="item-content" style="display: block">
 								<div class="wrap-rule-title">
 									<h5 class="card-title" th:text="${myRule.description}"></h5>
