@@ -9,17 +9,26 @@ document.addEventListener('DOMContentLoaded', () => {
 	/**貯金ルール活性制御 */
 	myRuleList.forEach((rule) => {
 		const selectButton = rule.querySelector('button[type="submit"]');
+		//曜日判定用項目
 		const dayIndex = new Date().getDay();
-		const dayNames = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+		const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 		const dayName = dayNames[dayIndex];
 		const frequency = rule.dataset.frequency;
-		console.log(frequency);
+		//ボタン押下判定項目
+		const todayString = new Date().toDateString();
+		const dateKey = `buttonClicked_${selectButton.dataset.id}`;
 		
-		if(frequency.includes(dayName)){
-			selectButton.disabled = false;
-		}else{
-			selectButton.disabled = true;
-		}
+		//判定条件
+		const isTodayIncluded = frequency.includes(dayName);
+		const isAlreadyClicked = localStorage.getItem(dateKey) === todayString;
+console.log(isAlreadyClicked);
+		//曜日判定=true,かつボタン押下判定=falseのとき活性表示
+		selectButton.disabled = !(isTodayIncluded && !isAlreadyClicked);
+
+		selectButton.addEventListener('click', () => {
+			localStorage.setItem(dateKey,todayString);
+			button.disabled = true;
+		});
 	});
 
 
