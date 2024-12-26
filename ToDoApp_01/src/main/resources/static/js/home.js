@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	/**貯金ルール活性制御 */
 	myRuleList.forEach((rule) => {
-		const selectButton = rule.querySelector('button[type="submit"]');
+		const achievedButton = rule.querySelector('button.achieved');
+		const unachievedButton = rule.querySelector('button.unachieved');
+
 		//曜日判定用項目
 		const dayIndex = new Date().getDay();
 		const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
@@ -16,18 +18,27 @@ document.addEventListener('DOMContentLoaded', () => {
 		const frequency = rule.dataset.frequency;
 		//ボタン押下判定項目
 		const todayString = new Date().toDateString();
-		const dateKey = `buttonClicked_${selectButton.dataset.id}`;
-		
+		const dateKey = `buttonClicked_${achievedButton.dataset.id}`;
+
 		//判定条件
 		const isTodayIncluded = frequency.includes(dayName);
 		const isAlreadyClicked = localStorage.getItem(dateKey) === todayString;
-console.log(isAlreadyClicked);
-		//曜日判定=true,かつボタン押下判定=falseのとき活性表示
-		selectButton.disabled = !(isTodayIncluded && !isAlreadyClicked);
 
-		selectButton.addEventListener('click', () => {
-			localStorage.setItem(dateKey,todayString);
-			button.disabled = true;
+		//曜日判定=true,かつボタン押下判定=falseのとき活性表示
+		achievedButton.disabled = !(isTodayIncluded && !isAlreadyClicked);
+		unachievedButton.disabled = !(isTodayIncluded && !isAlreadyClicked);
+
+		// 達成ボタンのクリック処理
+		achievedButton.addEventListener('click', () => {
+			localStorage.setItem(dateKey, todayString);
+		});
+
+		// 未達成ボタンのクリック処理 (サーバー送信を防止)
+		unachievedButton.addEventListener('click', (event) => {
+			event.preventDefault(); // サーバーへのリクエストを防止
+			localStorage.setItem(dateKey, todayString);
+			achievedButton.disabled = true; 
+			unachievedButton.disabled = true;
 		});
 	});
 
