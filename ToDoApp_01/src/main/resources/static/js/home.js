@@ -1,15 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
+	const totalSavingsElement = document.getElementById('total-savings');
 	const totalSavingsAmount = parseInt(document.getElementById('total-savings').innerText, 10);
 	const withdrawButton = document.getElementById('withdraw-button');
 	const withdrawItemList = document.querySelectorAll('.withdraw-item');
 	const closeEditModal = document.getElementById("close-edit-modal");
 	const closeWithdrawModal = document.getElementById("close-withdraw-modal");
 	const myRuleList = document.querySelectorAll('.savings-rule');
+	const achievedButtons = document.querySelectorAll('.achieved');
 
-	/**貯金ルール活性制御 */
+	/**貯金達成ボタン関連処理 */
+	//①活性非活性制御,②達成処理
 	myRuleList.forEach((rule) => {
 		const achievedButton = rule.querySelector('button.achieved');
 		const unachievedButton = rule.querySelector('button.unachieved');
+		const ruleId = rule.dataset.id;
 
 		//曜日判定用項目
 		const dayIndex = new Date().getDay();
@@ -29,19 +33,34 @@ document.addEventListener('DOMContentLoaded', () => {
 		unachievedButton.disabled = !(isTodayIncluded && !isAlreadyClicked);
 
 		// 達成ボタンのクリック処理
-		achievedButton.addEventListener('click', () => {
+		achievedButton.addEventListener('click', async function() {
+			//ボタン押下の履歴を残す
 			localStorage.setItem(dateKey, todayString);
+			achievedButton.disabled = true;
+			unachievedButton.disabled = true;
+			
+			//サーバとの通信を実行する
+			const response = await fetch(`/savings/api/deposit/${ruleId}`, {
+				method: 'POST'
+			});
+			if (response.ok) {
+				const updatedTotalAmount = await response.json();
+				console.log(updatedTotalAmount);
+				totalSavingsElement.textContent = updatedTotalAmount;
+				alert('更新が完了しました。');
+			} else {
+				alert('更新に失敗しました。');
+			}
 		});
 
 		// 未達成ボタンのクリック処理 (サーバー送信を防止)
 		unachievedButton.addEventListener('click', (event) => {
 			event.preventDefault(); // サーバーへのリクエストを防止
 			localStorage.setItem(dateKey, todayString);
-			achievedButton.disabled = true; 
+			achievedButton.disabled = true;
 			unachievedButton.disabled = true;
 		});
 	});
-
 
 
 	/**取り崩し処理 */
@@ -58,6 +77,23 @@ document.addEventListener('DOMContentLoaded', () => {
 			selectButton.disabled = true; // ボタンを無効化
 		}
 	});
+
+	// モーダルを閉じる
+	closeWithdrawModal.addEventListener("click", function() {
+		document.getElementById("withdraw-list-modal").style.display = "none";
+	});
+
+
+	//	/*
+	//	貯金ルール達成処理
+	//	 */
+	//	achievedButtons.forEach(button => {
+	//		button.addEventListener("click", function() {
+	//			const ruleId = button.dataset.id
+	//		});
+	//	});
+	//	
+
 	/*
 	マイ貯金ルール編集
 	 */
@@ -69,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			// モーダルの値をセット
 			document.getElementById("modal-id").value = ruleId;
-			document.getElementById("modal-description").value = ruleElement.querySelector("#description")?.value || "";
+			document.getElementById("modal-description").value = ruleElement.querySelector(".card-title").textContent;
 			document.getElementById("modal-amount").value = ruleElement.querySelector(".card-text").textContent.trim().replace("円", "");
 
 			// モーダルを表示
@@ -83,10 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		document.getElementById("edit-modal").style.display = "none";
 	});
 
-	// モーダルを閉じる
-	closeWithdrawModal.addEventListener("click", function() {
-		document.getElementById("withdraw-list-modal").style.display = "none";
-	});
 
 	//編集内容を保存
 	document.getElementById('save-modal-button').addEventListener(`click`, async function() {
@@ -122,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				body: myRule // オブジェクトをJSON形式に変換して送信
 			});
 			if (response.ok) {
+
 				const updatedRule = await response.json();
 				const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
 				ruleElement.querySelector('.card-title').textContent = updatedRule.description;

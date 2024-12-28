@@ -36,7 +36,6 @@ public class SavingRuleController {
 	@PostMapping
 	public String saveMySavingRules(Model model, MySavingRuleForm mySavingRuleForm) {		
 		MySavingRule myRule = MySavingRule.builder()
-		        .title(mySavingRuleForm.getTitle())
 		        .description(mySavingRuleForm.getDescription())
 		        .userId(userId)
 		        .amount(mySavingRuleForm.getAmount())

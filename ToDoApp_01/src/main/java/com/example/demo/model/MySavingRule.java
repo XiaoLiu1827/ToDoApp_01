@@ -30,8 +30,6 @@ public class MySavingRule {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_seq")
 	private Long id;
 
-	private String title;
-
 	private String description;
 
 	private Long userId;
@@ -54,7 +52,6 @@ public class MySavingRule {
 
 	public MySavingRule(String title, String description, Long userId, BigDecimal amount, Set<DayOfWeek> frequency) {
 		super();
-		this.title = title;
 		this.description = description;
 		this.userId = userId;
 		this.amount = amount;

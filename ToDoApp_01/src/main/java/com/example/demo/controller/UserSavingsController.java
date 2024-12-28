@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.example.demo.form.SavingsFormWithValidation;
-import com.example.demo.model.MySavingRule;
 import com.example.demo.model.WishItem;
 import com.example.demo.service.MySavingRuleService;
 import com.example.demo.service.SavingsBoxService;
@@ -55,14 +54,14 @@ public class UserSavingsController {
 		return "home";
 	}
 
-	@PostMapping
-	public String createSavings(@RequestParam(name = "myRuleId", required = true) Long myRuleId,
-			Model model) {
-
-		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
-		savingsBoxService.updateAmount(userId, myRule.getAmount());
-		return "redirect:/savings/user";
-	}
+//	@PostMapping
+//	public String createSavings(@RequestParam(name = "myRuleId", required = true) Long myRuleId,
+//			Model model) {
+//
+//		MySavingRule myRule = (myRuleId == null) ? null : mySavingRuleService.getMySavingRuleById(myRuleId);
+//		savingsBoxService.updateAmount(userId, myRule.getAmount());
+//		return "redirect:/savings/user";
+//	}
 
 	//
 		@PostMapping("/withdraw")

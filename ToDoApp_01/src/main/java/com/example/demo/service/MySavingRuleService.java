@@ -29,7 +29,8 @@ public class MySavingRuleService {
 	}
 
 	public MySavingRule updateMySavingRuleFromDto(MySavingRule entity, MySavingRuleDto dto) {
-		BeanUtils.copyProperties(dto, entity, getNullPropertyNames(dto));
+		String[] nullNames = getNullPropertyNames(dto);
+		BeanUtils.copyProperties(dto, entity, nullNames);
 		return repository.save(entity);      
 	}
 

@@ -13,10 +13,10 @@ public class SavingsBoxService {
 	@Autowired
 	SavingsBoxRepository repository;
 	
-	public void updateAmount(Long userId, BigDecimal amount) {
+	public SavingsBox updateAmount(Long userId, BigDecimal amount) {
 		SavingsBox updatedSavingsBox = getSavingBoxByUserId(userId);
 		updatedSavingsBox.updateTotalAmount(amount);
-		repository.save(updatedSavingsBox);
+		return repository.save(updatedSavingsBox);
 	}
 	public SavingsBox getSavingBoxByUserId(Long userId) {
 		return repository.findByUserId(userId);

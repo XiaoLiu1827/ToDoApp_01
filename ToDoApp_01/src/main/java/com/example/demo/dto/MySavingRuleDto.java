@@ -1,12 +1,12 @@
 package com.example.demo.dto;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 @Data
 public class MySavingRuleDto {
-	private String title;
-
 	private String description;
 
-	private Double amount;
+	private BigDecimal amount;
 }
