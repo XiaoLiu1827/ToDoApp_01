@@ -18,7 +18,7 @@ public class SavingsBox {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private BigDecimal totalAmount;
+    private BigDecimal totalAmount = BigDecimal.ZERO;
 
 	@Column(unique = true)
 	private Long userId;

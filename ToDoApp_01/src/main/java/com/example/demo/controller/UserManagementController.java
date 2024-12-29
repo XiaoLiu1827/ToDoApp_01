@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/savings")
-@SessionAttributes({"userId", "username"})
+@SessionAttributes({ "userId", "username" })
 public class UserManagementController {
 	@Autowired
 	private UserAccountService userAccountService;
@@ -44,7 +44,11 @@ public class UserManagementController {
 			return "register";
 		}
 
-		return "redirect:/savings";
+		UserAccount newUser = new UserAccount(userAccountForm.getUsername(), userAccountForm.getPassword());
+		UserAccount updatedUser = userAccountService.saveUser(newUser);
+		model.addAttribute("userId", updatedUser.getId());
+		model.addAttribute("username", updatedUser.getUsername());
+		return "redirect:/savings/user";
 	}
 
 	@GetMapping("/login")
@@ -58,15 +62,15 @@ public class UserManagementController {
 		if (bindingResult.hasErrors()) {
 			return "login";
 		}
-		
+
 		try {
 			UserAccount loginUser = authenticationService.authenticateUser(userAccountForm);
 			model.addAttribute("userId", loginUser.getId());
 			model.addAttribute("username", loginUser.getUsername());
 
 			return "redirect:/savings/user";
-		}catch(AuthenticationException e) {
-			model.addAttribute("UserNotFound",messageUtils.get("user.not.found"));
+		} catch (AuthenticationException e) {
+			model.addAttribute("UserNotFound", messageUtils.get("user.not.found"));
 			return "login";
 		}
 	}

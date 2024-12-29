@@ -28,7 +28,7 @@ public class UserAccount {
 	private List<WishItem> purposeList = new ArrayList<>();
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "savings_box_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "savings_box_id", referencedColumnName = "id", nullable = true)
 	private SavingsBox savingsBox;
 
 	public UserAccount() {

@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Register</h1>
-        <form th:action="@{/api/savings/register}" th:object="${userAccountForm}" method="post">
+        <form th:action="@{/savings/register}" th:object="${userAccountForm}" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" th:field="*{username}" class="form-control" placeholder="Username">
