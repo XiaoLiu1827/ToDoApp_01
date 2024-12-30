@@ -30,4 +30,8 @@ public class SavingsBox {
 	public void withDraw(BigDecimal withdrawalAmount) {
 		this.totalAmount = this.totalAmount.subtract(withdrawalAmount);
 	}
+	
+	public String getFormattedAmount() {
+		return totalAmount.stripTrailingZeros().toPlainString(); // 整形して返す
+	}
 }
