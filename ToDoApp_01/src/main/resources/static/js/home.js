@@ -7,6 +7,11 @@ const closeEditModal = document.getElementById("close-edit-modal");
 const closeWithdrawModal = document.getElementById("close-withdraw-modal");
 const myRuleList = document.querySelectorAll('.savings-rule');
 const achievedButtons = document.querySelectorAll('.achieved');
+const wishItemList = document.querySelectorAll('.wishlist-item');
+const withdrawlList = document.querySelectorAll('.withdraw-item');
+const withdrawAmountElements = document.querySelectorAll('.withdraw-amount');
+const withItemAmountElements = document.querySelectorAll('.wishItem-amount');
+
 
 /**取り崩し処理 */
 //モーダル表示
@@ -46,16 +51,25 @@ document.getElementById('save-modal-button').addEventListener(`click`, function(
 
 
 document.addEventListener('DOMContentLoaded', () => {
-	/**貯金達成ボタン関連処理 */
+	//金額表示
+	formatToYen([totalSavingsElement]);
+	formatToYen(withdrawAmountElements);
+	formatToYen(withItemAmountElements);
+
 	myRuleList.forEach((rule) => {
 		const achievedButton = rule.querySelector('button.achieved');
 		const unachievedButton = rule.querySelector('button.unachieved');
 		const ruleId = rule.dataset.id;
 		const frequency = rule.dataset.frequency;
+		const amountElement = rule.querySelector('.card-text');
 
 		//ボタン押下判定項目
 		const todayString = new Date().toDateString();
 		const dateKey = `buttonClicked_${achievedButton.dataset.id}`;
+		console.log(amountElement);
+
+		//金額表示
+		formatToYen([amountElement]);
 
 		//ボタン活性非活性制御
 		controllButtonDisabled(achievedButton, unachievedButton, frequency, todayString, dateKey);
@@ -152,7 +166,7 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 	if (response.ok) {
 		const updatedTotalAmount = await response.json();
 		console.log(updatedTotalAmount);
-		totalSavingsElement.textContent = updatedTotalAmount;
+		totalSavingsElement.textContent = updatedTotalAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
 		alert('更新が完了しました。');
 	} else {
 		alert('更新に失敗しました。');
@@ -184,14 +198,17 @@ function handleOpenEditModal(ruleId, ruleElement) {
 	// モーダルの値をセット
 	document.getElementById("modal-id").value = ruleId;
 	document.getElementById("modal-description").value = ruleElement.querySelector(".card-title").textContent;
-	document.getElementById("modal-amount").value = ruleElement.querySelector(".card-text").textContent.trim().replace("円", "");
+	document.getElementById("modal-amount").value = ruleElement.querySelector(".card-text").textContent.trim().replace(/[￥,]/g, "");
 
 	// モーダルを表示
 	document.getElementById("edit-modal").style.display = "block";
 }
 
 //金額を円表示する
-function formatToYen(amount) {
-	return '¥' + Number(amount).toLocaleString('ja-JP');
+function formatToYen(elements) {
+	elements.forEach(amountElement => {
+		const amountValue = amountElement.dataset.amount; // data-amount の値を取得
+		amountElement.textContent = `${parseFloat(amountValue).toLocaleString("ja-JP", { style: "currency", currency: "JPY" })}`;
+	});
 }
 
