@@ -293,6 +293,17 @@ button.small:disabled {
 	transition: width 2s ease-in-out;
 }
 
+.progress.reset {
+	background: linear-gradient(90deg, #4caf50, #8bc34a);
+	/* 黄色を目立たせるため左端に配置 */
+	height: 300%;
+	border-radius: 5px;
+	width: 0;
+	transition: width 2s ease-in-out;
+}
+
+
+
 .item-content {
 	flex-grow: 1;
 }

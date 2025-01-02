@@ -228,6 +228,12 @@ function updateProgress() {
 		const progressEl = item.querySelector('.progress');
 		const progress = (totalSavingsAmount / targetAmount) * 100;
 		console.log(totalSavingsAmount);
-		progressEl.style.width = `${progress}%`
+		//	progressEl.style.width = '0';
+		progressEl.style.transition = 'none';
+		progressEl.style.width = '0';
+		setTimeout(() => {
+			progressEl.style.transition = 'width 2s ease-in-out';
+			progressEl.style.width = `${progress}%`;
+		}, 100);
 	});
 }
