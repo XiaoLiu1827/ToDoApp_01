@@ -176,7 +176,7 @@ h2 {
 
 /*詳細度を上げ手適用*/
 button.unachieved:disabled,
-button.small:disabled{
+button.small:disabled {
 	background-color: #ccc;
 	/* グレー */
 	color: #666;
@@ -246,11 +246,12 @@ button.small:disabled{
 	padding: 10px 20px;
 	margin-right: 5px;
 	font-size: 16px;
-	
+
 }
 
 .button.unachieved {
-    background-color: white; /* オレンジ色 */
+	background-color: white;
+	/* オレンジ色 */
 	color: #FFA500;
 	border: none;
 	border-color: black;
@@ -276,7 +277,7 @@ button.small:disabled{
 
 .progress-bar {
 	background-color: #e0e0e0;
-	height: 10px;
+	height: 13.5px;
 	border-radius: 5px;
 	margin-top: 10px;
 	flex-grow: 1;
@@ -284,10 +285,12 @@ button.small:disabled{
 }
 
 .progress {
-	background-color: #4a90e2;
-	height: 100%;
+	background: linear-gradient(90deg, #4caf50, #8bc34a);
+	/* 黄色を目立たせるため左端に配置 */
+	height: 300%;
 	border-radius: 5px;
 	width: 0;
+	transition: width 2s ease-in-out;
 }
 
 .item-content {

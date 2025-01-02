@@ -1,5 +1,5 @@
 const totalSavingsElement = document.getElementById('total-savings');
-const totalSavingsAmount = parseInt(document.getElementById('total-savings').innerText, 10);
+let totalSavingsAmount = document.getElementById('total-savings').dataset.amount;
 const withdrawButton = document.getElementById('withdraw-button');
 const withdrawItemList = document.querySelectorAll('.withdraw-item');
 const openEditModal = document.querySelectorAll('.open-edit-modal');
@@ -11,6 +11,7 @@ const wishItemList = document.querySelectorAll('.wishlist-item');
 const withdrawlList = document.querySelectorAll('.withdraw-item');
 const withdrawAmountElements = document.querySelectorAll('.withdraw-amount');
 const withItemAmountElements = document.querySelectorAll('.wishItem-amount');
+let i = 1;
 
 
 /**取り崩し処理 */
@@ -56,6 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	formatToYen(withdrawAmountElements);
 	formatToYen(withItemAmountElements);
 
+	updateProgress();
+
+
 	myRuleList.forEach((rule) => {
 		const achievedButton = rule.querySelector('button.achieved');
 		const unachievedButton = rule.querySelector('button.unachieved');
@@ -66,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		//ボタン押下判定項目
 		const todayString = new Date().toDateString();
 		const dateKey = `buttonClicked_${achievedButton.dataset.id}`;
-		console.log(amountElement);
 
 		//金額表示
 		formatToYen([amountElement]);
@@ -76,7 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		// 達成ボタンのクリック処理
 		achievedButton.addEventListener('click', function() {
-			handleAchievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey);
+			handleAchievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey)
+				.then(() => {
+					updateProgress();
+				});
 		});
 
 		// 未達成ボタンのクリック処理
@@ -164,9 +170,9 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 		method: 'POST'
 	});
 	if (response.ok) {
-		const updatedTotalAmount = await response.json();
-		console.log(updatedTotalAmount);
-		totalSavingsElement.textContent = updatedTotalAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
+		totalSavingsAmount = await response.json();
+		totalSavingsElement.setAttribute('data-amount', totalSavingsAmount);
+		totalSavingsElement.textContent = totalSavingsAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
 		alert('更新が完了しました。');
 	} else {
 		alert('更新に失敗しました。');
@@ -189,7 +195,9 @@ function handleButtonState(achievedButton, unachievedButton, dateKey, todayStrin
 //取り崩し選択ボタン活性制御処理
 function handleSelectButtonDisabled(neededAmount, selectButton) {
 	if (neededAmount > totalSavingsAmount) {
+		console.log(totalSavingsAmount);
 		selectButton.disabled = true; // ボタンを無効化
+		console.log(selectButton.disabled)
 	}
 }
 
@@ -212,3 +220,14 @@ function formatToYen(elements) {
 	});
 }
 
+function updateProgress() {
+	console.log(i);
+	i++;
+	wishItemList.forEach(item => {
+		const targetAmount = item.querySelector('.wishItem-amount').dataset.amount;
+		const progressEl = item.querySelector('.progress');
+		const progress = (totalSavingsAmount / targetAmount) * 100;
+		console.log(totalSavingsAmount);
+		progressEl.style.width = `${progress}%`
+	});
+}
