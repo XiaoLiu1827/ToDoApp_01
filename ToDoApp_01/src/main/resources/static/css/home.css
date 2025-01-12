@@ -127,8 +127,12 @@ h2 {
 .button.withdraw {
 	background-color: #ff69b4;
 	font-weight: bold;
+	transition: background-color 0.3s;
 }
 
+.button.withdraw:hover {
+	background-color: #ff1493;
+}
 
 /*モーダル*/
 .modal {
@@ -188,6 +192,11 @@ button.small:disabled {
 }
 
 /*部品*/
+.item-header {
+	display: flex;
+	justify-content: space-between;
+}
+
 .card-title {
 	font-size: 18px;
 	font-weight: bold;
@@ -280,9 +289,33 @@ button.small:disabled {
 	height: 13.5px;
 	border-radius: 5px;
 	margin-top: 10px;
-	flex-grow: 1;
 	margin-right: 10px;
+	position: relative;
+	display: flex;
+	overflow: hidden;
 }
+
+.status-badges {
+	margin-top: 17px;
+}
+
+.status-badge {
+	padding: 4px 12px;
+	border-radius: 999px;
+	font-size: 18px;
+	border: none;
+}
+
+.status-incomplete {
+	background-color: #e5e7eb;
+	color: #666;
+}
+
+.status-complete {
+	background-color: #3b82f6;
+	color: white;
+}
+
 
 .progress {
 	background: linear-gradient(90deg, #4caf50, #8bc34a);
@@ -291,17 +324,35 @@ button.small:disabled {
 	border-radius: 5px;
 	width: 0;
 	transition: width 2s ease-in-out;
+	position: relative;
+	z-index: 1;
 }
 
-.progress.reset {
-	background: linear-gradient(90deg, #4caf50, #8bc34a);
-	/* 黄色を目立たせるため左端に配置 */
-	height: 300%;
-	border-radius: 5px;
-	width: 0;
-	transition: width 2s ease-in-out;
+.particle {
+	position: absolute;
+	top: 50%;
+	width: 13.5px;
+	height: 13.5px;
+	border-radius: 30%;
+	background-color: yellow;
+	transition: transform 2s ease-in-out;
+	animation: particleMove 3s ease-in-out forwards;
+	z-index: 2;
+	transform: translateY(-50%);
+	/* 中央揃え */
 }
 
+@keyframes particleMove {
+
+	0%,
+	100% {
+		opacity: 0;
+	}
+
+	66% {
+		opacity: 1;
+	}
+}
 
 
 .item-content {

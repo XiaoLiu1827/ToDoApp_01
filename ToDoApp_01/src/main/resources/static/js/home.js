@@ -1,5 +1,5 @@
 const totalSavingsElement = document.getElementById('total-savings');
-let totalSavingsAmount = document.getElementById('total-savings').dataset.amount;
+let totalSavingsAmount = Number(document.getElementById('total-savings').dataset.amount);
 const withdrawButton = document.getElementById('withdraw-button');
 const withdrawItemList = document.querySelectorAll('.withdraw-item');
 const openEditModal = document.querySelectorAll('.open-edit-modal');
@@ -174,6 +174,14 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 		totalSavingsElement.setAttribute('data-amount', totalSavingsAmount);
 		totalSavingsElement.textContent = totalSavingsAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
 		alert('更新が完了しました。');
+
+		//取り崩しボタン非活性判定
+		withdrawItemList.forEach((item) => {
+			console.log('button cliccked');
+			const neededAmount = parseInt(item.querySelector('.item-content').dataset.amount, 10);
+			const selectButton = item.querySelector('button[type="submit"]');
+			handleSelectButtonDisabled(neededAmount, selectButton);
+		});
 	} else {
 		alert('更新に失敗しました。');
 	}
@@ -195,9 +203,9 @@ function handleButtonState(achievedButton, unachievedButton, dateKey, todayStrin
 //取り崩し選択ボタン活性制御処理
 function handleSelectButtonDisabled(neededAmount, selectButton) {
 	if (neededAmount > totalSavingsAmount) {
-		console.log(totalSavingsAmount);
 		selectButton.disabled = true; // ボタンを無効化
-		console.log(selectButton.disabled)
+	} else {
+		selectButton.disabled = false;
 	}
 }
 
@@ -221,19 +229,57 @@ function formatToYen(elements) {
 }
 
 function updateProgress() {
-	console.log(i);
-	i++;
 	wishItemList.forEach(item => {
-		const targetAmount = item.querySelector('.wishItem-amount').dataset.amount;
+		const targetAmount = Number(item.querySelector('.wishItem-amount').dataset.amount);
 		const progressEl = item.querySelector('.progress');
 		const progress = (totalSavingsAmount / targetAmount) * 100;
-		console.log(totalSavingsAmount);
-		//	progressEl.style.width = '0';
+		const progressBarEl = item.querySelector('.progress-bar');
+
+		//パーティクルの生成
+		const particle = document.createElement("div");
+		particle.classList.add("particle");
+		progressBarEl.appendChild(particle);
+
+		//達成状況判定
+		checkeIsAchieved(item, targetAmount);
+
+		//バーとパーティクルをスタート位置に設定
 		progressEl.style.transition = 'none';
 		progressEl.style.width = '0';
+		particle.style.transition = 'none';
+		particle.style.left = `-${particle.offsetWidth}px`;
+		particle.style.animation = 'none';
+
+		//バーとパーティクルを動かす
 		setTimeout(() => {
 			progressEl.style.transition = 'width 2s ease-in-out';
 			progressEl.style.width = `${progress}%`;
+			particle.style.transition = 'left 2s ease-in-out';
+			particle.style.left = `calc(${progress}% - ${particle.offsetWidth}px)`;
+			particle.style.animation = 'particleMove 3s ease-in-out forwards';
 		}, 100);
 	});
+}
+
+function checkeIsAchieved(item, targetAmount) {
+	const statusEl = item.querySelector('.status-badge');
+	let i = 1;
+	if (totalSavingsAmount >= targetAmount) {
+		console.log(i);
+		console.log(typeof totalSavingsAmount);
+		console.log(typeof targetAmount);
+		i++;
+		statusEl.classList.add("status-complete");
+		statusEl.classList.remove("status-incomplete");
+		statusEl.textContent = "達成";
+	} else {
+		console.log(i);
+		console.log(typeof totalSavingsAmount);
+		console.log(typeof targetAmount);
+		statusEl.classList.remove("status-complete");
+		if (!statusEl.classList.contains("status-incomplete")) {
+			statusEl.classList.add("status-incomplete");
+			statusEl.textContent = "未達成";
+		}
+	}
 }
