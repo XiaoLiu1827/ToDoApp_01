@@ -11,7 +11,8 @@ const wishItemList = document.querySelectorAll('.wishlist-item');
 const withdrawlList = document.querySelectorAll('.withdraw-item');
 const withdrawAmountElements = document.querySelectorAll('.withdraw-amount');
 const withItemAmountElements = document.querySelectorAll('.wishItem-amount');
-let i = 1;
+let achievedItems = [];
+let isPurchaseable = false;
 
 
 /**取り崩し処理 */
@@ -49,7 +50,6 @@ document.getElementById('save-modal-button').addEventListener(`click`, function(
 
 	saveRuleEdit(id, description, amount);
 });
-
 
 document.addEventListener('DOMContentLoaded', () => {
 	//金額表示
@@ -92,11 +92,22 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	//取り崩し選択ボタン
+	let hasPurchasabaleItem = false;
 	withdrawItemList.forEach((item) => {
 		const neededAmount = parseInt(item.querySelector('.item-content').dataset.amount, 10);
 		const selectButton = item.querySelector('button[type="submit"]');
 		handleSelectButtonDisabled(neededAmount, selectButton);
+		if (totalSavingsAmount >= neededAmount) {
+			hasPurchasabaleItem = true;
+		}
 	});
+	if (!hasPurchasabaleItem) {
+		const piggyBankEl = document.getElementById('piggy-bank');
+		const purchaseStatusEl = document.getElementById('purchaseStatus');
+		piggyBankEl.classList.remove("purchasable");
+		purchaseStatusEl.classList.remove("show");
+		isPurchaseable = false;
+	}
 });
 
 
@@ -263,19 +274,18 @@ function updateProgress() {
 
 function checkeIsAchieved(item, targetAmount) {
 	const statusEl = item.querySelector('.status-badge');
-	let i = 1;
 	if (totalSavingsAmount >= targetAmount) {
-		console.log(i);
-		console.log(typeof totalSavingsAmount);
-		console.log(typeof targetAmount);
-		i++;
 		statusEl.classList.add("status-complete");
 		statusEl.classList.remove("status-incomplete");
 		statusEl.textContent = "達成";
+		if (!isPurchaseable) {
+			const piggyBankEl = document.getElementById('piggy-bank');
+			const purchaseStatusEl = document.getElementById('purchaseStatus');
+			piggyBankEl.classList.add("purchasable");
+			purchaseStatusEl.classList.add("show");
+			isPurchaseable = true;
+		}
 	} else {
-		console.log(i);
-		console.log(typeof totalSavingsAmount);
-		console.log(typeof targetAmount);
 		statusEl.classList.remove("status-complete");
 		if (!statusEl.classList.contains("status-incomplete")) {
 			statusEl.classList.add("status-incomplete");
@@ -283,3 +293,4 @@ function checkeIsAchieved(item, targetAmount) {
 		}
 	}
 }
+
