@@ -2,8 +2,8 @@ const totalSavingsElement = document.getElementById('total-savings');
 let totalSavingsAmount = Number(document.getElementById('total-savings').dataset.amount);
 const withdrawButton = document.getElementById('withdraw-button');
 const withdrawItemList = document.querySelectorAll('.withdraw-item');
-const openEditModal = document.querySelectorAll('.open-edit-modal');
-const closeEditModal = document.getElementById("close-edit-modal");
+const openEditModalList = document.querySelectorAll('.open-edit-modal');
+const closeEditModalEl = document.getElementById(`close-edit-modal`);
 const closeWithdrawModal = document.getElementById("close-withdraw-modal");
 const myRuleList = document.querySelectorAll('.savings-rule');
 const achievedButtons = document.querySelectorAll('.achieved');
@@ -11,6 +11,9 @@ const wishItemList = document.querySelectorAll('.wishlist-item');
 const withdrawlList = document.querySelectorAll('.withdraw-item');
 const withdrawAmountElements = document.querySelectorAll('.withdraw-amount');
 const withItemAmountElements = document.querySelectorAll('.wishItem-amount');
+const editModalEl = document.getElementById("edit-modal");
+
+
 let achievedItems = [];
 let isPurchaseable = false;
 
@@ -27,7 +30,7 @@ closeWithdrawModal.addEventListener("click", function() {
 });
 
 //編集モーダルを開く
-openEditModal.forEach((element) => {
+openEditModalList.forEach((element) => {
 	element.addEventListener("click", function() {
 		const ruleId = this.dataset.id;
 		const ruleElement = document.querySelector(`.savings-rule[data-id="${ruleId}"]`);
@@ -36,19 +39,30 @@ openEditModal.forEach((element) => {
 	})
 });
 
-// モーダルを閉じる
-closeEditModal.addEventListener("click", function() {
-	document.getElementById("edit-modal").style.display = "none";
+// 編集モーダルを閉じる
+closeEditModalEl.addEventListener("click", function() {
+	closeModal(`edit-modal`);
 });
 
+//編集モーダルボタンクリック処理
+document.querySelectorAll(`.button-modal`).forEach(button => {
+	button.addEventListener(`click`, (event) => {
+		const id = document.getElementById("modal-id").value;
+		const description = document.getElementById("modal-description").value;
+		const amount = document.getElementById("modal-amount").value;
 
-//編集内容を保存
-document.getElementById('save-modal-button').addEventListener(`click`, function() {
-	const id = document.getElementById("modal-id").value;
-	const description = document.getElementById("modal-description").value;
-	const amount = document.getElementById("modal-amount").value;
-
-	saveRuleEdit(id, description, amount);
+		if (event.target.id === `delete-modal-button`) {
+			//モーダル画面を切替表示
+			closeModal(`edit-modal`);
+			setTimeout(() => {
+				openModal(`deleteConfirmModal`);
+			});
+		} else if (event.target.id === `save-modal-button`) {
+			//編集内容を保存
+			console.log(`保存処理を実行します。modal-id: ${id}`);
+			saveRuleEdit(id, description, amount);
+		}
+	});
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -146,7 +160,7 @@ async function saveRuleEdit(id, description, amount) {
 			const updatedRule = await response.json();
 			const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
 			ruleElement.querySelector('.card-title').textContent = updatedRule.description;
-			ruleElement.querySelector('.card-text').textContent = `${updatedRule.amount}円`;
+			ruleElement.querySelector('.card-text').textContent = `${parseFloat(updatedRule.amount).toLocaleString("ja-JP", { style: "currency", currency: "JPY" })}`;
 			alert(`更新が完了しました。`);
 		} else {
 			alert(`更新に失敗しました。`);
@@ -228,7 +242,7 @@ function handleOpenEditModal(ruleId, ruleElement) {
 	document.getElementById("modal-amount").value = ruleElement.querySelector(".card-text").textContent.trim().replace(/[￥,]/g, "");
 
 	// モーダルを表示
-	document.getElementById("edit-modal").style.display = "block";
+	openModal(`edit-modal`);
 }
 
 //金額を円表示する
@@ -294,3 +308,16 @@ function checkeIsAchieved(item, targetAmount) {
 	}
 }
 
+function openModal(modalId) {
+	const modal = document.getElementById(modalId);
+	modal.classList.add("active");
+	modal.querySelector(`.modal-content`).classList.add(`active`);
+}
+
+function closeModal(modalId) {
+	const modal = document.getElementById(modalId);
+	modal.querySelector(`.modal-content`).classList.remove(`active`);
+	setTimeout(() => {
+		modal.classList.remove(`active`);
+	}, 300);
+}
