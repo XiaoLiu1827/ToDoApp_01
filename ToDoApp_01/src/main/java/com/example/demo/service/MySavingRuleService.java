@@ -33,8 +33,16 @@ public class MySavingRuleService {
 		BeanUtils.copyProperties(dto, entity, nullNames);
 		return repository.save(entity);      
 	}
-
-	public String[] getNullPropertyNames(Object source) {
+	
+	public boolean deleteMySavingRule(Long id) {
+		if(repository.existsById(id)) {
+			repository.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+	
+	private String[] getNullPropertyNames(Object source) {
 		return Arrays.stream(BeanUtils.getPropertyDescriptors(source.getClass()))
 				.map(pd -> pd.getName()).filter(name -> {
 					try {

@@ -1,6 +1,7 @@
 package com.example.demo.restController;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.example.demo.service.MySavingRuleService;
 public class SavingRuleApiController {
 	 @Autowired
 	    private MySavingRuleService mySavingRuleService;
+	 
 	@PostMapping("/update/{id}")
 	public ResponseEntity<MySavingRule> updateMySavingRule(
 			@PathVariable Long id,
@@ -27,5 +29,17 @@ public class SavingRuleApiController {
 		MySavingRule result = mySavingRuleService.updateMySavingRuleFromDto(entity, updatedRule);
 		// 更新後のオブジェクトを JSON 形式で返す
 		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping("/delete/{id}")
+	public ResponseEntity<Void> deleteMySavingRule(
+			@PathVariable Long id){
+		boolean isDeleted = mySavingRuleService.deleteMySavingRule(id);
+		
+		if(isDeleted) {
+			return ResponseEntity.noContent().build();
+		}else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 }

@@ -114,17 +114,17 @@
 				<div class="modal-content confirmation-modal">
 					<div class="modal-header">
 						<h2 class="modal-title">削除の確認</h2>
-						<button class="close-button" onclick="closeModal('deleteConfirmModal')">&times;</button>
+						<button class="modal-close" onclick="closeModal('deleteConfirmModal')">&times;</button>
 					</div>
 					<p>本当に削除しますか？<br>削除すると復元できません。</p>
 					<div class="modal-footer">
-						<button class="button-modal cancel" onclick="closeModal('deleteConfirmModal')">キャンセル</button>
-						<button class="button-modal delete">削除する</button>
+						<button class="button-modal cancel" id="cancel-modal-button">キャンセル</button>
+						<button class="button-modal delete" id="confirm-modal-button">削除する</button>
 					</div>
 				</div>
 			</div>
 			<!-- 取り崩し用モーダル-->
-			<div id="withdraw-list-modal" class="modal">
+			<div id="withdraw-list-modal" class="modal-overlay">
 				<div class="modal-content">
 					<span id="close-withdraw-modal" class="close">&times;</span>
 					<h2>欲しいものリスト</h2>

@@ -27,11 +27,11 @@ public class UserAccountService {
 		return userAccountRepository.findByUsernameAndPassword(username, password);
 	};
 
-	public void addWishItem(Long userId, String name, BigDecimal neededAmount) {
+	public void addWishItem(Long userId, String name, BigDecimal neededAmount, String imagePath) {
 		UserAccount user = findById(userId);
 
-		WishItem purpose = new WishItem(name, BigDecimal.ZERO, neededAmount);
-		user.addPurpose(purpose);
+		WishItem item = new WishItem(name, BigDecimal.ZERO, neededAmount, imagePath);
+		user.addPurpose(item);
 
 		userAccountRepository.save(user);
 	}

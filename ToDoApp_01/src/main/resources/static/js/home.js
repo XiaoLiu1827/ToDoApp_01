@@ -21,12 +21,12 @@ let isPurchaseable = false;
 /**取り崩し処理 */
 //モーダル表示
 withdrawButton.addEventListener('click', () => {
-	document.getElementById("withdraw-list-modal").style.display = "block";
+	openModal(`withdraw-list-modal`);
 });
 
 // モーダルを閉じる
 closeWithdrawModal.addEventListener("click", function() {
-	document.getElementById("withdraw-list-modal").style.display = "none";
+	closeModal(`withdraw-list-modal`);
 });
 
 //編集モーダルを開く
@@ -47,23 +47,33 @@ closeEditModalEl.addEventListener("click", function() {
 //編集モーダルボタンクリック処理
 document.querySelectorAll(`.button-modal`).forEach(button => {
 	button.addEventListener(`click`, (event) => {
-		const id = document.getElementById("modal-id").value;
+		const ruleId = document.getElementById("modal-id").value;
 		const description = document.getElementById("modal-description").value;
 		const amount = document.getElementById("modal-amount").value;
-
-		if (event.target.id === `delete-modal-button`) {
+		const buttonId = event.target.id;
+		if (buttonId === `delete-modal-button`) {
 			//モーダル画面を切替表示
 			closeModal(`edit-modal`);
 			setTimeout(() => {
 				openModal(`deleteConfirmModal`);
 			});
-		} else if (event.target.id === `save-modal-button`) {
+		} else if (buttonId === `save-modal-button`) {
 			//編集内容を保存
-			console.log(`保存処理を実行します。modal-id: ${id}`);
-			saveRuleEdit(id, description, amount);
+			console.log(`保存処理を実行します。modal-id: ${ruleId}`);
+			saveRuleEdit(ruleId, description, amount);
+			closeModal(`edit-modal`);
+		} else if (buttonId === `cancel-modal-button`) {
+			closeModal(`deleteConfirmModal`);
+		} else if (buttonId === `confirm-modal-button`) {
+			deleteRule(ruleId);
+			closeModal(`deleteConfirmModal`);
 		}
 	});
 });
+
+//削除確認モーダル処理
+const deleteConfirmModalEl = document.getElementById(`deleteConfirmModal`);
+deleteConfirmModalEl
 
 document.addEventListener('DOMContentLoaded', () => {
 	//金額表示
@@ -164,6 +174,32 @@ async function saveRuleEdit(id, description, amount) {
 			alert(`更新が完了しました。`);
 		} else {
 			alert(`更新に失敗しました。`);
+		}
+	} catch (error) {
+		console.error(`error:`, error);
+	}
+}
+
+//貯金ルール編集内容を保存
+async function deleteRule(id) {
+	// サーバーに更新リクエストを送信し、レスポンスを処理する
+	try {
+		console.log('Sending fetch request...');
+		const response = await fetch(`/savings/api/mySavingRule/delete/${id}`, {
+			method: 'POST',
+		});
+		if (response.ok) {
+			console.log(`削除成功`);
+			const ruleElement = document.querySelector(`[data-id='${id}']`).closest('.savings-rule');
+			if (ruleElement) {
+				ruleElement.style.display = 'none';
+			}
+		} else {
+			if (response.status === 404) {
+				alert(`リソースが見つかりません`);
+			} else {
+				console.log(`削除失敗`);
+			}
 		}
 	} catch (error) {
 		console.error(`error:`, error);

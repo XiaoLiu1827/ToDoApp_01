@@ -5,27 +5,41 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>欲しいもの登録</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/addPurposeForm.css">
+	<link rel="stylesheet" href="/css/wishItemForm.css">
 </head>
 
 <body>
-	<div class="container mt-5">
-		<h2>欲しいものを登録する</h2>
-		<form th:action="@{/savings/wishItem}" th:object="${wishItemForm}" method="post">
+	<div class="form-container">
+		<div class="form-header">
+			<h1>欲しいものを登録する</h1>
+		</div>
+		<form id="wishItemForm">
 			<div class="form-group">
-				<label for="name">名前</label>
-				<input type="text" id="name" th:field="*{name}" class="form-control" required>
+				<label for="name" class="form-label">タイトル</label>
+				<input type="text" id="name" name="name" class="form-input" required>
 			</div>
 			<div class="form-group">
-				<label for="neededAmount">必要額</label>
-				<input type="number" id="neededAmount" th:field="*{neededAmount}" class="form-control" step="0.01"
+				<label for="neededAmount" class="form-label">金額</label>
+				<input type="number" id="neededAmount" name="neededAmount" class="form-input" step="0.01"
 					required>
-				<div th:errors="*{neededAmount}" class="invalid-feedback d-block"></div>
+				<div class="error-message" id="amountError">有効な金額を入力してください</div>
 			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
+			<div class="form-group">
+				<label class="form-label">画像</label>
+				<div class="image-upload" id="imageUpload">
+					<input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
+					<img id="imagePreview" class="image-preview">
+					<div id="uploadPlaceholder">
+						<div class="upload-icon">📸</div>
+						<div class="upload-text">クリックして画像をアップロード</div>
+						<div class="upload-hint">または画像をドラッグ＆ドロップ</div>
+					</div>
+				</div>
+			</div>
+			<button type="button" id="submit-button" class="submit-button">登録する</button>
 		</form>
 	</div>
+	<script src="/js/wishItemForm.js"></script>
 </body>
 
 </html>

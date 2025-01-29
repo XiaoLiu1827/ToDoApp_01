@@ -12,4 +12,5 @@ public class WishItemForm {
 	@NotNull(message = "amount is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "amount must be greater than zero")
 	private BigDecimal neededAmount;
+    private byte[] image;
 }
