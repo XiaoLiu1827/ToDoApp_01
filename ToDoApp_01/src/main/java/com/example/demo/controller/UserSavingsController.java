@@ -51,6 +51,7 @@ public class UserSavingsController {
 		model.addAttribute("myRuleList", mySavingRuleService.getMySavingRuleByUserId(userId));
 		model.addAttribute("totalSavings", savingsBoxService.getSavingBoxByUserId(userId).getTotalAmount());
 		model.addAttribute("username", username);
+		
 		return "home";
 	}
 
@@ -89,4 +90,5 @@ public class UserSavingsController {
 
 		return "redirect:/savings/user";
 	}
+	
 }

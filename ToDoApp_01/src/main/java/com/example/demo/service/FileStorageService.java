@@ -18,6 +18,10 @@ public class FileStorageService {
 	private String uploadDir;
 
 	public String saveFile(MultipartFile file) throws IOException {
+		if (file == null || file.isEmpty() || file.getOriginalFilename().isBlank()) {
+			return "no_image"; // Return default placeholder filename
+		}
+		
 		// ディレクトリを作成（存在しない場合）
 		Files.createDirectories(Paths.get(uploadDir));
 

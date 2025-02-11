@@ -17,8 +17,6 @@ const editModalEl = document.getElementById("edit-modal");
 let achievedItems = [];
 let isPurchaseable = false;
 
-
-/**取り崩し処理 */
 //モーダル表示
 withdrawButton.addEventListener('click', () => {
 	openModal(`withdraw-list-modal`);
@@ -29,6 +27,25 @@ closeWithdrawModal.addEventListener("click", function() {
 	closeModal(`withdraw-list-modal`);
 });
 
+wishItemList.forEach((element) => {
+	console.log(element.dataset.id);
+	const editButton = element.querySelector('.transition-edit-item');
+	//欲しいもの編集画面に遷移
+	editButton.addEventListener("click", function() {
+		// Store selected wishItem data before transition
+		const wishItem = {
+			id: element.dataset.id,
+			name: element.dataset.name,
+			neededAmount: element.dataset.amount,
+			imagePath: element.dataset.image
+		};
+		localStorage.setItem("editWishItem", JSON.stringify(wishItem));
+
+		// Redirect to the form
+		window.location.href = "/savings/wishItem";
+
+	})
+});
 //編集モーダルを開く
 openEditModalList.forEach((element) => {
 	element.addEventListener("click", function() {
@@ -180,7 +197,7 @@ async function saveRuleEdit(id, description, amount) {
 	}
 }
 
-//貯金ルール編集内容を保存
+//貯金ルール削除
 async function deleteRule(id) {
 	// サーバーに更新リクエストを送信し、レスポンスを処理する
 	try {
@@ -327,7 +344,7 @@ function checkeIsAchieved(item, targetAmount) {
 	if (totalSavingsAmount >= targetAmount) {
 		statusEl.classList.add("status-complete");
 		statusEl.classList.remove("status-incomplete");
-		statusEl.textContent = "達成";
+		statusEl.textContent = "購入可能";
 		if (!isPurchaseable) {
 			const piggyBankEl = document.getElementById('piggy-bank');
 			const purchaseStatusEl = document.getElementById('purchaseStatus');

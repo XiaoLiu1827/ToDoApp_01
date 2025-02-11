@@ -30,6 +30,8 @@ public class WishItemController {
 	public String showWishItemForm(Model model, WishItemForm wishItemForm) {
 		return "wishItemForm";
 	}
+	
+	
 
 //	@PostMapping
 //	public String createWishItem(@Validated @ModelAttribute WishItemForm wishItemForm,

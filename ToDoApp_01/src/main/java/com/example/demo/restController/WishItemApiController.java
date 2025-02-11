@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -20,6 +21,7 @@ import com.example.demo.dto.WishItemDto;
 import com.example.demo.model.WishItem;
 import com.example.demo.service.FileStorageService;
 import com.example.demo.service.UserAccountService;
+import com.example.demo.service.WishItemService;
 
 @RestController
 @RequestMapping("/savings/api/wishItem")
@@ -29,6 +31,8 @@ public class WishItemApiController {
 	private FileStorageService fileStorageService;
 	@Autowired
 	private UserAccountService userAccountService;
+	@Autowired
+	private WishItemService wishItemService;
 	private Long userId;
 
 	@ModelAttribute
@@ -41,7 +45,7 @@ public class WishItemApiController {
 	public ResponseEntity<?> addWishItem(
 			@ModelAttribute WishItemDto dto) {
 		try {
-			// 画像ファイルを保存
+			// 画像ファイルを外部に保存
 			String fileName = fileStorageService.saveFile(dto.getImage());
 
 			//WishItemエンティティを作成
@@ -62,8 +66,36 @@ public class WishItemApiController {
 		}
 	}
 
-	@GetMapping("/image/{fileName}")
-	public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws IOException {
+	@PostMapping("/update/{id}")
+	@ResponseBody
+	public ResponseEntity<?> updateWishItem(
+			@PathVariable Long id,
+			@ModelAttribute WishItemDto dto) {
+		try {
+			// 画像ファイルを外部に保存
+			String fileName = fileStorageService.saveFile(dto.getImage());
+
+			//エンティティを取得し、変更内容を反映
+			WishItem entity = wishItemService.getWishItembyId(id);
+			entity.setName(dto.getName());
+			entity.setNeededAmount(dto.getNeededAmount());
+			entity.setImagePath(fileName);
+
+			userAccountService.addWishItem(userId, dto.getName(),
+					dto.getNeededAmount(), fileName);
+
+			return ResponseEntity.ok("/savings/user");
+		} catch (Exception e) {
+			// エラーログを出力
+			e.printStackTrace();
+			// 適切なエラーメッセージを返却するか例外を再スロー
+			throw new RuntimeException("ファイル保存中にエラーが発生しました", e);
+		}
+	}
+
+	@GetMapping("/image")
+	public ResponseEntity<Resource> getImage(@RequestParam String fileName) throws IOException {
+
 		Resource file = fileStorageService.loadFile(fileName);
 		return ResponseEntity.ok()
 				.contentType(MediaType.IMAGE_JPEG) // 適切なMIMEタイプに変更

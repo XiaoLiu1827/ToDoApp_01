@@ -10,6 +10,22 @@ const uploadPlaceholder = document.getElementById('uploadPlaceholder');
 const amountError = document.getElementById('amountError');
 const submitButton = document.getElementById('submit-button');
 
+
+document.addEventListener('DOMContentLoaded', () => {
+	const storedData = localStorage.getItem("editWishItem");
+	if (storedData) {
+		const wishItem = JSON.parse(storedData);
+		//idをつける
+		console.log(wishItem);
+		document.getElementById("id").value = wishItem.id;
+		document.getElementById("name").value = wishItem.name;
+		document.getElementById("neededAmount").value = wishItem.neededAmount;
+		// Cleanup storage after use
+		localStorage.removeItem("editWishItem");
+	}
+});
+
+
 // Image upload handling
 imageUpload.addEventListener('click', () => imageInput.click());
 
@@ -41,20 +57,24 @@ imageInput.addEventListener('change', (e) => {
 
 submitButton.addEventListener('click', async function(event) {
 	const form = document.getElementById("wishItemForm");
+	const id = document.getElementById('id')?.value;
+	//formにidがあるときは編集
+	//処理ロジックはルール編集と同じ
 	const formData = new FormData(form);
 	try {
-		const response = await fetch("/savings/api/wishItem/add", {
+		//idが設定されている場合は更新、以外は登録
+		const response = await fetch(id ? `/savings/api/wishItem/update/${id}` : "/savings/api/wishItem/add", {
 			method: "POST",
 			body: formData,
 		});
-		
-		if(response.ok){
+
+		if (response.ok) {
 			const redirectUrl = await response.text();
 			window.location.href = redirectUrl;
-		}else{
-			console.error("エラー発生：",await response.text());
+		} else {
+			console.error("エラー発生：", await response.text());
 		}
-		
+
 	} catch (error) {
 		console.log(error);
 	}
