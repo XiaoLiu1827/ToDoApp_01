@@ -35,7 +35,7 @@ public class WishItemService {
 		return repository.save(wishItem);
 	}
 
-	public WishItem saveSavingPurpose(WishItem savingWishItem) {
+	public WishItem saveWishItem(WishItem savingWishItem) {
 		return repository.save(savingWishItem);
 	}
 

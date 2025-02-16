@@ -1,7 +1,9 @@
 package com.example.demo.restController;
 
 import java.io.IOException;
+import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -40,6 +42,22 @@ public class WishItemApiController {
 		this.userId = userId;
 	}
 
+	@PostMapping("/delete/{id}")
+	@ResponseBody
+	public ResponseEntity<?> deleteWishItem(
+			@PathVariable Long id) {
+		try {
+			wishItemService.deleteWishItem(id);
+
+			return ResponseEntity.ok("/savings/user");
+		} catch (Exception e) {
+			// エラーログを出力
+			e.printStackTrace();
+			// 適切なエラーメッセージを返却するか例外を再スロー
+			throw new RuntimeException("ファイル保存中にエラーが発生しました", e);
+		}
+	}
+
 	@PostMapping("/add")
 	@ResponseBody
 	public ResponseEntity<?> addWishItem(
@@ -48,11 +66,11 @@ public class WishItemApiController {
 			// 画像ファイルを外部に保存
 			String fileName = fileStorageService.saveFile(dto.getImage());
 
-			//WishItemエンティティを作成
-			WishItem wishItem = new WishItem();
-			wishItem.setName(dto.getName());
-			wishItem.setNeededAmount(dto.getNeededAmount());
-			wishItem.setImagePath(fileName);
+			//			//WishItemエンティティを作成
+			//			WishItem wishItem = new WishItem();
+			//			wishItem.setName(dto.getName());
+			//			wishItem.setNeededAmount(dto.getNeededAmount());
+			//			wishItem.setImagePath(fileName);
 
 			userAccountService.addWishItem(userId, dto.getName(),
 					dto.getNeededAmount(), fileName);
@@ -70,21 +88,27 @@ public class WishItemApiController {
 	@ResponseBody
 	public ResponseEntity<?> updateWishItem(
 			@PathVariable Long id,
-			@ModelAttribute WishItemDto dto) {
+			@ModelAttribute WishItemDto dto,
+			@RequestParam("keepCurrentImage") Optional<Boolean> keepCurrentImage) {
 		try {
-			// 画像ファイルを外部に保存
-			String fileName = fileStorageService.saveFile(dto.getImage());
-
-			//エンティティを取得し、変更内容を反映
+			//エンティティを取得し
 			WishItem entity = wishItemService.getWishItembyId(id);
-			entity.setName(dto.getName());
-			entity.setNeededAmount(dto.getNeededAmount());
-			entity.setImagePath(fileName);
 
-			userAccountService.addWishItem(userId, dto.getName(),
-					dto.getNeededAmount(), fileName);
+			//画像変更なしの場合
+			if (keepCurrentImage.orElse(false)) {
+				BeanUtils.copyProperties(dto, entity, "imagePath", "userAccount");
+			} else {
+				BeanUtils.copyProperties(dto, entity, "userAccount");
+
+				// 画像ファイルを外部に保存
+				String fileName = fileStorageService.saveFile(dto.getImage());
+				entity.setImagePath(fileName);
+			}
+			//adddだと更新にならなそう
+			wishItemService.saveWishItem(entity);
 
 			return ResponseEntity.ok("/savings/user");
+
 		} catch (Exception e) {
 			// エラーログを出力
 			e.printStackTrace();
