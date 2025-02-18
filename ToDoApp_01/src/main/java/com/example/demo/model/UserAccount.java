@@ -27,9 +27,12 @@ public class UserAccount {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<WishItem> purposeList = new ArrayList<>();
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+			optional = false)
 	@JoinColumn(name = "savings_box_id", referencedColumnName = "id", nullable = true)
 	private SavingsBox savingsBox;
+	
+	private String role;
 
 	public UserAccount() {
 	}

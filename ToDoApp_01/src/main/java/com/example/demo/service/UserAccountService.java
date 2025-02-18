@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.SessionExpiredException;
-import com.example.demo.model.SavingsBox;
 import com.example.demo.model.UserAccount;
 import com.example.demo.model.WishItem;
 import com.example.demo.repository.SavingsBoxRepository;
@@ -47,11 +46,6 @@ public class UserAccountService {
 	}
 
 	public UserAccount saveUser(UserAccount user) {
-		UserAccount savedUser = userAccountRepository.save(user);
-		SavingsBox savingsBox = new SavingsBox();
-		savingsBox.setUserId(savedUser.getId());
-		savingsBoxRepository.save(savingsBox);
-		savedUser.setSavingsBox(savingsBox);
-		return userAccountRepository.save(savedUser);
+		return userAccountRepository.save(user);
 	}
 }

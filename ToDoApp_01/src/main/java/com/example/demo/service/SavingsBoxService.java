@@ -28,6 +28,8 @@ public class SavingsBoxService {
 		repository.save(updatedSavingsBox);
 	}
 	
-	
+	public SavingsBox saveSavingsBox(SavingsBox savingsBox) {
+		return repository.save(savingsBox);
+	}
 	
 }
