@@ -1,15 +1,26 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.auth.CustomUserDetails;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService {
-	@Autowired
+    private final AuthenticationManager authenticationManager;
+    private final HttpSessionSecurityContextRepository securityContextRepository
+     = new HttpSessionSecurityContextRepository();
+    
 	private UserAccountService userAccountService;
 
 	//	public UserAccount authenticateUser(UserAccountForm form)throws AuthenticationException {
@@ -21,6 +32,22 @@ public class AuthenticationService {
 	//			return opt.get();
 	//		}
 	//	}
+
+	//手動で認証情報を作成する
+	public void authenticateUser(String username, String password,
+			HttpServletRequest request, HttpServletResponse response) {
+		// 認証トークンの作成
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+		
+	    Authentication authentication = authenticationManager.authenticate(authToken);
+
+	    SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+
+		// SecurityContext にセット
+        securityContextRepository.saveContext(context, request, response);
+	
+	}
 
 	public Long getAuthenticatedUserId() {
 

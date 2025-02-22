@@ -12,6 +12,8 @@ const withdrawlList = document.querySelectorAll('.withdraw-item');
 const withdrawAmountElements = document.querySelectorAll('.withdraw-amount');
 const withItemAmountElements = document.querySelectorAll('.wishItem-amount');
 const editModalEl = document.getElementById("edit-modal");
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
 
 
 let achievedItems = [];
@@ -154,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //貯金ルール編集内容を保存
 async function saveRuleEdit(id, description, amount) {
+
 	//入力チェック
 	const amountPattern = /^[0-9]+(\.[0-9]+)?$/;
 
@@ -178,8 +181,10 @@ async function saveRuleEdit(id, description, amount) {
 		const response = await fetch(`/savings/api/mySavingRule/update/${id}`, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json' // JSON形式で送信
+				'Content-Type': 'application/json', // JSON形式で送信
+				'X-CSRF-TOKEN': csrfToken // 必要なら追加
 			},
+			credentials: 'include',
 			body: myRule // オブジェクトをJSON形式に変換して送信
 		});
 		if (response.ok) {
