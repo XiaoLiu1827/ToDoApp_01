@@ -30,7 +30,7 @@ public class MySavingRule {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_seq")
 	private Long id;
 
-	private String description;
+	private String title;
 
 	private Long userId;
 
@@ -50,9 +50,9 @@ public class MySavingRule {
 		return amount.stripTrailingZeros().toPlainString(); // 整形して返す
 	}
 
-	public MySavingRule(String title, String description, Long userId, BigDecimal amount, Set<DayOfWeek> frequency) {
+	public MySavingRule(String title, Long userId, BigDecimal amount, Set<DayOfWeek> frequency) {
 		super();
-		this.description = description;
+		this.title = title;
 		this.userId = userId;
 		this.amount = amount;
 		this.frequency = frequency;

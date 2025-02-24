@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf" th:content="${_csrf.token}" />
 
 	<title>Savings</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -22,7 +22,7 @@
 		<div class="content">
 			<div class="section">
 				<div class="section-header">
-					<h2>マイ貯金ルール</h2>
+					<h2>マイ浪費パターン</h2>
 					<a th:href="@{/savings/mySavingRule}" class="button">新規追加</a>
 				</div>
 				<!--				<form th:action="@{/savings/user}" method="post" id="savings" class="form-vertical">-->
@@ -31,7 +31,7 @@
 						th:data-frequency="${myRule.frequency}">
 						<div th:id="'item-content-'+ ${myRule.id}" class="item-content" style="display: block">
 							<div class="wrap-rule-title">
-								<h5 class="card-title" th:text="${myRule.description}"></h5>
+								<h5 class="card-title" th:text="${myRule.title}"></h5>
 								<span class="open-edit-modal edit-icon" title="編集"
 									th:attr="data-id=${myRule.id}">✎</span>
 							</div>
@@ -90,6 +90,26 @@
 					</div>
 				</div>
 			</div>
+			<button class="manual-input">＋</button>
+			<!--手動入力用モーダル-->
+			<div id="manual-input-modal" class="modal-overlay">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title">貯金する額を入力</h2>
+						<span class="modal-close">&times;</span>
+					</div>
+					<form id="edit-form">
+						<div class="form-group">
+							<label for="save-amount">貯金額</label>
+							<input type="text" id="save-amount" name="amount">
+						</div>
+						<input type="hidden" id="modal-id" name="id">
+						<div class="modal-footer">
+							<button type="button" class="button-modal save" id="save-money-button">貯金</button>
+						</div>
+					</form>
+				</div>
+			</div>
 			<!-- 編集用モーダル -->
 			<div id="edit-modal" class="modal-overlay">
 				<div class="modal-content">
@@ -99,8 +119,8 @@
 					</div>
 					<form id="edit-form">
 						<div class="form-group">
-							<label for="modal-description">説明</label>
-							<input type="text" id="modal-description" name="description">
+							<label for="modal-title">説明</label>
+							<input type="text" id="modal-title" name="title">
 						</div>
 						<div class="form-group">
 							<label for="modal-amount">貯金額</label>
@@ -131,7 +151,7 @@
 			<!-- 取り崩し用モーダル-->
 			<div id="withdraw-list-modal" class="modal-overlay">
 				<div class="modal-content">
-					<span id="close-withdraw-modal" class="close">&times;</span>
+					<span id="close-withdraw-modal" class="modal-close">&times;</span>
 					<h2>欲しいものリスト</h2>
 					<form th:action="@{/savings/user/withdraw}" method="post">
 						<div th:each="wishItem : ${wishList}" class="withdraw-item">

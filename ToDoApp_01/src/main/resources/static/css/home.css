@@ -24,7 +24,7 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin:0 -15px;	
+	margin: 0 -15px;
 }
 
 h1 {
@@ -49,6 +49,23 @@ h2 {
 
 .section {
 	margin-bottom: 20px;
+}
+
+/*手入力ボタン*/
+.manual-input {
+	position: fixed;
+	right: 110px;
+	bottom: 40px;
+	font-size: 30px;
+	padding: 10px 20px;
+	background-color: #4a90e2;
+	color: white;
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	width: 100px;
+	height: 100px;
 }
 
 /*マイ貯金ルール*/

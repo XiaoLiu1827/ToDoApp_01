@@ -35,8 +35,7 @@ public class SavingsApiController {
 	}
 
 	@PostMapping("/deposit/{ruleId}")
-	public ResponseEntity<BigDecimal> updateMySavingRule(Long userId,
-			@PathVariable Long ruleId) {
+	public ResponseEntity<BigDecimal> updateMySavingRule(@PathVariable Long ruleId) {
 		MySavingRule myRule = (ruleId == null) ? null : mySavingRuleService.getMySavingRuleById(ruleId);
 		BigDecimal updatedTotalAmount = savingsBoxService.updateAmount(userId, myRule.getAmount()).getTotalAmount();
 		return ResponseEntity.ok(updatedTotalAmount);

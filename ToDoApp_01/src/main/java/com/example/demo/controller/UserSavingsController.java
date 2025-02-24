@@ -56,6 +56,7 @@ public class UserSavingsController {
 		Long id = authService.getAuthenticatedUserId();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		boolean isAuth = authentication.isAuthenticated();
+		
 		model.addAttribute("savingsList", savingsService.getSavingsByUserId(userId));
 		model.addAttribute("wishList", wishItemService.getSavingPurposeByUserId(userId));
 		model.addAttribute("myRuleList", mySavingRuleService.getMySavingRuleByUserId(userId));

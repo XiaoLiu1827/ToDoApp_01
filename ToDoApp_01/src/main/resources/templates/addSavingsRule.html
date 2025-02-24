@@ -21,11 +21,7 @@
 					<label for="title">タイトル</label>
 					<input type="text" id="title" th:field="*{title}" placeholder="" required>
 				</div>
-				<div class="form-group">
-					<label for="description">貯金ルールの説明</label>
-					<textarea id="description" th:field="*{description}" placeholder="コンビニの買い食いをしなかったら300円貯金！"
-						required></textarea>
-				</div>
+				
 				<div class="form-group">
 					<label for="amount">貯金額 (円)</label>
 					<input type="number" id="amount" th:field="*{amount}" min="1" required>
