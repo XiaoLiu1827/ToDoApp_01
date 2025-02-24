@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.SessionExpiredException;
-import com.example.demo.model.SavingsBox;
 import com.example.demo.model.UserAccount;
 import com.example.demo.model.WishItem;
 import com.example.demo.repository.SavingsBoxRepository;
@@ -27,11 +26,11 @@ public class UserAccountService {
 		return userAccountRepository.findByUsernameAndPassword(username, password);
 	};
 
-	public void addWishItem(Long userId, String name, BigDecimal neededAmount) {
+	public void addWishItem(Long userId, String name, BigDecimal neededAmount, String imagePath) {
 		UserAccount user = findById(userId);
 
-		WishItem purpose = new WishItem(name, BigDecimal.ZERO, neededAmount);
-		user.addPurpose(purpose);
+		WishItem item = new WishItem(name, BigDecimal.ZERO, neededAmount, imagePath);
+		user.addPurpose(item);
 
 		userAccountRepository.save(user);
 	}
@@ -47,11 +46,6 @@ public class UserAccountService {
 	}
 
 	public UserAccount saveUser(UserAccount user) {
-		UserAccount savedUser = userAccountRepository.save(user);
-		SavingsBox savingsBox = new SavingsBox();
-		savingsBox.setUserId(savedUser.getId());
-		savingsBoxRepository.save(savingsBox);
-		savedUser.setSavingsBox(savingsBox);
-		return userAccountRepository.save(savedUser);
+		return userAccountRepository.save(user);
 	}
 }

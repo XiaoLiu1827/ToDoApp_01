@@ -10,5 +10,5 @@ import com.example.demo.model.UserAccount;
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
 	public Optional<UserAccount> findByUsernameAndPassword(String loginName, String password);
-
+	public Optional<UserAccount> findByUsername(String loginName);
 }

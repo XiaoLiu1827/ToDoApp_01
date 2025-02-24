@@ -5,6 +5,7 @@ const withdrawItemList = document.querySelectorAll('.withdraw-item');
 const openEditModalList = document.querySelectorAll('.open-edit-modal');
 const closeEditModalEl = document.getElementById(`close-edit-modal`);
 const closeWithdrawModal = document.getElementById("close-withdraw-modal");
+const closeModalButtonList = document.querySelectorAll('.modal-close');
 const myRuleList = document.querySelectorAll('.savings-rule');
 const achievedButtons = document.querySelectorAll('.achieved');
 const wishItemList = document.querySelectorAll('.wishlist-item');
@@ -12,23 +13,52 @@ const withdrawlList = document.querySelectorAll('.withdraw-item');
 const withdrawAmountElements = document.querySelectorAll('.withdraw-amount');
 const withItemAmountElements = document.querySelectorAll('.wishItem-amount');
 const editModalEl = document.getElementById("edit-modal");
-
-
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 let achievedItems = [];
 let isPurchaseable = false;
+const manualInputButton = document.querySelector('.manual-input');
 
 
-/**取り崩し処理 */
+//各モーダルを閉じる
+closeModalButtonList.forEach((button) => {
+	button.addEventListener('click', function(){
+		const modalId = this.closest('.modal-overlay').id;
+		closeModal(modalId);
+	})
+})
+
+//手動入力ボタンを押下時モーダルを呼びだす
+manualInputButton.addEventListener('click', () => {
+	openModal(`manual-input-modal`);
+	//貯金額フォームのみを表示
+	
+
+})
+
 //モーダル表示
 withdrawButton.addEventListener('click', () => {
-	document.getElementById("withdraw-list-modal").style.display = "block";
+	openModal(`withdraw-list-modal`);
 });
 
-// モーダルを閉じる
-closeWithdrawModal.addEventListener("click", function() {
-	document.getElementById("withdraw-list-modal").style.display = "none";
-});
+wishItemList.forEach((element) => {
+	console.log(element.dataset.id);
+	const editButton = element.querySelector('.transition-edit-item');
+	//欲しいもの編集画面に遷移
+	editButton.addEventListener("click", function() {
+		// Store selected wishItem data before transition
+		const wishItem = {
+			id: element.dataset.id,
+			name: element.dataset.name,
+			neededAmount: element.dataset.amount,
+			imagePath: element.dataset.image
+		};
+		localStorage.setItem("editWishItem", JSON.stringify(wishItem));
 
+		// Redirect to the form
+		window.location.href = "/savings/wishItem";
+
+	})
+});
 //編集モーダルを開く
 openEditModalList.forEach((element) => {
 	element.addEventListener("click", function() {
@@ -39,31 +69,36 @@ openEditModalList.forEach((element) => {
 	})
 });
 
-// 編集モーダルを閉じる
-closeEditModalEl.addEventListener("click", function() {
-	closeModal(`edit-modal`);
-});
-
 //編集モーダルボタンクリック処理
 document.querySelectorAll(`.button-modal`).forEach(button => {
 	button.addEventListener(`click`, (event) => {
-		const id = document.getElementById("modal-id").value;
-		const description = document.getElementById("modal-description").value;
+		const ruleId = document.getElementById("modal-id").value;
+		const title = document.getElementById("modal-title").value;
 		const amount = document.getElementById("modal-amount").value;
-
-		if (event.target.id === `delete-modal-button`) {
+		const buttonId = event.target.id;
+		if (buttonId === `delete-modal-button`) {
 			//モーダル画面を切替表示
 			closeModal(`edit-modal`);
 			setTimeout(() => {
 				openModal(`deleteConfirmModal`);
 			});
-		} else if (event.target.id === `save-modal-button`) {
+		} else if (buttonId === `save-modal-button`) {
 			//編集内容を保存
-			console.log(`保存処理を実行します。modal-id: ${id}`);
-			saveRuleEdit(id, description, amount);
+			console.log(`保存処理を実行します。modal-id: ${ruleId}`);
+			saveRuleEdit(ruleId, title, amount);
+			closeModal(`edit-modal`);
+		} else if (buttonId === `cancel-modal-button`) {
+			closeModal(`deleteConfirmModal`);
+		} else if (buttonId === `confirm-modal-button`) {
+			deleteRule(ruleId);
+			closeModal(`deleteConfirmModal`);
 		}
 	});
 });
+
+//削除確認モーダル処理
+const deleteConfirmModalEl = document.getElementById(`deleteConfirmModal`);
+deleteConfirmModalEl
 
 document.addEventListener('DOMContentLoaded', () => {
 	//金額表示
@@ -126,7 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 //貯金ルール編集内容を保存
-async function saveRuleEdit(id, description, amount) {
+async function saveRuleEdit(id, title, amount) {
+
 	//入力チェック
 	const amountPattern = /^[0-9]+(\.[0-9]+)?$/;
 
@@ -136,7 +172,7 @@ async function saveRuleEdit(id, description, amount) {
 
 	//null以外の項目をセットする　null項目は更新しない 
 	const myRule = JSON.stringify({
-		"description": description,
+		"title": title,
 		"amount": amount
 	}, function(prop, value) {
 		if (value === null || value === "") {
@@ -151,19 +187,51 @@ async function saveRuleEdit(id, description, amount) {
 		const response = await fetch(`/savings/api/mySavingRule/update/${id}`, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json' // JSON形式で送信
+				'Content-Type': 'application/json', // JSON形式で送信
+				'X-CSRF-TOKEN': csrfToken // 必要なら追加
 			},
+			credentials: 'include',
 			body: myRule // オブジェクトをJSON形式に変換して送信
 		});
 		if (response.ok) {
 
 			const updatedRule = await response.json();
 			const ruleElement = document.querySelector(`.savings-rule[data-id="${id}"]`);
-			ruleElement.querySelector('.card-title').textContent = updatedRule.description;
+			ruleElement.querySelector('.card-title').textContent = updatedRule.title;
 			ruleElement.querySelector('.card-text').textContent = `${parseFloat(updatedRule.amount).toLocaleString("ja-JP", { style: "currency", currency: "JPY" })}`;
 			alert(`更新が完了しました。`);
 		} else {
 			alert(`更新に失敗しました。`);
+		}
+	} catch (error) {
+		console.error(`error:`, error);
+	}
+}
+
+//貯金ルール削除
+async function deleteRule(id) {
+	// サーバーに更新リクエストを送信し、レスポンスを処理する
+	try {
+		console.log('Sending fetch request...');
+		const response = await fetch(`/savings/api/mySavingRule/delete/${id}`, {
+			method: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': csrfToken // 必要なら追加
+			},
+			credentials: 'include',
+		});
+		if (response.ok) {
+			console.log(`削除成功`);
+			const ruleElement = document.querySelector(`[data-id='${id}']`).closest('.savings-rule');
+			if (ruleElement) {
+				ruleElement.style.display = 'none';
+			}
+		} else {
+			if (response.status === 404) {
+				alert(`リソースが見つかりません`);
+			} else {
+				console.log(`削除失敗`);
+			}
 		}
 	} catch (error) {
 		console.error(`error:`, error);
@@ -192,7 +260,11 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 
 	//サーバとの通信を実行する
 	const response = await fetch(`/savings/api/deposit/${ruleId}`, {
-		method: 'POST'
+		method: 'POST',
+		headers: {
+			'X-CSRF-TOKEN': csrfToken // 必要なら追加
+		},
+		credentials: 'include',
 	});
 	if (response.ok) {
 		totalSavingsAmount = await response.json();
@@ -238,7 +310,8 @@ function handleSelectButtonDisabled(neededAmount, selectButton) {
 function handleOpenEditModal(ruleId, ruleElement) {
 	// モーダルの値をセット
 	document.getElementById("modal-id").value = ruleId;
-	document.getElementById("modal-description").value = ruleElement.querySelector(".card-title").textContent;
+	document.getElementById("modal-title").value = ruleElement.querySelector(".card-title").textContent;
+	console.log(ruleElement.querySelector(".card-text").textContent.trim().replace(/[￥,]/g, ""));
 	document.getElementById("modal-amount").value = ruleElement.querySelector(".card-text").textContent.trim().replace(/[￥,]/g, "");
 
 	// モーダルを表示
@@ -291,7 +364,7 @@ function checkeIsAchieved(item, targetAmount) {
 	if (totalSavingsAmount >= targetAmount) {
 		statusEl.classList.add("status-complete");
 		statusEl.classList.remove("status-incomplete");
-		statusEl.textContent = "達成";
+		statusEl.textContent = "購入可能";
 		if (!isPurchaseable) {
 			const piggyBankEl = document.getElementById('piggy-bank');
 			const purchaseStatusEl = document.getElementById('purchaseStatus');
