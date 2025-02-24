@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,32 +15,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.demo.dto.WishItemDto;
 import com.example.demo.model.WishItem;
+import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.FileStorageService;
 import com.example.demo.service.UserAccountService;
 import com.example.demo.service.WishItemService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/savings/api/wishItem")
-@SessionAttributes("userId")
+@RequiredArgsConstructor
 public class WishItemApiController {
-	@Autowired
-	private FileStorageService fileStorageService;
-	@Autowired
-	private UserAccountService userAccountService;
-	@Autowired
-	private WishItemService wishItemService;
+
+	private final FileStorageService fileStorageService;
+
+	private final UserAccountService userAccountService;
+
+	private final WishItemService wishItemService;
+	
+	private final AuthenticationService authService;
+
 	private Long userId;
 
 	@ModelAttribute
-	public void setUserId(@SessionAttribute("userId") Long userId) {
-		this.userId = userId;
+	public void setUser() {
+		this.userId = authService.getAuthenticatedUserId();
 	}
-
+	
 	@PostMapping("/delete/{id}")
 	@ResponseBody
 	public ResponseEntity<?> deleteWishItem(

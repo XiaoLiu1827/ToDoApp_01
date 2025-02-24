@@ -76,11 +76,19 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- PostgreSQL Driver (PostgreSQLデータベース接続用) -->
-<!--		<dependency>-->
-<!--			<groupId>org.postgresql</groupId>-->
-<!--			<artifactId>postgresql</artifactId>-->
-<!--			<version>42.2.5</version>  適切なバージョンを選んでください -->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.postgresql</groupId>-->
+		<!--			<artifactId>postgresql</artifactId>-->
+		<!--			<version>42.2.5</version>  適切なバージョンを選んでください -->
+		<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

@@ -2,7 +2,8 @@ package com.example.demo.controller;
 
 import java.math.BigDecimal;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,41 +12,51 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.example.demo.form.SavingsFormWithValidation;
 import com.example.demo.model.WishItem;
+import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.MySavingRuleService;
 import com.example.demo.service.SavingsBoxService;
 import com.example.demo.service.SavingsService;
 import com.example.demo.service.UserAccountService;
 import com.example.demo.service.WishItemService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+
 @Controller
 @RequestMapping("/savings/user")
+@RequiredArgsConstructor
 public class UserSavingsController {
-	@Autowired
-	private SavingsService savingsService;
-	@Autowired
-	private WishItemService wishItemService;
-	@Autowired
-	private MySavingRuleService mySavingRuleService;
-	@Autowired
-	private UserAccountService userService;
-	@Autowired
-	private SavingsBoxService savingsBoxService;
+
+	private final SavingsService savingsService;
+
+	private final WishItemService wishItemService;
+
+	private final MySavingRuleService mySavingRuleService;
+
+	private final UserAccountService userService;
+
+	private final SavingsBoxService savingsBoxService;
+
+	private final AuthenticationService authService;
 
 	private Long userId;
 	private String username;
 
 	@ModelAttribute
-	public void setUser(@SessionAttribute("userId") Long userId, @SessionAttribute("username") String username) {
-		this.userId = userId;
-		this.username = username;
+	public void setUser() {
+		this.userId = authService.getAuthenticatedUserId();
+		this.username = authService.getAutenticatedUsename();
 	}
 
 	@GetMapping
-	public String getAllSavings(Model model, @ModelAttribute SavingsFormWithValidation savingsFormWithValidation) {
+	public String getAllSavings(HttpServletRequest request, Model model, @ModelAttribute SavingsFormWithValidation savingsFormWithValidation) {
+		Long id = authService.getAuthenticatedUserId();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		boolean isAuth = authentication.isAuthenticated();
+		
 		model.addAttribute("savingsList", savingsService.getSavingsByUserId(userId));
 		model.addAttribute("wishList", wishItemService.getSavingPurposeByUserId(userId));
 		model.addAttribute("myRuleList", mySavingRuleService.getMySavingRuleByUserId(userId));

@@ -13,6 +13,8 @@ const deleteButton = document.getElementById('delete-button');
 const formGroup = document.querySelectorAll('.form-group');
 let isImageChanged = false;
 
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
 document.addEventListener('DOMContentLoaded', () => {
 	const storedData = localStorage.getItem("editWishItem");
 	if (storedData) {
@@ -151,6 +153,10 @@ submitButton.addEventListener('click', async function(event) {
 		//idが設定されている場合は更新、以外は登録
 		const response = await fetch(id ? `/savings/api/wishItem/update/${id}` : "/savings/api/wishItem/add", {
 			method: "POST",
+			headers: {
+				'X-CSRF-TOKEN': csrfToken // 必要なら追加
+			},
+			credentials: 'include',
 			body: formData,
 		});
 
