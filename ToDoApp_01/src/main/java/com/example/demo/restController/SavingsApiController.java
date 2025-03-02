@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.MySavingRule;
@@ -35,9 +36,16 @@ public class SavingsApiController {
 	}
 
 	@PostMapping("/deposit/{ruleId}")
-	public ResponseEntity<BigDecimal> updateMySavingRule(@PathVariable Long ruleId) {
+	public ResponseEntity<BigDecimal> depositByRule(@PathVariable Long ruleId) {
 		MySavingRule myRule = (ruleId == null) ? null : mySavingRuleService.getMySavingRuleById(ruleId);
 		BigDecimal updatedTotalAmount = savingsBoxService.updateAmount(userId, myRule.getAmount()).getTotalAmount();
+		return ResponseEntity.ok(updatedTotalAmount);
+	}
+	
+	@PostMapping("/save")
+	public ResponseEntity<BigDecimal> saveByManualInput(@RequestParam(defaultValue = "0") String amount){
+	    BigDecimal amountValue = new BigDecimal(amount);
+		BigDecimal updatedTotalAmount = savingsBoxService.updateAmount(userId, amountValue).getTotalAmount();
 		return ResponseEntity.ok(updatedTotalAmount);
 	}
 }

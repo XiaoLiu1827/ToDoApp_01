@@ -8,6 +8,7 @@ const closeWithdrawModal = document.getElementById("close-withdraw-modal");
 const closeModalButtonList = document.querySelectorAll('.modal-close');
 const myRuleList = document.querySelectorAll('.savings-rule');
 const achievedButtons = document.querySelectorAll('.achieved');
+const saveByManualButtons = document.getElementById('save-manual-button');
 const wishItemList = document.querySelectorAll('.wishlist-item');
 const withdrawlList = document.querySelectorAll('.withdraw-item');
 const withdrawAmountElements = document.querySelectorAll('.withdraw-amount');
@@ -21,7 +22,7 @@ const manualInputButton = document.querySelector('.manual-input');
 
 //各モーダルを閉じる
 closeModalButtonList.forEach((button) => {
-	button.addEventListener('click', function(){
+	button.addEventListener('click', function() {
 		const modalId = this.closest('.modal-overlay').id;
 		closeModal(modalId);
 	})
@@ -31,7 +32,7 @@ closeModalButtonList.forEach((button) => {
 manualInputButton.addEventListener('click', () => {
 	openModal(`manual-input-modal`);
 	//貯金額フォームのみを表示
-	
+
 
 })
 
@@ -67,6 +68,26 @@ openEditModalList.forEach((element) => {
 
 		handleOpenEditModal(ruleId, ruleElement);
 	})
+});
+
+//手動入力貯金保存ボタンクリック処理
+saveByManualButtons.addEventListener('click', () => {
+	const inputAmount = document.getElementById('save-amount').value;
+
+	if (inputAmount === null || inputAmount.trim() === "") {
+		console.error("貯金額が入力されていません。");
+		alert("貯金額を入力してください");
+		return;  // 処理を中止
+	}
+
+	const amount = parseInt(inputAmount, 10);
+
+	if (isNaN(amount)) {
+		alert("有効な金額を入力してください");
+		return;  // 処理を中止
+	}
+
+	handleManualInput(amount)
 });
 
 //編集モーダルボタンクリック処理
@@ -256,6 +277,30 @@ function controllButtonDisabled(achievedButton, unachievedButton, frequency, tod
 	unachievedButton.disabled = !(isTodayIncluded && !isAlreadyClicked);
 }
 
+//手動入力貯金処理
+async function handleManualInput(inputAmount) {
+
+	const response = await fetch('/savings/api/save', {
+		method: 'POST',
+		headers: {
+			'X-CSRF-TOKEN': csrfToken,// 必要なら追加
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		body: `amount=${inputAmount}`,
+		credentials: 'include'
+	});
+
+	if (response.ok) {
+		totalSavingsAmount = await response.json();
+		setDataAfterSaving(totalSavingsAmount)
+		alert('更新が完了しました。');
+	} else {
+		alert('更新に失敗しました。');
+	}
+
+	closeModal('manual-input-modal');
+}
+
 //達成ボタンクリック処理
 async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey) {
 	handleButtonState(achievedButton, unachievedButton, dateKey, todayString);
@@ -270,8 +315,7 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 	});
 	if (response.ok) {
 		totalSavingsAmount = await response.json();
-		totalSavingsElement.setAttribute('data-amount', totalSavingsAmount);
-		totalSavingsElement.textContent = totalSavingsAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
+		setDataAfterSaving(totalSavingsAmount)
 		alert('更新が完了しました。');
 
 		//取り崩しボタン非活性判定
@@ -285,6 +329,12 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 		alert('更新に失敗しました。');
 	}
 };
+
+//貯金処理完了後の表示データの貼り付け
+function setDataAfterSaving(totalSavingsAmount) {
+	totalSavingsElement.setAttribute('data-amount', totalSavingsAmount);
+	totalSavingsElement.textContent = totalSavingsAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
+}
 
 //未達成ボタンクリック処理
 function handleUnachievedButtonClick(achievedButton, unachievedButton, event, todayString, dateKey) {
