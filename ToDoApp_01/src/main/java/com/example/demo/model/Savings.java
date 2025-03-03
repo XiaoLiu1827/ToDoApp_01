@@ -1,5 +1,8 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,17 +23,22 @@ public class Savings {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
    
-    private Double amount;
+    private BigDecimal amount;
 		
 	@ManyToOne
-	@JoinColumn(name = "my_saving_rule_id", nullable = true) // nullable = true でnullを許可
+	@JoinColumn(name = "my_saving_rule_id", referencedColumnName = "id", nullable = true) // nullable = true でnullを許可
 	private MySavingRule mySavingRule;
 	
 	private Long userId;
 
-    	
-	public Savings(Double amount,Long userId) {
+    private LocalDate savedDate;
+    
+    @Builder
+	public Savings(BigDecimal amount, MySavingRule mySavingRule,
+			Long userId) {
 		this.amount = amount;
+		this.mySavingRule = mySavingRule;
 		this.userId = userId;
-	}
+        this.savedDate = LocalDate.now();
+	} 
 }
