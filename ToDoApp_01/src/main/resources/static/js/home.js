@@ -315,6 +315,8 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 	});
 	if (response.ok) {
 		totalSavingsAmount = await response.json();
+		totalSavingsAmount = parseFloat(totalSavingsAmount); // 文字列の場合に備えて変換
+		
 		setDataAfterSaving(totalSavingsAmount)
 		alert('更新が完了しました。');
 
@@ -332,7 +334,7 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 
 //貯金処理完了後の表示データの貼り付け
 function setDataAfterSaving(totalSavingsAmount) {
-	totalSavingsElement.setAttribute('data-amount', totalSavingsAmount);
+	totalSavingsElement.setAttribute('data-amount', totalSavingsAmount.toString());
 	totalSavingsElement.textContent = totalSavingsAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
 }
 

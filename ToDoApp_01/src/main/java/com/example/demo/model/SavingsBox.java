@@ -23,8 +23,9 @@ public class SavingsBox {
 	@Column(unique = true)
 	private Long userId;
 
-	public void updateTotalAmount(BigDecimal addedAmount) {
+	public BigDecimal updateTotalAmount(BigDecimal addedAmount) {
 		this.totalAmount = this.totalAmount.add(addedAmount);
+		return this.totalAmount;
 	}
 
 	public void withDraw(BigDecimal withdrawalAmount) {

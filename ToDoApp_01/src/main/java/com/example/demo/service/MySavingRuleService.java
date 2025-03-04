@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class MySavingRuleService {
 		return repository.findByUserId(userId);
 	}
 
-	public MySavingRule getMySavingRuleById(Long id) {
-		return repository.findById(id).orElse(null);
+	public Optional<MySavingRule> getMySavingRuleById(Long id) {
+		return repository.findById(id);
 	}
 
 	public MySavingRule saveMySavingRule(MySavingRule myRule) {
