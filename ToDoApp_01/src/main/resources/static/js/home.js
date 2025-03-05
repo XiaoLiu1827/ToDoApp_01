@@ -303,9 +303,26 @@ async function handleManualInput(inputAmount) {
 
 //達成ボタンクリック処理
 async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey) {
+	//クリック履歴の保存と非活性化を実行
 	handleButtonState(achievedButton, unachievedButton, dateKey, todayString);
 
 	//サーバとの通信を実行する
+
+	// 達成状況を記録
+	const achievementResponse = await fetch(`/savings/api/achievement/${ruleId}?achieved=true`, {
+		method: 'POST',
+		headers: {
+			'X-CSRF-TOKEN': csrfToken, // 必要なら追加
+		},
+		credentials: 'include'
+	});
+
+	if (!achievementResponse.ok) {
+		alert('達成状況の記録に失敗しました。');
+		return;
+	}
+
+	//貯金を記録
 	const response = await fetch(`/savings/api/deposit/${ruleId}`, {
 		method: 'POST',
 		headers: {
@@ -316,7 +333,7 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 	if (response.ok) {
 		totalSavingsAmount = await response.json();
 		totalSavingsAmount = parseFloat(totalSavingsAmount); // 文字列の場合に備えて変換
-		
+
 		setDataAfterSaving(totalSavingsAmount)
 		alert('更新が完了しました。');
 
