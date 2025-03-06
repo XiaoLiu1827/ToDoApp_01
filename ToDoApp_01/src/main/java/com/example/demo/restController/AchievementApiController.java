@@ -45,5 +45,7 @@ public class AchievementApiController {
 		Achievement savedAchievement = achievementService.saveAchievement(achieved, myRule, userId);
 		
 		return ResponseEntity.ok("達成状況を記録しました");
+		//return ResponseEntity.badRequest().body("エラー: 達成状況の記録に失敗しました");
+
 	}
 }

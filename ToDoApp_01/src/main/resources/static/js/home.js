@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		// 未達成ボタンのクリック処理
 		unachievedButton.addEventListener('click', (event) => {
-			handleUnachievedButtonClick(achievedButton, unachievedButton, event, todayString, dateKey);
+			handleUnachievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey);
 		});
 	});
 
@@ -308,20 +308,6 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 
 	//サーバとの通信を実行する
 
-	// 達成状況を記録
-	const achievementResponse = await fetch(`/savings/api/achievement/${ruleId}?achieved=true`, {
-		method: 'POST',
-		headers: {
-			'X-CSRF-TOKEN': csrfToken, // 必要なら追加
-		},
-		credentials: 'include'
-	});
-
-	if (!achievementResponse.ok) {
-		alert('達成状況の記録に失敗しました。');
-		return;
-	}
-
 	//貯金を記録
 	const response = await fetch(`/savings/api/deposit/${ruleId}`, {
 		method: 'POST',
@@ -330,6 +316,7 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 		},
 		credentials: 'include',
 	});
+
 	if (response.ok) {
 		totalSavingsAmount = await response.json();
 		totalSavingsAmount = parseFloat(totalSavingsAmount); // 文字列の場合に備えて変換
@@ -346,8 +333,22 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 		});
 	} else {
 		alert('更新に失敗しました。');
+		//更新に失敗時は再度送信可能にする
+		restoreButtonState(dateKey, achievedButton);
+		return;
 	}
+
+	// 達成状況を記録
+	fetchAchievement(ruleId, true);
+
 };
+
+//達成報告ボタンの状態を元に戻す
+function restoreButtonState(dateKey, button) {
+	localStorage.removeItem(dateKey);
+	button.disabled = false;
+
+}
 
 //貯金処理完了後の表示データの貼り付け
 function setDataAfterSaving(totalSavingsAmount) {
@@ -356,9 +357,28 @@ function setDataAfterSaving(totalSavingsAmount) {
 }
 
 //未達成ボタンクリック処理
-function handleUnachievedButtonClick(achievedButton, unachievedButton, event, todayString, dateKey) {
-	event.preventDefault(); // サーバーへのリクエストを防止
+function handleUnachievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey) {
+	//event.preventDefault(); // サーバーへのリクエストを防止
+	// 達成状況を記録
+	fetchAchievement(ruleId, false);
+
 	handleButtonState(achievedButton, unachievedButton, dateKey, todayString);
+}
+
+//達成状況記録用に通信
+async function fetchAchievement(ruleId, isAchieved) {
+	const achievementResponse = await fetch(`/savings/api/achievement/${ruleId}?achieved=${isAchieved}`, {
+		method: 'POST',
+		headers: {
+			'X-CSRF-TOKEN': csrfToken, // 必要なら追加
+		},
+		credentials: 'include'
+	});
+
+	if (!achievementResponse.ok) {
+		alert('達成状況の記録に失敗しました。');
+		return;
+	}
 }
 
 //クリック履歴の保存と非活性化を実行
