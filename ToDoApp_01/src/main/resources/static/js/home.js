@@ -8,6 +8,7 @@ const closeWithdrawModal = document.getElementById("close-withdraw-modal");
 const closeModalButtonList = document.querySelectorAll('.modal-close');
 const myRuleList = document.querySelectorAll('.savings-rule');
 const achievedButtons = document.querySelectorAll('.achieved');
+const saveByManualButtons = document.getElementById('save-manual-button');
 const wishItemList = document.querySelectorAll('.wishlist-item');
 const withdrawlList = document.querySelectorAll('.withdraw-item');
 const withdrawAmountElements = document.querySelectorAll('.withdraw-amount');
@@ -21,7 +22,7 @@ const manualInputButton = document.querySelector('.manual-input');
 
 //各モーダルを閉じる
 closeModalButtonList.forEach((button) => {
-	button.addEventListener('click', function(){
+	button.addEventListener('click', function() {
 		const modalId = this.closest('.modal-overlay').id;
 		closeModal(modalId);
 	})
@@ -31,7 +32,7 @@ closeModalButtonList.forEach((button) => {
 manualInputButton.addEventListener('click', () => {
 	openModal(`manual-input-modal`);
 	//貯金額フォームのみを表示
-	
+
 
 })
 
@@ -69,10 +70,31 @@ openEditModalList.forEach((element) => {
 	})
 });
 
+//手動入力貯金保存ボタンクリック処理
+saveByManualButtons.addEventListener('click', () => {
+	const inputAmount = document.getElementById('save-amount').value;
+
+	if (inputAmount === null || inputAmount.trim() === "") {
+		console.error("貯金額が入力されていません。");
+		alert("貯金額を入力してください");
+		return;  // 処理を中止
+	}
+
+	const amount = parseInt(inputAmount, 10);
+
+	if (isNaN(amount)) {
+		alert("有効な金額を入力してください");
+		return;  // 処理を中止
+	}
+
+	handleManualInput(amount)
+});
+
 //編集モーダルボタンクリック処理
 document.querySelectorAll(`.button-modal`).forEach(button => {
 	button.addEventListener(`click`, (event) => {
 		const ruleId = document.getElementById("modal-id").value;
+
 		const title = document.getElementById("modal-title").value;
 		const amount = document.getElementById("modal-amount").value;
 		const buttonId = event.target.id;
@@ -136,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		// 未達成ボタンのクリック処理
 		unachievedButton.addEventListener('click', (event) => {
-			handleUnachievedButtonClick(achievedButton, unachievedButton, event, todayString, dateKey);
+			handleUnachievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey);
 		});
 	});
 
@@ -254,11 +276,38 @@ function controllButtonDisabled(achievedButton, unachievedButton, frequency, tod
 	unachievedButton.disabled = !(isTodayIncluded && !isAlreadyClicked);
 }
 
+//手動入力貯金処理
+async function handleManualInput(inputAmount) {
+
+	const response = await fetch('/savings/api/save', {
+		method: 'POST',
+		headers: {
+			'X-CSRF-TOKEN': csrfToken,// 必要なら追加
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		body: `amount=${inputAmount}`,
+		credentials: 'include'
+	});
+
+	if (response.ok) {
+		totalSavingsAmount = await response.json();
+		setDataAfterSaving(totalSavingsAmount)
+		alert('更新が完了しました。');
+	} else {
+		alert('更新に失敗しました。');
+	}
+
+	closeModal('manual-input-modal');
+}
+
 //達成ボタンクリック処理
 async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey) {
+	//クリック履歴の保存と非活性化を実行
 	handleButtonState(achievedButton, unachievedButton, dateKey, todayString);
 
 	//サーバとの通信を実行する
+
+	//貯金を記録
 	const response = await fetch(`/savings/api/deposit/${ruleId}`, {
 		method: 'POST',
 		headers: {
@@ -266,10 +315,12 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 		},
 		credentials: 'include',
 	});
+
 	if (response.ok) {
 		totalSavingsAmount = await response.json();
-		totalSavingsElement.setAttribute('data-amount', totalSavingsAmount);
-		totalSavingsElement.textContent = totalSavingsAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
+		totalSavingsAmount = parseFloat(totalSavingsAmount); // 文字列の場合に備えて変換
+
+		setDataAfterSaving(totalSavingsAmount)
 		alert('更新が完了しました。');
 
 		//取り崩しボタン非活性判定
@@ -281,13 +332,52 @@ async function handleAchievedButtonClick(achievedButton, unachievedButton, ruleI
 		});
 	} else {
 		alert('更新に失敗しました。');
+		//更新に失敗時は再度送信可能にする
+		restoreButtonState(dateKey, achievedButton);
+		return;
 	}
+
+	// 達成状況を記録
+	fetchAchievement(ruleId, true);
+
 };
 
+//達成報告ボタンの状態を元に戻す
+function restoreButtonState(dateKey, button) {
+	localStorage.removeItem(dateKey);
+	button.disabled = false;
+
+}
+
+//貯金処理完了後の表示データの貼り付け
+function setDataAfterSaving(totalSavingsAmount) {
+	totalSavingsElement.setAttribute('data-amount', totalSavingsAmount.toString());
+	totalSavingsElement.textContent = totalSavingsAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" });
+}
+
 //未達成ボタンクリック処理
-function handleUnachievedButtonClick(achievedButton, unachievedButton, event, todayString, dateKey) {
-	event.preventDefault(); // サーバーへのリクエストを防止
+function handleUnachievedButtonClick(achievedButton, unachievedButton, ruleId, todayString, dateKey) {
+	//event.preventDefault(); // サーバーへのリクエストを防止
+	// 達成状況を記録
+	fetchAchievement(ruleId, false);
+
 	handleButtonState(achievedButton, unachievedButton, dateKey, todayString);
+}
+
+//達成状況記録用に通信
+async function fetchAchievement(ruleId, isAchieved) {
+	const achievementResponse = await fetch(`/savings/api/achievement/${ruleId}?achieved=${isAchieved}`, {
+		method: 'POST',
+		headers: {
+			'X-CSRF-TOKEN': csrfToken, // 必要なら追加
+		},
+		credentials: 'include'
+	});
+
+	if (!achievementResponse.ok) {
+		alert('達成状況の記録に失敗しました。');
+		return;
+	}
 }
 
 //クリック履歴の保存と非活性化を実行

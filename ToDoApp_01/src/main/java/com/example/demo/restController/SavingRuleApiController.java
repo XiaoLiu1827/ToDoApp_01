@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.MySavingRuleDto;
 import com.example.demo.model.MySavingRule;
@@ -24,7 +25,8 @@ public class SavingRuleApiController {
 			@PathVariable Long id,
 			@RequestBody MySavingRuleDto updatedRule) {
 		//既存のエンティティを取得
-		MySavingRule entity = mySavingRuleService.getMySavingRuleById(id);
+		MySavingRule entity = mySavingRuleService.getMySavingRuleById(id)
+			    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "貯金ルールが見つかりません"));
 		//DTOからエンティティに反映
 		MySavingRule result = mySavingRuleService.updateMySavingRuleFromDto(entity, updatedRule);
 		// 更新後のオブジェクトを JSON 形式で返す

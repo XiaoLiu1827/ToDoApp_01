@@ -15,6 +15,8 @@ let isImageChanged = false;
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
 
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
 document.addEventListener('DOMContentLoaded', () => {
 	const storedData = localStorage.getItem("editWishItem");
 	if (storedData) {

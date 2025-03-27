@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
@@ -9,36 +8,36 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.SequenceGenerator;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Savings {
+@Builder
+public class Achievement {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "my_seq", sequenceName = "my_sequence", initialValue = 10, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_seq")
 	private Long id;
-   
-    private BigDecimal amount;
-		
+	
+	private Boolean isAchieved;
+	
 	@ManyToOne
-	@JoinColumn(name = "my_saving_rule_id", referencedColumnName = "id", nullable = true) // nullable = true でnullを許可
+	@JoinColumn(name = "my_saving_rule_id", referencedColumnName = "id", nullable = false) 
 	private MySavingRule mySavingRule;
 	
 	private Long userId;
-
+	
     private LocalDate savedDate;
-    
+
     @Builder
-	public Savings(BigDecimal amount, MySavingRule mySavingRule,
+	public Achievement(Boolean isAchieved, MySavingRule mySavingRule,
 			Long userId) {
-		this.amount = amount;
+    	this.isAchieved = isAchieved;
 		this.mySavingRule = mySavingRule;
 		this.userId = userId;
         this.savedDate = LocalDate.now();
 	} 
+	
 }
