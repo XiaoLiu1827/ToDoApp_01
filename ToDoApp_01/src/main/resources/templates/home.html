@@ -112,6 +112,26 @@
 					</form>
 				</div>
 			</div>
+			<button class="manual-input">＋</button>
+			<!--手動入力用モーダル-->
+			<div id="manual-input-modal" class="modal-overlay">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title">貯金する額を入力</h2>
+						<span class="modal-close">&times;</span>
+					</div>
+					<form id="edit-form">
+						<div class="form-group">
+							<label for="save-amount">貯金額</label>
+							<input type="text" id="save-amount" name="amount">
+						</div>
+						<input type="hidden" id="modal-id" name="id">
+						<div class="modal-footer">
+							<button type="button" class="button-modal save" id="save-money-button">貯金</button>
+						</div>
+					</form>
+				</div>
+			</div>
 			<!-- 編集用モーダル -->
 			<div id="edit-modal" class="modal-overlay">
 				<div class="modal-content">

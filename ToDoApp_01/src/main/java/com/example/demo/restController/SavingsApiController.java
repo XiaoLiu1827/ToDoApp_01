@@ -2,6 +2,7 @@ package com.example.demo.restController;
 
 import java.math.BigDecimal;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +20,8 @@ import com.example.demo.service.TransactionalSavingsService;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/savings/api/")
 @RequiredArgsConstructor
@@ -28,9 +31,10 @@ public class SavingsApiController {
 
 	private final AuthenticationService authService;
 
-	private final TransactionalSavingsService transactionalSavingsService;
 
-	private Long userId;
+	private final TransactionalSavingsService transactionalSavingsService;
+	
+  private Long userId;
 
 	@ModelAttribute
 	public void setUser() {

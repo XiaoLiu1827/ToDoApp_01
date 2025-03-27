@@ -12,6 +12,8 @@ const submitButton = document.getElementById('submit-button');
 const deleteButton = document.getElementById('delete-button');
 const formGroup = document.querySelectorAll('.form-group');
 let isImageChanged = false;
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
 
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 

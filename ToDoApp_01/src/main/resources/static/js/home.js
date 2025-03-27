@@ -237,7 +237,6 @@ async function deleteRule(id) {
 		console.log('Sending fetch request...');
 		const response = await fetch(`/savings/api/mySavingRule/delete/${id}`, {
 			method: 'POST',
-
 			headers: {
 				'X-CSRF-TOKEN': csrfToken // 必要なら追加
 			},
