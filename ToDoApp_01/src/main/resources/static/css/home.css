@@ -385,8 +385,22 @@ h2 {
 
 }
 
-.button.small:hover {
+.button.small:hover,
+.button.borrow.reset:hover {
 	background-color: #357ab8;
+}
+
+.button.small.select-borrow {
+	display: none;
+	background-color: #ff4d4d;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.button.small.select-borrow.visible {
+	opacity: 1;
+	visibility: visible;
 }
 
 .button.borrow {
@@ -403,7 +417,12 @@ h2 {
 	transition: background-color 0.3s;
 }
 
-.button.borrow:hover {
+.button.borrow.reset {
+	background-color: #4a90e2;
+}
+
+.button.borrow:hover,
+.button.small.select-borrow:hover {
 	background-color: #cc0000;
 }
 

@@ -18,6 +18,52 @@ const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 let achievedItems = [];
 let isPurchaseable = false;
 const manualInputButton = document.querySelector('.manual-input');
+const borrowButton = document.getElementById('borrow-btn');
+
+//前借ボタン押下
+borrowButton.addEventListener('click', function() {
+	withdrawlList.forEach(item => {
+		const neededAmount = parseInt(item.querySelector('.item-content').dataset.amount, 10);
+		const selectButton = item.querySelector('button[type="submit"]');
+		const selectBorrowButton = item.querySelector('button[type="button"]');
+		handleSelectButtonVisible(neededAmount, selectButton, selectBorrowButton);
+	})
+
+
+
+})
+
+function handleSelectButtonVisible(neededAmount, selectButton, selectBorrowButton) {
+	//貯金額が足りないアイテムは前借ボタンを表示
+	if (neededAmount > totalSavingsAmount) {
+		//再度押下で表示を切り替え
+		if (!(borrowButton.classList.contains('reset'))) {
+			//アイテムごとのボタン切替
+			selectBorrowButton.style.display = 'block';
+			
+			//アニメーション適用のためブラウザの再描画用の遅延を入れる
+			setTimeout(() => {
+				//フェードインする
+				selectBorrowButton.classList.add('visible');
+			}, 10);
+			
+			selectButton.style.display = 'none';
+			
+			//前借ボタンの切り替え
+			borrowButton.textContent = '戻る';
+			borrowButton.classList.add('reset');
+		} else {
+			//アイテムごとのボタン切替
+			selectBorrowButton.classList.remove('visible');
+			selectBorrowButton.style.display = 'none';
+			selectButton.style.display = 'block';
+			//前借ボタンの切り替え
+			borrowButton.textContent = '前借する';
+			borrowButton.classList.remove('reset');
+		}
+
+	}
+}
 
 
 //各モーダルを閉じる
