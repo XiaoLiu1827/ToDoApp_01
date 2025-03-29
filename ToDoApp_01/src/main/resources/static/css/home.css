@@ -37,11 +37,7 @@ h2 {
 	font-size: 24px;
 }
 
-.button.outline {
-	background-color: white;
-	color: #4a90e2;
-	border: 1px solid #4a90e2;
-}
+
 
 .content {
 	padding: 20px;
@@ -264,7 +260,8 @@ h2 {
 	width: 90%;
 	max-width: 500px;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-
+	position: relative;
+	padding-bottom: 75px;
 }
 
 .modal-content {
@@ -329,18 +326,6 @@ h2 {
 	cursor: pointer;
 }
 
-/*詳細度を上げ手適用*/
-button.unachieved:disabled,
-button.small:disabled {
-	background-color: #ccc;
-	/* グレー */
-	color: #666;
-	/* テキストの色 */
-	cursor: not-allowed;
-	/* カーソルを禁止マークに変更 */
-	opacity: 0.7;
-	/* 透明度を少し下げる */
-}
 
 /*部品*/
 .item-header {
@@ -375,6 +360,7 @@ button.small:disabled {
 	/* タイトルが中央に配置されるようにする */
 }
 
+/*ボタン*/
 .button {
 	background-color: #4a90e2;
 	color: white;
@@ -385,12 +371,6 @@ button.small:disabled {
 	text-decoration: none;
 	display: inline-block;
 	font-size: 14px;
-}
-
-.button.outline {
-	background-color: white;
-	color: #4a90e2;
-	border: 1px solid #4a90e2;
 }
 
 .button.small {
@@ -404,6 +384,36 @@ button.small:disabled {
 	font-size: 16px;
 
 }
+
+.button.small:hover {
+	background-color: #357ab8;
+}
+
+.button.borrow {
+	position: absolute;
+	/* モーダルの相対位置 */
+	right: 24px;
+	bottom: 19px;
+	background-color: #ff4d4d;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: bold;
+	transition: background-color 0.3s;
+}
+
+.button.borrow:hover {
+	background-color: #cc0000;
+}
+
+.button.outline {
+	background-color: white;
+	color: #4a90e2;
+	border: 1px solid #4a90e2;
+}
+
+
 
 .button-modal {
 	padding: 10px 20px;
@@ -451,10 +461,19 @@ button.small:disabled {
 
 }
 
-
-.button.small:hover {
-	background-color: #357ab8;
+/*詳細度を上げて適用*/
+button.unachieved:disabled,
+button.small:disabled {
+	background-color: #ccc;
+	/* グレー */
+	color: #666;
+	/* テキストの色 */
+	cursor: not-allowed;
+	/* カーソルを禁止マークに変更 */
+	opacity: 0.7;
+	/* 透明度を少し下げる */
 }
+
 
 .progress-bar {
 	background-color: #e0e0e0;
