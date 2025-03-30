@@ -19,7 +19,30 @@ let achievedItems = [];
 let isPurchaseable = false;
 const manualInputButton = document.querySelector('.manual-input');
 const borrowButton = document.getElementById('borrow-btn');
+const selectBorrowButtonList = document.querySelectorAll('.select-borrow');
+console.log(selectBorrowButtonList);
 
+//前借選択ボタン押下で確認モーダル表示
+selectBorrowButtonList.forEach(button => {
+	button.addEventListener('click', function() {
+		openModal('borrowConfirmModal');
+		// クリックされたボタンの親要素（アイテムのコンテナ）を取得
+		// th:value="${wishItem.id}" の値を取得
+		const itemId = this.getAttribute('value');
+
+		// 該当する .item-content を取得
+		const itemContent = document.querySelector(`.item-content[data-id="${itemId}"]`);
+
+		let borrowAmount = null;
+		if (itemContent) {
+			borrowAmount = Number(itemContent.getAttribute('data-amount')) || 0;
+			document.getElementById('borrow-amount').textContent = borrowAmount.toLocaleString();
+		}
+		// モーダル内の前借額の表示部分に反映
+		document.getElementById('savings-amount').textContent = totalSavingsAmount.toLocaleString();
+		document.getElementById('repayment-amount').textContent = (borrowAmount - totalSavingsAmount).toLocaleString();
+	})
+})
 //前借ボタン押下
 borrowButton.addEventListener('click', function() {
 	withdrawlList.forEach(item => {
@@ -40,15 +63,15 @@ function handleSelectButtonVisible(neededAmount, selectButton, selectBorrowButto
 		if (!(borrowButton.classList.contains('reset'))) {
 			//アイテムごとのボタン切替
 			selectBorrowButton.style.display = 'block';
-			
+
 			//アニメーション適用のためブラウザの再描画用の遅延を入れる
 			setTimeout(() => {
 				//フェードインする
 				selectBorrowButton.classList.add('visible');
 			}, 10);
-			
+
 			selectButton.style.display = 'none';
-			
+
 			//前借ボタンの切り替え
 			borrowButton.textContent = '戻る';
 			borrowButton.classList.add('reset');

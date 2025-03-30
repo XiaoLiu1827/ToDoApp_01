@@ -173,6 +173,27 @@
 					<button id="borrow-btn" class="button small borrow">前借する</button>
 				</div>
 			</div>
+			<!-- 前借購入確認モーダル -->
+			<div id="borrowConfirmModal" class="modal-overlay">
+				<div class="modal-content confirmation-modal">
+					<div class="modal-header">
+						<h2 class="modal-title">前借の確認</h2>
+						<button class="modal-close" onclick="closeModal('borrowConfirmModal')">&times;</button>
+					</div>
+					<p>以下の内容で前借しますか？</p>
+					<div class="modal-body">
+						<ul>
+							<li><strong>前借額：</strong><span id="borrow-amount"></span>円</li>
+							<li><strong>現在の貯金額：</strong><span id="savings-amount"></span>円</li>
+							<li><strong>前借後の必要返済額：</strong><span id="repayment-amount"></span>円</li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<button class="button-modal cancel" id="cancel-borrw-button">キャンセル</button>
+						<button class="button-modal delete" id="confirm-borrow-button">前借する</button>
+					</div>
+				</div>
+			</div>
 			<script src="/js/home.js"></script>
 </body>
 

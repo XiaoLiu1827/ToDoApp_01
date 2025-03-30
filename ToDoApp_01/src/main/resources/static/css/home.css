@@ -47,6 +47,13 @@ h2 {
 	margin-bottom: 20px;
 }
 
+.modal-body ul {
+	list-style: none;
+    padding-left: 100px;
+	text-align: left;
+	/* 左寄せ */
+}
+
 /*手入力ボタン*/
 .manual-input {
 	position: fixed;
