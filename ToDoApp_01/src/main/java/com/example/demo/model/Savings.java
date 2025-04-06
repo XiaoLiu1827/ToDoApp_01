@@ -41,4 +41,14 @@ public class Savings {
 		this.userId = userId;
         this.savedDate = LocalDate.now();
 	} 
+    
+    @Override
+    public String toString() {
+        return "Savings{id=" + id + 
+               ", amount=" + amount + 
+               ", mySavingsRule=" + mySavingRule.getId() +
+               ", userId=" + userId + 
+               ", savedDate=" + savedDate + 
+               '}';
+    }
 }
