@@ -28,8 +28,9 @@ public class SavingsBox {
 		return this.totalAmount;
 	}
 
-	public void withDraw(BigDecimal withdrawalAmount) {
+	public BigDecimal withDraw(BigDecimal withdrawalAmount) {
 		this.totalAmount = this.totalAmount.subtract(withdrawalAmount);
+		return totalAmount;
 	}
 	
 	public String getFormattedAmount() {

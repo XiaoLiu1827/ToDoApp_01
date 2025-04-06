@@ -21,6 +21,7 @@ public class WishItem {
 	private BigDecimal currentAmount;
 	private BigDecimal neededAmount;
 	private String imagePath;
+	private Integer status = 0; // 0: 未達成, 1: 達成, 2: 前借中
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userAccount_id", referencedColumnName = "id")

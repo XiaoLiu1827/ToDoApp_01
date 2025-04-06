@@ -15,7 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.demo.model.MySavingRule;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.MySavingRuleService;
+import com.example.demo.service.SavingsBoxService;
 import com.example.demo.service.TransactionalSavingsService;
+import com.example.demo.service.WishItemService;
+import com.example.demo.service.WithdrawalService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,28 +28,38 @@ import lombok.RequiredArgsConstructor;
 public class SavingsApiController {
 
 	private final MySavingRuleService mySavingRuleService;
-
 	private final AuthenticationService authService;
-
 	private final TransactionalSavingsService transactionalSavingsService;
-	
-  private Long userId;
-  
+	private final WishItemService wishItemService;
+	private final SavingsBoxService savingsBoxService;
+	private final WithdrawalService withdrawalService;
+	private Long userId;
+
 	@ModelAttribute
 	public void setUser() {
+
 		this.userId = authService.getAuthenticatedUserId();
 	}
 
-	@PostMapping("/deposit/{ruleId}")
+	//貯金引き出し時に貯金額の更新と選択アイテムに状態区分を設定する
+	@PostMapping("/withdraw/{wishItemId}")
+	public ResponseEntity<String> withdraw(@PathVariable Long wishItemId) {
 
+        BigDecimal updatedTotalAmount = withdrawalService.updateTotalSavingsAndItemStatus(userId, wishItemId);
+		
+		return ResponseEntity.ok(updatedTotalAmount.toString());
+
+	}
+
+	@PostMapping("/deposit/{ruleId}")
 	public ResponseEntity<String> depositByRule(@PathVariable Long ruleId) {
 
-		if(ruleId == null) {
-	        return ResponseEntity.badRequest().body("ルールIDが必要です。");
+		if (ruleId == null) {
+			return ResponseEntity.badRequest().body("ルールIDが必要です。");
 		}
-		
+
 		MySavingRule myRule = mySavingRuleService.getMySavingRuleById(ruleId)
-			    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "貯金ルールが見つかりません"));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "貯金ルールが見つかりません"));
 
 		BigDecimal updatedTotalAmount = transactionalSavingsService.processSavings(userId, myRule.getAmount(), myRule);
 

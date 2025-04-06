@@ -75,7 +75,7 @@ public class UserSavingsController {
 //		return "redirect:/savings/user";
 //	}
 
-	//
+	//apiで統合する(deleteWishItemはしない）
 		@PostMapping("/withdraw")
 		public String withdrawFromSavingsBox(@RequestParam("wishItemId") Long wishItemId) {
 			WishItem selectedItem = wishItemService.getWishItembyId(wishItemId);

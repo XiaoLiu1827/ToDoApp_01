@@ -22,10 +22,12 @@ public class SavingsBoxService {
 		return repository.findByUserId(userId);
 	}
 	
-	public void withdraw(Long userId, BigDecimal amount) {
+	//トランザクション管理でリポジトリ呼び出し不要？
+	public BigDecimal withdraw(Long userId, BigDecimal amount) {
 		SavingsBox updatedSavingsBox = getSavingBoxByUserId(userId);
-		updatedSavingsBox.withDraw(amount);
+		BigDecimal totalAmount = updatedSavingsBox.withDraw(amount);
 		repository.save(updatedSavingsBox);
+		return totalAmount;
 	}
 	
 	public SavingsBox saveSavingsBox(SavingsBox savingsBox) {

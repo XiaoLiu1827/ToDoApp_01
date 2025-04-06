@@ -15,6 +15,17 @@ public class WishItemService {
 	@Autowired
 	private WishItemRepository repository;
 
+	//トランザクション管理のアドバイスもらう
+	//呼び出し元で取得したitemの扱い
+	public void setItemStatus(BigDecimal updatedTotalAmount, WishItem selectedItem) {
+		
+		if (updatedTotalAmount.compareTo(BigDecimal.ZERO) < 0) {
+			selectedItem.setStatus(2);
+		} else {
+			selectedItem.setStatus(1);
+		}
+	}
+
 	/**検索**/
 	public List<WishItem> getAllSavingPurposes() {
 		return repository.findAll();
